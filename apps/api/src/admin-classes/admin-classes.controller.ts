@@ -1,10 +1,13 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtAdminAuthGuard } from "../admin-auth/guards/jwt-admin-auth.guard";
 import { AdminClassesService } from "./admin-classes.service";
 import { CreateClassDto, ListClassesQueryDto, UpdateClassDto } from "./dto/class.dto";
 
 // ADM-02: owner & staff sama-sama punya akses penuh CRUD kelas (bukan cuma
 // staff terkecuali kelola-admin/branding) -- tidak ada @Roles() di sini.
+@ApiTags("Admin Classes")
+@ApiBearerAuth("admin-access-token")
 @Controller("admin/classes")
 @UseGuards(JwtAdminAuthGuard)
 export class AdminClassesController {

@@ -1,4 +1,5 @@
 import { BadRequestException, Body, Controller, Delete, Get, Header, Param, Post, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { JwtAdminAuthGuard } from "../admin-auth/guards/jwt-admin-auth.guard";
 import { AdminInvitationsService } from "./admin-invitations.service";
@@ -7,6 +8,8 @@ import { CreateInvitationDto, ListInvitationsQueryDto } from "./dto/invitation.d
 const CSV_TEMPLATE = "nama,email,kelas\nContoh Nama,contoh@email.com,Nama Kelas Persis Seperti di Sistem\n";
 const MAX_CSV_BYTES = 1_000_000; // 1MB -- lebih dari cukup untuk beberapa ribu baris
 
+@ApiTags("Admin Invitations")
+@ApiBearerAuth("admin-access-token")
 @Controller("admin/invitations")
 @UseGuards(JwtAdminAuthGuard)
 export class AdminInvitationsController {

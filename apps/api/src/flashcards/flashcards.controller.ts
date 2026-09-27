@@ -1,9 +1,12 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtStudentAuthGuard } from "../auth/guards/jwt-student-auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";
 import { FlashcardsService } from "./flashcards.service";
 import { ReviewFlashcardDto } from "./dto/review-flashcard.dto";
 
+@ApiTags("Flashcards")
+@ApiBearerAuth("access-token")
 @Controller("flashcards")
 @UseGuards(JwtStudentAuthGuard)
 export class FlashcardsController {

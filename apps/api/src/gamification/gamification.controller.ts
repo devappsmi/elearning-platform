@@ -1,8 +1,11 @@
 import { Controller, Get, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtStudentAuthGuard } from "../auth/guards/jwt-student-auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";
 import { GamificationService } from "./gamification.service";
 
+@ApiTags("Gamification")
+@ApiBearerAuth("access-token")
 @Controller()
 @UseGuards(JwtStudentAuthGuard)
 export class GamificationController {

@@ -91,6 +91,13 @@ export class AdminAuthService {
     return pair;
   }
 
+  async me(adminUserId: string) {
+    return this.prisma.adminUser.findUniqueOrThrow({
+      where: { id: adminUserId },
+      select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true, lastLoginAt: true },
+    });
+  }
+
   private async issueTokenPair(adminUserId: string, role: string): Promise<{ accessToken: string; refreshToken: string }> {
     const secret = this.config.get("JWT_ADMIN_SECRET", { infer: true });
     const accessToken = await this.jwt.signAsync(

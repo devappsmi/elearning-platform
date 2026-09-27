@@ -1,9 +1,12 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtStudentAuthGuard } from "../auth/guards/jwt-student-auth.guard";
 import { CurrentUser } from "../common/current-user.decorator";
 import { ScenariosService } from "./scenarios.service";
 import { SubmitScenarioAttemptDto } from "./dto/submit-scenario-attempt.dto";
 
+@ApiTags("Scenarios")
+@ApiBearerAuth("access-token")
 @Controller("scenarios")
 @UseGuards(JwtStudentAuthGuard)
 export class ScenariosController {

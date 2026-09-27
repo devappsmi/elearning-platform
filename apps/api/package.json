@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
-    "prisma": "prisma"
+    "prisma": "prisma",
+    "generate-openapi": "nest build && node dist/generate-openapi.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1141.0",

@@ -1,8 +1,11 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtAdminAuthGuard } from "../admin-auth/guards/jwt-admin-auth.guard";
 import { AdminStudentsService } from "./admin-students.service";
 import { ListStudentsQueryDto, UpdateStudentDto } from "./dto/update-student.dto";
 
+@ApiTags("Admin Students")
+@ApiBearerAuth("admin-access-token")
 @Controller("admin/students")
 @UseGuards(JwtAdminAuthGuard)
 export class AdminStudentsController {

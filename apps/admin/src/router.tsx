@@ -1,11 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import { AuthGuard } from "./auth/AuthGuard";
 import { RootLayout } from "./components/RootLayout";
+import { LoginPage } from "./pages/LoginPage";
 import { StubPage } from "./pages/StubPage";
 
 /**
- * Route skeleton for Milestone 10 — every route resolves to a stub page.
- * Real per-screen UI (data tables etc.) is a separate Fase 1 plan.
+ * Route skeleton for Milestone 10 — every route resolves to a stub page,
+ * KECUALI /login yang sekarang beneran (Milestone 10 lanjutan, lihat
+ * docs/PLAN.md). Real per-screen UI (data tables etc.) is a separate Fase 1
+ * plan.
  *
  * `/content` (A7) and `/reports` (A8) are Fase 2 features and are
  * deliberately NOT registered here — the router stays honest about what
@@ -13,7 +16,7 @@ import { StubPage } from "./pages/StubPage";
  * features.
  */
 export const router = createBrowserRouter([
-  { path: "/login", element: <StubPage title="Login" /> },
+  { path: "/login", element: <LoginPage /> },
   {
     element: <AuthGuard />,
     children: [

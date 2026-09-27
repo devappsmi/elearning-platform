@@ -1,5 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Param, Post } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import { Throttle } from "@nestjs/throttler";
+import { TokenPairDto } from "../common/dto/token-pair.dto";
 import { AuthService } from "./auth.service";
 import {
   ForgotPasswordDto,
@@ -10,6 +12,7 @@ import {
   ValidateInvitationDto,
 } from "./dto/auth.dto";
 
+@ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
@@ -21,19 +24,19 @@ export class AuthController {
   }
 
   @Post("register")
-  register(@Body() dto: RegisterDto) {
+  register(@Body() dto: RegisterDto): Promise<TokenPairDto> {
     return this.auth.register(dto);
   }
 
   @Post("login")
   @HttpCode(HttpStatus.OK)
-  login(@Body() dto: LoginDto) {
+  login(@Body() dto: LoginDto): Promise<TokenPairDto> {
     return this.auth.login(dto.email, dto.password);
   }
 
   @Post("refresh")
   @HttpCode(HttpStatus.OK)
-  refresh(@Body() dto: RefreshDto) {
+  refresh(@Body() dto: RefreshDto): Promise<TokenPairDto> {
     return this.auth.refresh(dto.refreshToken);
   }
 
