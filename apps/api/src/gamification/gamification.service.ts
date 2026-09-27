@@ -34,8 +34,13 @@ export class GamificationService {
    * dan mengevaluasi badge baru. `amount` sudah final (mis. hasil
    * `XpService.lessonXp(stars)`) -- service ini tidak menghitung besarannya. */
   async awardXp(params: { userId: string; source: XpSource; amount: number; refId?: string }): Promise<void> {
-    const user = await this.prisma.user.findUniqueOrThrow({ where: { id: params.userId }, select: { classId: true } });
     const now = new Date();
+    // Sekalian update lastActiveAt -- sebelumnya field ini CUMA di-update saat
+    // login (AuthService.login), jadi salah menggambarkan "terakhir aktif"
+    // untuk dashboard admin (ADM-30 "murid aktif minggu ini") begitu murid
+    // login sekali lalu belajar berhari-hari tanpa login ulang (JWT access
+    // token 1 jam + refresh diam-diam, tidak pernah login ulang lagi).
+    const user = await this.prisma.user.update({ where: { id: params.userId }, data: { lastActiveAt: now }, select: { classId: true } });
 
     await this.prisma.xpEvent.create({
       data: { userId: params.userId, source: params.source, amount: params.amount, refId: params.refId },
