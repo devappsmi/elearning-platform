@@ -29,6 +29,10 @@ export * from './gamification/badgeCatalog';
 // srs: statistik repetisi kata/kalimat
 export * from './srs/wordRepetitionService';
 
+// scenario: skema + sesi latihan percakapan ber-template (CONV-01..04)
+export * from './scenario/types';
+export * from './scenario/scenarioSession';
+
 // shared: utilitas tanggal, angka, RNG
 export * from './shared/dates';
 export * from './shared/math';

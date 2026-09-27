@@ -22,7 +22,13 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { PrismaClient, type Prisma } from "@prisma/client";
-import { unitSchema, BadgeCatalog, type Exercise as DomainExercise, type Unit as DomainUnit } from "@elearning/domain";
+import {
+  unitSchema,
+  BadgeCatalog,
+  scenarioContentSchema,
+  type Exercise as DomainExercise,
+  type Unit as DomainUnit,
+} from "@elearning/domain";
 import { AudioService } from "../src/audio/audio.service";
 import { AzureTtsClient } from "../src/audio/azure-tts.client";
 import { ObjectStorageService } from "../src/audio/object-storage.service";
@@ -195,21 +201,62 @@ async function seedStaticBadges(): Promise<void> {
   }
 }
 
+// Kosakata yang dirujuk scenario.vocab -- di luar cakupan Hiragana (bukan
+// kana, kata benda/salam N5), jadi diseed di sini, bukan seedHiraganaUnit.
+// unitId sengaja null: entri kamus lepas (lihat DictionaryModule), bukan
+// milik lesson unit mana pun.
+const SCENARIO_VOCAB: { id: string; jp: string; reading: string; romaji: string; meaningId: string }[] = [
+  { id: "voc_hajimemashite", jp: "はじめまして", reading: "はじめまして", romaji: "hajimemashite", meaningId: "salam kenal (dipakai sekali saat pertama kali bertemu)" },
+  { id: "voc_onamae", jp: "お名前", reading: "おなまえ", romaji: "onamae", meaningId: "nama (bentuk sopan)" },
+  { id: "voc_yoroshiku", jp: "よろしく", reading: "よろしく", romaji: "yoroshiku", meaningId: "mohon bantuannya / senang berkenalan" },
+];
+
+/** Milestone 9 (ScenariosModule): SATU contoh skenario ("Perkenalan Diri",
+ * skenario pertama di daftar CONV-01 PRD) untuk membuktikan pipeline
+ * end-to-end -- BUKAN 10 skenario MVP penuh. Authoring 10 dialog JLPT N5
+ * akurat adalah kerja konten tersendiri (PRD §12 eksplisit menandai "beban
+ * pembuatan konten" sebagai risiko, mitigasinya "libatkan pengajar lembaga
+ * pilot" -- bukan sesuatu yang pantas ditulis sendiri di sini asal-asalan),
+ * sama seperti kurikulum Katakana/Dasar/N5/N4 di luar Hiragana. */
+async function seedExampleScenario(): Promise<void> {
+  const raw = JSON.parse(readFileSync(join(__dirname, "seed-data/raw/scenario-perkenalan.json"), "utf-8"));
+  const parsed = scenarioContentSchema.parse(raw); // validasi saja -- yang DISIMPAN tetap `raw` (snake_case asli, sama seperti dibaca ulang ScenariosService)
+
+  for (const v of SCENARIO_VOCAB) {
+    await prisma.vocab.upsert({ where: { id: v.id }, update: v, create: v });
+  }
+
+  await prisma.scenario.upsert({
+    where: { id: parsed.scenarioId },
+    update: { titleJp: parsed.titleJp, titleId: parsed.titleId, level: "N5", payload: raw as unknown as Prisma.InputJsonValue, status: "PUBLISHED" },
+    create: {
+      id: parsed.scenarioId,
+      titleJp: parsed.titleJp,
+      titleId: parsed.titleId,
+      level: "N5",
+      payload: raw as unknown as Prisma.InputJsonValue,
+      status: "PUBLISHED",
+    },
+  });
+}
+
 async function main(): Promise<void> {
   const unit = loadHiraganaUnit();
   await seedHiraganaUnit(unit);
   await seedStaticBadges();
   await seedAudioAssets(unit);
+  await seedExampleScenario();
 
-  const [vocabCount, sentenceCount, lessonCount, exerciseCount, badgeCount] = await Promise.all([
+  const [vocabCount, sentenceCount, lessonCount, exerciseCount, badgeCount, scenarioCount] = await Promise.all([
     prisma.vocab.count({ where: { unitId: unit.id } }),
     prisma.sentence.count({ where: { unitId: unit.id } }),
     prisma.lesson.count({ where: { unitId: unit.id } }),
     prisma.exercise.count({ where: { lesson: { unitId: unit.id } } }),
     prisma.badge.count(),
+    prisma.scenario.count(),
   ]);
   console.log(
-    `Seed selesai: unit=${unit.id} vocab=${vocabCount} sentence=${sentenceCount} lesson=${lessonCount} exercise=${exerciseCount} badge=${badgeCount}`,
+    `Seed selesai: unit=${unit.id} vocab=${vocabCount} sentence=${sentenceCount} lesson=${lessonCount} exercise=${exerciseCount} badge=${badgeCount} scenario=${scenarioCount}`,
   );
 }
 

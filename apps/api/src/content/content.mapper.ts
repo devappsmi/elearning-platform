@@ -9,14 +9,11 @@ import type {
   WordPart,
 } from "@elearning/domain";
 import { hashAudioKey } from "../audio/audio-hash.util";
+import type { AudioUrlByHash } from "../audio/audio-lookup.util";
 
-/** Kunci lookup -> URL audio, dibangun ContentService lewat SATU query bulk
- * ke AudioAsset (lihat content.service.ts) lalu dioper ke sini -- mapper ini
- * TETAP murni/sync (gampang dites, lihat content.mapper.test.ts), tidak
- * mengakses Prisma sendiri. Vocab TIDAK punya field voice di skema (beda
- * dari Sentence) -- selalu 'female', konsisten dengan default voice
- * Sentence lama saat field itu kosong (lihat packages/domain/content/types.ts). */
-export type AudioUrlByHash = ReadonlyMap<string, string>;
+// Vocab TIDAK punya field voice di skema (beda dari Sentence) -- selalu
+// 'female', konsisten dengan default voice Sentence lama saat field itu
+// kosong (lihat packages/domain/content/types.ts).
 
 /** Shape Prisma yang cukup untuk direkonstruksi jadi domain Unit lengkap --
  * dipakai bersama oleh ContentService (baca) dan seed.ts (tulis, arah
