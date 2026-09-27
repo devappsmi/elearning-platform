@@ -9,11 +9,17 @@ import { HealthModule } from "./health/health.module";
 import { AuthModule } from "./auth/auth.module";
 import { AdminAuthModule } from "./admin-auth/admin-auth.module";
 import { UsersModule } from "./users/users.module";
+import { ContentModule } from "./content/content.module";
+import { GamificationModule } from "./gamification/gamification.module";
+import { SrsModule } from "./srs/srs.module";
+import { LearningPathModule } from "./learning-path/learning-path.module";
+import { LessonsModule } from "./lessons/lessons.module";
 
-/** Modul fitur lain (Lessons, Gamification, TutorModule, dst. -- lihat plan
- * bagian 3) ditambahkan di milestone-milestone berikutnya. File ini
- * mengkabelkan bagian cross-cutting + health check (Milestone 4) dan
- * vertical slice auth (Milestone 5). */
+/** Modul fitur lain (TutorModule, Scenarios/Dictionary/Flashcards, Admin
+ * CRUD, dst. -- lihat plan bagian 3) ditambahkan di milestone-milestone
+ * berikutnya. File ini mengkabelkan bagian cross-cutting + health check
+ * (Milestone 4), vertical slice auth (Milestone 5), dan vertical slice
+ * belajar inti -- learning path/lesson/gamifikasi/SRS (Milestone 7). */
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
@@ -24,6 +30,11 @@ import { UsersModule } from "./users/users.module";
     AuthModule,
     AdminAuthModule,
     UsersModule,
+    ContentModule,
+    GamificationModule,
+    SrsModule,
+    LearningPathModule,
+    LessonsModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
