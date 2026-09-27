@@ -29,8 +29,14 @@ export const envSchema = z.object({
   OPENAI_TTS_MODEL: z.string().default("gpt-4o-mini-tts"),
   OPENAI_TTS_VOICE_DEFAULT: z.string().default("nova"),
 
+  // AZURE_SPEECH_KEY/REGION opsional -- AzureTtsClient (AudioModule, Milestone 8)
+  // melempar error yang jelas SAAT DIPANGGIL kalau kosong, bukan gagal di boot;
+  // biar server & seed tetap bisa jalan di environment tanpa kredensial TTS
+  // (audio jadi placeholder kosong sampai kredensial tersedia).
   AZURE_SPEECH_KEY: z.string().optional(),
   AZURE_SPEECH_REGION: z.string().optional(),
+  AZURE_TTS_VOICE_FEMALE: z.string().default("ja-JP-NanamiNeural"),
+  AZURE_TTS_VOICE_MALE: z.string().default("ja-JP-KeitaNeural"),
 
   CORS_ORIGIN_STUDENT: z.string().url(),
   CORS_ORIGIN_ADMIN: z.string().url(),

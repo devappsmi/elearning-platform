@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { deriveNodeStates, UnlockRules, type Lesson as DomainLesson, type Unit as DomainUnit } from "@elearning/domain";
 import { PrismaService } from "../prisma/prisma.service";
-import { toDomainUnit, UNIT_CONTENT_INCLUDE } from "./content.mapper";
+import { audioHashKeysForUnit, toDomainUnit, UNIT_CONTENT_INCLUDE, type AudioUrlByHash } from "./content.mapper";
 
 /** Stand-in domain Unit minimal -- cukup {id, lessons[].id} untuk unlockRules,
  * lihat catatan yang sama di learning-path.service.ts (dua tempat ini sengaja
@@ -34,7 +34,22 @@ export class ContentService {
   async loadUnit(unitId: string): Promise<DomainUnit> {
     const unit = await this.prisma.unit.findUnique({ where: { id: unitId }, include: UNIT_CONTENT_INCLUDE });
     if (!unit) throw new NotFoundException(`Unit tidak ditemukan: ${unitId}`);
-    return toDomainUnit(unit);
+
+    const audioUrlByHash = await this.loadAudioUrls(audioHashKeysForUnit(unit));
+    return toDomainUnit(unit, audioUrlByHash);
+  }
+
+  /** SATU query bulk (bukan N+1 per vocab/sentence) -- lihat catatan di
+   * content.mapper.ts. Hash yang belum ada AudioAsset-nya (belum pernah
+   * digenerate, lihat seed.ts) sengaja tidak masuk map -- toDomainUnit
+   * jatuh ke placeholder "" untuk itu. */
+  private async loadAudioUrls(hashes: string[]): Promise<AudioUrlByHash> {
+    if (hashes.length === 0) return new Map();
+    const rows = await this.prisma.audioAsset.findMany({
+      where: { textHash: { in: hashes } },
+      select: { textHash: true, s3Url: true },
+    });
+    return new Map(rows.map((r) => [r.textHash, r.s3Url]));
   }
 
   /** Dipakai LessonsModule: GET/POST /lessons/:id cuma tahu lessonId, bukan

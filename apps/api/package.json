@@ -13,6 +13,7 @@
     "prisma": "prisma"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1141.0",
     "@elearning/domain": "workspace:*",
     "@nestjs/common": "^10.4.15",
     "@nestjs/config": "^3.3.0",

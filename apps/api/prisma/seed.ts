@@ -23,6 +23,9 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { PrismaClient, type Prisma } from "@prisma/client";
 import { unitSchema, BadgeCatalog, type Exercise as DomainExercise, type Unit as DomainUnit } from "@elearning/domain";
+import { AudioService } from "../src/audio/audio.service";
+import { AzureTtsClient } from "../src/audio/azure-tts.client";
+import { ObjectStorageService } from "../src/audio/object-storage.service";
 
 const prisma = new PrismaClient();
 
@@ -125,6 +128,60 @@ async function seedHiraganaUnit(unit: DomainUnit): Promise<void> {
   }
 }
 
+/** Milestone 8: pre-generate audio SAAT SEED (bukan on-demand saat
+ * `GET /lessons/:id` -- lihat catatan NFR "API p95 < 300ms" di
+ * audio.service.ts). Best-effort dan gagal-aman: kalau AZURE_SPEECH_KEY/
+ * REGION belum diisi (mis. environment dev/sandbox tanpa kredensial), seed
+ * TETAP jalan seperti biasa -- cuma audio yang tidak tersedia (placeholder
+ * "" di ContentService, lihat content.mapper.ts), bukan seluruh migrasi
+ * konten gagal karena satu kredensial belum ada. Berhenti di kegagalan
+ * PERTAMA (bukan retry semua item) -- kegagalan TTS/S3 di sini nyaris
+ * selalu sistemik (kredensial salah/storage tidak terjangkau), mengulang
+ * 160 kali untuk error yang sama cuma nge-spam log, bukan menolong. */
+async function seedAudioAssets(unit: DomainUnit): Promise<void> {
+  if (!process.env.AZURE_SPEECH_KEY || !process.env.AZURE_SPEECH_REGION) {
+    console.warn(
+      "Seed audio DILEWATI: AZURE_SPEECH_KEY/AZURE_SPEECH_REGION belum diisi di .env -- " +
+        "audio lesson akan kosong sampai kredensial TTS tersedia (lihat docs/PLAN.md, Milestone 8).",
+    );
+    return;
+  }
+
+  const tts = new AzureTtsClient(
+    process.env.AZURE_SPEECH_KEY,
+    process.env.AZURE_SPEECH_REGION,
+    process.env.AZURE_TTS_VOICE_FEMALE ?? "ja-JP-NanamiNeural",
+    process.env.AZURE_TTS_VOICE_MALE ?? "ja-JP-KeitaNeural",
+  );
+  const storage = new ObjectStorageService(
+    process.env.S3_ENDPOINT ?? "",
+    process.env.S3_REGION ?? "",
+    process.env.S3_BUCKET ?? "",
+    process.env.S3_ACCESS_KEY_ID ?? "",
+    process.env.S3_SECRET_ACCESS_KEY ?? "",
+  );
+  const audio = new AudioService(prisma, tts, storage);
+
+  const items: { text: string; voice: "female" | "male" }[] = [
+    ...unit.vocab.map((v) => ({ text: v.surface, voice: "female" as const })),
+    ...unit.sentences.map((s) => ({ text: s.surface, voice: s.voice === "male" ? ("male" as const) : ("female" as const) })),
+  ];
+
+  let generated = 0;
+  for (const item of items) {
+    try {
+      await audio.resolveAudioUrl(item.text, item.voice);
+      generated++;
+    } catch (err) {
+      console.warn(
+        `Seed audio berhenti di '${item.text}' (${generated}/${items.length} berhasil sebelumnya): ${err instanceof Error ? err.message : String(err)}`,
+      );
+      return;
+    }
+  }
+  console.log(`Seed audio selesai: ${generated}/${items.length} teks (cache hit tidak memanggil TTS ulang).`);
+}
+
 async function seedStaticBadges(): Promise<void> {
   // BadgeCatalog.all(units) juga menambah badge dinamis per-unit conversation
   // -- unit_hiragana bertipe 'kana', jadi tidak menghasilkan badge tambahan
@@ -142,6 +199,7 @@ async function main(): Promise<void> {
   const unit = loadHiraganaUnit();
   await seedHiraganaUnit(unit);
   await seedStaticBadges();
+  await seedAudioAssets(unit);
 
   const [vocabCount, sentenceCount, lessonCount, exerciseCount, badgeCount] = await Promise.all([
     prisma.vocab.count({ where: { unitId: unit.id } }),

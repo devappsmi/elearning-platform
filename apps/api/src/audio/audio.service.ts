@@ -1,0 +1,49 @@
+import { Inject, Injectable } from "@nestjs/common";
+import type { PrismaClient } from "@prisma/client";
+import { PrismaService } from "../prisma/prisma.service";
+import { TtsClient } from "./tts-client";
+import { ObjectStorageService } from "./object-storage.service";
+import { hashAudioKey, type AudioVoice } from "./audio-hash.util";
+
+export const OBJECT_STORAGE = Symbol("OBJECT_STORAGE");
+
+/** PRD §9.4: pipeline cache audio-by-hash. Dipakai dari dua tempat dengan
+ * cara konstruksi berbeda -- lewat NestJS DI di dalam app (AudioModule), dan
+ * dikonstruksi langsung (bukan lewat Nest) dari `seed.ts` untuk pre-generate
+ * audio konten sekali di waktu seed, BUKAN on-demand saat `GET /lessons/:id`
+ * (lihat catatan di ContentService/seed.ts -- generate TTS sinkron per
+ * request akan melanggar NFR "API p95 < 300ms" telak; endpoint lesson cuma
+ * baca AudioAsset yang sudah ada). Konstruktor nerima `PrismaClient`
+ * (bukan spesifik `PrismaService`) supaya `new PrismaClient()` biasa di
+ * seed.ts juga valid -- `PrismaService extends PrismaClient`. */
+@Injectable()
+export class AudioService {
+  constructor(
+    @Inject(PrismaService) private readonly prisma: PrismaClient,
+    private readonly tts: TtsClient,
+    @Inject(OBJECT_STORAGE) private readonly storage: ObjectStorageService,
+  ) {}
+
+  /** Cache hit -> langsung kembalikan s3Url tersimpan, TIDAK memanggil TTS
+   * provider lagi (persis kriteria verifikasi Milestone 8 di docs/PLAN.md).
+   * Cache miss -> generate + upload + `upsert` (bukan `create` polos --
+   * `textHash` unique, upsert-ke-no-op menghindari crash kalau dua panggilan
+   * untuk teks baru yang sama kebetulan race; pemborosan satu panggilan TTS
+   * ekstra pada race itu diterima, mengunci akan berlebihan untuk kasus yang
+   * jarang terjadi). */
+  async resolveAudioUrl(textJp: string, voice: AudioVoice = "female"): Promise<string> {
+    const textHash = hashAudioKey(textJp, voice);
+    const existing = await this.prisma.audioAsset.findUnique({ where: { textHash } });
+    if (existing) return existing.s3Url;
+
+    const audioBuffer = await this.tts.synthesize(textJp, voice);
+    const s3Url = await this.storage.upload(`audio/${textHash}.mp3`, audioBuffer, "audio/mpeg");
+
+    const asset = await this.prisma.audioAsset.upsert({
+      where: { textHash },
+      update: {},
+      create: { textHash, textJp, s3Url },
+    });
+    return asset.s3Url;
+  }
+}

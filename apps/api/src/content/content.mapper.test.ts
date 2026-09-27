@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { ExerciseFactory } from "@elearning/domain";
-import { toDomainUnit, type UnitWithContent } from "./content.mapper";
+import { hashAudioKey } from "../audio/audio-hash.util";
+import { audioHashKeysForUnit, toDomainUnit, type UnitWithContent } from "./content.mapper";
+
+const NO_AUDIO = new Map<string, string>();
 
 function fakeUnit(overrides: Partial<UnitWithContent> = {}): UnitWithContent {
   return {
@@ -48,7 +51,7 @@ function fakeUnit(overrides: Partial<UnitWithContent> = {}): UnitWithContent {
 
 describe("toDomainUnit", () => {
   it("maps vocab/sentence/lesson fields to domain shape", () => {
-    const unit = toDomainUnit(fakeUnit());
+    const unit = toDomainUnit(fakeUnit(), NO_AUDIO);
     expect(unit.type).toBe("kana");
     expect(unit.vocab).toEqual([
       { id: "k_a", surface: "あ", kana: "あ", romaji: "a", audio: "", meaning: undefined, image: undefined },
@@ -62,12 +65,25 @@ describe("toDomainUnit", () => {
   });
 
   it("maps meaningId -> meaning (undefined when null)", () => {
-    const unit = toDomainUnit(fakeUnit());
+    const unit = toDomainUnit(fakeUnit(), NO_AUDIO);
     expect(unit.vocab.every((v) => v.meaning === undefined)).toBe(true);
   });
 
+  it("fills in real audio URLs when the hash lookup has them, empty string otherwise", () => {
+    const raw = fakeUnit();
+    const keys = audioHashKeysForUnit(raw);
+    expect(keys).toContain(hashAudioKey("あ", "female"));
+    expect(keys).toContain(hashAudioKey("愛", "female"));
+
+    const audioUrlByHash = new Map([[hashAudioKey("あ", "female"), "http://fake-s3/audio/k_a.mp3"]]);
+    const unit = toDomainUnit(raw, audioUrlByHash);
+    expect(unit.vocab.find((v) => v.id === "k_a")?.audio).toBe("http://fake-s3/audio/k_a.mp3");
+    expect(unit.vocab.find((v) => v.id === "k_i")?.audio).toBe(""); // tidak ada di map -> placeholder kosong
+    expect(unit.sentences[0]?.audio).toBe(""); // juga tidak ada di map
+  });
+
   it("produces output ExerciseFactory can actually run (not just structurally similar)", () => {
-    const unit = toDomainUnit(fakeUnit());
+    const unit = toDomainUnit(fakeUnit(), NO_AUDIO);
     const lesson = unit.lessons[0]!;
     const factory = new ExerciseFactory({ unit, lesson, rng: () => 0 });
     const chosen = factory.prepare(lesson.exercises[0]!);
@@ -90,7 +106,7 @@ describe("toDomainUnit", () => {
         } as any,
       ],
     });
-    expect(() => toDomainUnit(unit)).toThrow(/belum didukung/);
+    expect(() => toDomainUnit(unit, NO_AUDIO)).toThrow(/belum didukung/);
   });
 
   it("throws a clear error for a malformed payload", () => {
@@ -107,6 +123,6 @@ describe("toDomainUnit", () => {
         } as any,
       ],
     });
-    expect(() => toDomainUnit(unit)).toThrow(/payload tidak valid/);
+    expect(() => toDomainUnit(unit, NO_AUDIO)).toThrow(/payload tidak valid/);
   });
 });

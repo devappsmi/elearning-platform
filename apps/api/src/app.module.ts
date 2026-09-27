@@ -14,12 +14,17 @@ import { GamificationModule } from "./gamification/gamification.module";
 import { SrsModule } from "./srs/srs.module";
 import { LearningPathModule } from "./learning-path/learning-path.module";
 import { LessonsModule } from "./lessons/lessons.module";
+import { AudioModule } from "./audio/audio.module";
 
 /** Modul fitur lain (TutorModule, Scenarios/Dictionary/Flashcards, Admin
  * CRUD, dst. -- lihat plan bagian 3) ditambahkan di milestone-milestone
  * berikutnya. File ini mengkabelkan bagian cross-cutting + health check
- * (Milestone 4), vertical slice auth (Milestone 5), dan vertical slice
- * belajar inti -- learning path/lesson/gamifikasi/SRS (Milestone 7). */
+ * (Milestone 4), vertical slice auth (Milestone 5), vertical slice belajar
+ * inti (Milestone 7), dan pipeline audio TTS (Milestone 8). AudioModule
+ * belum ada controller/konsumen di app ini sendiri (audio di-generate saat
+ * seed, bukan saat request -- lihat catatan di audio.service.ts) -- tetap
+ * didaftarkan di sini, sama seperti SrsModule, supaya siap dipakai modul
+ * mendatang (Milestone 9/11) lewat DI biasa. */
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
@@ -35,6 +40,7 @@ import { LessonsModule } from "./lessons/lessons.module";
     SrsModule,
     LearningPathModule,
     LessonsModule,
+    AudioModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
