@@ -3,6 +3,7 @@ import type { UnitType as PrismaUnitType } from "@prisma/client";
 import { completedLessonCount, deriveNodeStates, UnlockRules, type Lesson as DomainLesson, type Unit as DomainUnit } from "@elearning/domain";
 import { PrismaService } from "../prisma/prisma.service";
 import { GamificationService } from "../gamification/gamification.service";
+import { PathLessonView, PathLevelView, PathUnitView, PathView } from "./dto/path-view.dto";
 
 interface LessonRow {
   id: string;
@@ -36,40 +37,6 @@ function toStubUnit(u: UnitRow): DomainUnit {
     sentences: [],
     lessons,
   };
-}
-
-export interface PathLessonView {
-  id: string;
-  title: string;
-  order: number;
-  isCheckpoint: boolean;
-  state: "done" | "available" | "locked";
-  stars: number | null;
-}
-
-export interface PathUnitView {
-  id: string;
-  title: string;
-  order: number;
-  type: "kana" | "conversation";
-  unlocked: boolean;
-  completedLessons: number;
-  totalLessons: number;
-  lessons: PathLessonView[];
-}
-
-export interface PathLevelView {
-  id: string;
-  code: string;
-  name: string;
-  order: number;
-  units: PathUnitView[];
-}
-
-export interface PathView {
-  levels: PathLevelView[];
-  continueLessonId: string | null;
-  streak: { current: number; longest: number };
 }
 
 /** LP-01/02: peta learning path lintas SELURUH level -- unit/lesson terkunci

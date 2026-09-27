@@ -1,14 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
 import { AuthGuard } from "./auth/AuthGuard";
 import { RootLayout } from "./components/RootLayout";
+import { HomePage } from "./pages/HomePage";
+import { LessonPage } from "./pages/LessonPage";
+import { LessonResultPage } from "./pages/LessonResultPage";
 import { LoginPage } from "./pages/LoginPage";
 import { StubPage } from "./pages/StubPage";
 
 /**
- * Route skeleton for Milestone 10 — every route resolves to a stub page,
- * KECUALI /login yang sekarang beneran (Milestone 10 lanjutan, lihat
- * docs/PLAN.md) -- login/AuthGuard adalah scope walking-skeleton milestone
- * ini, UI detail tiap layar lain tetap Fase 1 terpisah.
+ * Route skeleton -- inti alur belajar (Beranda/Belajar/Hasil Belajar) dan
+ * /login sekarang sungguhan (Fase 1 lanjutan, lihat docs/PLAN.md bagian 7c);
+ * rute lain (Percakapan/Kamus/Flashcard/Leaderboard/Profil/admin) masih
+ * StubPage, plan Fase 1 terpisah berikutnya.
  *
  * Public routes (no AuthGuard): /invite/:token, /login, /forgot-password,
  * /reset-password/:token. Everything else is wrapped in AuthGuard + the
@@ -26,9 +29,9 @@ export const router = createBrowserRouter([
         element: <RootLayout />,
         children: [
           { path: "/welcome", element: <StubPage title="Selamat Datang" /> },
-          { path: "/", element: <StubPage title="Beranda" /> },
-          { path: "/learn/:lessonId", element: <StubPage title="Belajar" /> },
-          { path: "/learn/:lessonId/result", element: <StubPage title="Hasil Belajar" /> },
+          { path: "/", element: <HomePage /> },
+          { path: "/learn/:lessonId", element: <LessonPage /> },
+          { path: "/learn/:lessonId/result", element: <LessonResultPage /> },
           { path: "/conversation", element: <StubPage title="Percakapan" /> },
           { path: "/conversation/:id", element: <StubPage title="Detail Percakapan" /> },
           {

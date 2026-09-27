@@ -26,4 +26,17 @@ export default defineConfig({
   server: {
     port: 5173,
   },
+  // @elearning/domain SENGAJA di-compile CommonJS (bukan ESM) -- dibutuhkan
+  // apps/api (NestJS, `require()` murni di produksi, lihat komentar di
+  // packages/domain/package.json/tsconfig.json soal kenapa). Vite dev
+  // server men-serve workspace package yang di-LINK (symlink pnpm) sebagai
+  // source MENTAH secara default (bukan lewat esbuild pre-bundle seperti
+  // dependency node_modules biasa) -- untuk paket CJS itu artinya `import {X}`
+  // gagal ("does not provide an export named"), karena tidak ada transform
+  // CJS->ESM interop yang jalan. `optimizeDeps.include` memaksa esbuild
+  // memproses paket ini juga (dapat interop-nya), TANPA perlu mengubah
+  // build packages/domain sendiri sama sekali (yang akan merusak apps/api).
+  optimizeDeps: {
+    include: ["@elearning/domain"],
+  },
 });

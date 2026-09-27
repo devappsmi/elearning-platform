@@ -184,6 +184,9 @@ importers:
       '@elearning/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
+      '@elearning/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@elearning/ui':
         specifier: workspace:*
         version: link:../../packages/ui

@@ -380,7 +380,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PathView"
                 }
               }
             }
@@ -453,7 +453,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/AttemptResultView"
                 }
               }
             }
@@ -1496,6 +1496,157 @@
           }
         }
       },
+      "PathLessonView": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "done",
+              "available",
+              "locked"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          },
+          "isCheckpoint": {
+            "type": "boolean"
+          },
+          "stars": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": [
+          "state",
+          "id",
+          "title",
+          "order",
+          "isCheckpoint",
+          "stars"
+        ]
+      },
+      "PathUnitView": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "kana",
+              "conversation"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          },
+          "unlocked": {
+            "type": "boolean"
+          },
+          "completedLessons": {
+            "type": "number"
+          },
+          "totalLessons": {
+            "type": "number"
+          },
+          "lessons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PathLessonView"
+            }
+          }
+        },
+        "required": [
+          "type",
+          "id",
+          "title",
+          "order",
+          "unlocked",
+          "completedLessons",
+          "totalLessons",
+          "lessons"
+        ]
+      },
+      "PathLevelView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          },
+          "units": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PathUnitView"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "name",
+          "order",
+          "units"
+        ]
+      },
+      "StreakView": {
+        "type": "object",
+        "properties": {
+          "current": {
+            "type": "number"
+          },
+          "longest": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "current",
+          "longest"
+        ]
+      },
+      "PathView": {
+        "type": "object",
+        "properties": {
+          "levels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PathLevelView"
+            }
+          },
+          "continueLessonId": {
+            "type": "string",
+            "nullable": true
+          },
+          "streak": {
+            "$ref": "#/components/schemas/StreakView"
+          }
+        },
+        "required": [
+          "levels",
+          "continueLessonId",
+          "streak"
+        ]
+      },
       "AnswerEventDto": {
         "type": "object",
         "properties": {
@@ -1536,6 +1687,48 @@
         },
         "required": [
           "answers"
+        ]
+      },
+      "AttemptResultView": {
+        "type": "object",
+        "properties": {
+          "passed": {
+            "type": "boolean"
+          },
+          "accuracyPercent": {
+            "type": "number"
+          },
+          "stars": {
+            "type": "number"
+          },
+          "xpAwarded": {
+            "type": "number"
+          },
+          "bestScore": {
+            "type": "number"
+          },
+          "bestStars": {
+            "type": "number"
+          },
+          "attempts": {
+            "type": "number"
+          },
+          "wrongRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "passed",
+          "accuracyPercent",
+          "stars",
+          "xpAwarded",
+          "bestScore",
+          "bestStars",
+          "attempts",
+          "wrongRefs"
         ]
       },
       "CreateClassDto": {

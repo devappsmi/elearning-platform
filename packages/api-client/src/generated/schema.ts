@@ -652,6 +652,42 @@ export interface components {
             /** @enum {number} */
             dailyXpGoal?: 10 | 30 | 50;
         };
+        PathLessonView: {
+            /** @enum {string} */
+            state: "done" | "available" | "locked";
+            id: string;
+            title: string;
+            order: number;
+            isCheckpoint: boolean;
+            stars: number | null;
+        };
+        PathUnitView: {
+            /** @enum {string} */
+            type: "kana" | "conversation";
+            id: string;
+            title: string;
+            order: number;
+            unlocked: boolean;
+            completedLessons: number;
+            totalLessons: number;
+            lessons: components["schemas"]["PathLessonView"][];
+        };
+        PathLevelView: {
+            id: string;
+            code: string;
+            name: string;
+            order: number;
+            units: components["schemas"]["PathUnitView"][];
+        };
+        StreakView: {
+            current: number;
+            longest: number;
+        };
+        PathView: {
+            levels: components["schemas"]["PathLevelView"][];
+            continueLessonId: string | null;
+            streak: components["schemas"]["StreakView"];
+        };
         AnswerEventDto: {
             ref: string;
             /** @enum {string} */
@@ -661,6 +697,16 @@ export interface components {
         };
         SubmitAttemptDto: {
             answers: components["schemas"]["AnswerEventDto"][];
+        };
+        AttemptResultView: {
+            passed: boolean;
+            accuracyPercent: number;
+            stars: number;
+            xpAwarded: number;
+            bestScore: number;
+            bestStars: number;
+            attempts: number;
+            wrongRefs: string[];
         };
         CreateClassDto: {
             name: string;
@@ -1012,7 +1058,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["PathView"];
                 };
             };
         };
@@ -1056,7 +1102,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["AttemptResultView"];
                 };
             };
         };

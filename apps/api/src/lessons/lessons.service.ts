@@ -5,19 +5,9 @@ import { ContentService } from "../content/content.service";
 import { GamificationService } from "../gamification/gamification.service";
 import { SrsService } from "../srs/srs.service";
 import type { AnswerEventDto } from "./dto/submit-attempt.dto";
+import { AttemptResultView } from "./dto/attempt-result.dto";
 
 const PASS_THRESHOLD = 80;
-
-export interface AttemptResultView {
-  passed: boolean;
-  accuracyPercent: number;
-  stars: number;
-  xpAwarded: number;
-  bestScore: number;
-  bestStars: number;
-  attempts: number;
-  wrongRefs: string[];
-}
 
 /** LessonsModule -- Milestone 7, PALING PENTING (lihat docs/PLAN.md).
  *
