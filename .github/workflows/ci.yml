@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: elearning
+          POSTGRES_PASSWORD: elearning
+          POSTGRES_DB: elearning
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U elearning"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm turbo run lint typecheck test
+
+      - name: Migration drift check
+        working-directory: apps/api
+        env:
+          DATABASE_URL: postgresql://elearning:elearning@localhost:5432/elearning
+        run: pnpm prisma migrate deploy

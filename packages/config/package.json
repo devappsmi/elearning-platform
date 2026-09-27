@@ -1,0 +1,16 @@
+{
+  "name": "@elearning/config",
+  "private": true,
+  "version": "0.0.0",
+  "main": "index.js",
+  "exports": {
+    "./eslint": "./eslint-preset.js",
+    "./tailwind": "./tailwind-preset.js"
+  },
+  "dependencies": {
+    "@eslint/js": "^9.17.0",
+    "typescript-eslint": "^8.19.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-config-prettier": "^9.1.0"
+  }
+}
