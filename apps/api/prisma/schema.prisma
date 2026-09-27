@@ -1,0 +1,463 @@
+// Skema database — lihat plan fondasi (C:\Users\firma\.claude\plans\sunny-cooking-floyd.md,
+// bagian "2. Skema Database (Prisma)") untuk penjelasan tiap keputusan desain.
+// Single-tenant: sengaja TIDAK ADA kolom org_id/tenant_id di mana pun.
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ---------- Institusi / Admin ----------
+
+model Institution {
+  id        String   @id @default("singleton") // singleton, ID tetap — TANPA seat_quota/plan
+  name      String
+  logoUrl   String?  @map("logo_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("institutions")
+}
+
+enum AdminRole {
+  OWNER
+  STAFF
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  role         AdminRole @default(STAFF) // STAFF = admin+pengajar digabung (satu role, tidak dipisah)
+  isActive     Boolean   @default(true) @map("is_active")
+  lastLoginAt  DateTime? @map("last_login_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  refreshTokens AdminRefreshToken[]
+  announcements Announcement[]
+  scenarios     Scenario[]
+
+  @@map("admin_users")
+}
+
+// Tidak ada di daftar literal PRD §9.3 — dibutuhkan supaya refresh token bisa
+// di-revoke (JWT stateless tidak bisa direvoke tanpa blocklist).
+model AdminRefreshToken {
+  id              String    @id @default(cuid())
+  adminUserId     String    @map("admin_user_id")
+  adminUser       AdminUser @relation(fields: [adminUserId], references: [id])
+  tokenHash       String    @unique @map("token_hash")
+  expiresAt       DateTime  @map("expires_at")
+  revokedAt       DateTime? @map("revoked_at")
+  replacedByToken String?   @map("replaced_by_token")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  @@index([adminUserId])
+  @@map("admin_refresh_tokens")
+}
+
+// ---------- Kelas / Undangan / Murid ----------
+
+enum ClassStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model Class {
+  id            String      @id @default(cuid())
+  name          String
+  targetLevelId String?     @map("target_level_id")
+  targetLevel   Level?      @relation(fields: [targetLevelId], references: [id])
+  description   String?
+  status        ClassStatus @default(ACTIVE)
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  invitations   Invitation[]
+  students      User[]
+  announcements Announcement[]
+
+  @@map("classes")
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}
+
+model Invitation {
+  id         String           @id @default(cuid())
+  classId    String           @map("class_id")
+  class      Class            @relation(fields: [classId], references: [id])
+  name       String
+  email      String
+  tokenHash  String           @unique @map("token_hash") // sha256(token mentah) -- token mentah cuma ada di link email
+  status     InvitationStatus @default(PENDING)
+  expiresAt  DateTime         @map("expires_at")
+  acceptedAt DateTime?        @map("accepted_at")
+  revokedAt  DateTime?        @map("revoked_at")
+  createdAt  DateTime         @default(now()) @map("created_at")
+  updatedAt  DateTime         @updatedAt @map("updated_at")
+
+  // AB "1 email = 1 undangan aktif": ditegakkan di service layer (cek dalam
+  // transaksi sebelum insert) -- Prisma tidak bisa unique-index ber-filter status.
+  @@index([email])
+  @@index([status])
+  @@map("invitations")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model User {
+  id                    String     @id @default(cuid())
+  classId               String     @map("class_id")
+  class                 Class      @relation(fields: [classId], references: [id])
+  name                  String
+  email                 String     @unique
+  passwordHash          String     @map("password_hash")
+  avatarUrl             String?    @map("avatar_url")
+  status                UserStatus @default(ACTIVE)
+  dailyXpGoal           Int        @default(30) @map("daily_xp_goal") // GAM-01: murid bisa ubah 10/30/50
+  placementStartUnitId  String?    @map("placement_start_unit_id") // AUTH-05: null = mulai Level 1
+  placementStartUnit    Unit?      @relation(fields: [placementStartUnitId], references: [id])
+  createdAt             DateTime   @default(now()) @map("created_at")
+  updatedAt             DateTime   @updatedAt @map("updated_at")
+  lastActiveAt          DateTime?  @map("last_active_at")
+
+  refreshTokens    RefreshToken[]
+  passwordResets   PasswordResetToken[]
+  progress         UserLessonProgress[]
+  reviewItems      ReviewItem[]
+  scenarioAttempts ScenarioAttempt[]
+  xpEvents         XpEvent[]
+  streak           Streak?
+  badges           UserBadge[]
+
+  @@index([classId])
+  @@map("users")
+}
+
+model RefreshToken {
+  id              String    @id @default(cuid())
+  userId          String    @map("user_id")
+  user            User      @relation(fields: [userId], references: [id])
+  tokenHash       String    @unique @map("token_hash")
+  expiresAt       DateTime  @map("expires_at")
+  revokedAt       DateTime? @map("revoked_at")
+  replacedByToken String?   @map("replaced_by_token")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// AUTH-03 "lupa password", expiry 1 jam -- pola opaque-token+hash sama seperti Invitation
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String    @map("user_id")
+  user      User      @relation(fields: [userId], references: [id])
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+// ---------- Kurikulum ----------
+
+enum LevelCode {
+  HIRAGANA
+  KATAKANA
+  DASAR
+  N5
+  N4
+}
+
+model Level {
+  id    String    @id @default(cuid())
+  code  LevelCode @unique
+  name  String
+  order Int       @unique
+
+  units         Unit[]
+  classesTarget Class[]
+
+  @@index([order])
+  @@map("levels")
+}
+
+model Unit {
+  id      String @id @default(cuid())
+  levelId String @map("level_id")
+  level   Level  @relation(fields: [levelId], references: [id])
+  title   String
+  order   Int
+
+  lessons        Lesson[]
+  vocab          Vocab[]
+  placementUsers User[] // kebalikan dari User.placementStartUnit
+  badges         Badge[] // badge dinamis per-unit
+
+  @@unique([levelId, order])
+  @@map("units")
+}
+
+model Lesson {
+  id           String  @id @default(cuid())
+  unitId       String  @map("unit_id")
+  unit         Unit    @relation(fields: [unitId], references: [id])
+  title        String
+  order        Int
+  isCheckpoint Boolean @default(false) @map("is_checkpoint") // LP-05: checkpoint = Lesson yang ditandai
+
+  exercises Exercise[]
+  progress  UserLessonProgress[]
+
+  @@unique([unitId, order])
+  @@map("lessons")
+}
+
+enum ExerciseType {
+  CHOOSE
+  MATCHING
+  ASSEMBLE
+  LISTENING
+  FILL_IN
+}
+
+model Exercise {
+  id         String       @id @default(cuid())
+  lessonId   String       @map("lesson_id")
+  lesson     Lesson       @relation(fields: [lessonId], references: [id])
+  type       ExerciseType
+  order      Int
+  payload    Json // bentuknya divalidasi zod packages/domain, bukan Postgres
+  difficulty Int          @default(1)
+
+  @@index([lessonId])
+  @@map("exercises")
+}
+
+// Tambahan di luar daftar literal §9.3 -- SUP-01/02 butuh vocab yang bisa
+// di-query relasional, dan ReviewItem butuh target FK sungguhan.
+model Vocab {
+  id           String  @id @default(cuid())
+  unitId       String? @map("unit_id")
+  unit         Unit?   @relation(fields: [unitId], references: [id])
+  jp           String
+  reading      String
+  romaji       String
+  meaningId    String  @map("meaning_id")
+  partOfSpeech String? @map("part_of_speech")
+  exampleJp    String? @map("example_jp")
+  exampleId    String? @map("example_id")
+
+  @@index([jp])
+  @@index([reading])
+  @@index([romaji])
+  @@index([meaningId])
+  @@map("vocab")
+}
+
+model UserLessonProgress {
+  id          String    @id @default(cuid())
+  userId      String    @map("user_id")
+  user        User      @relation(fields: [userId], references: [id])
+  lessonId    String    @map("lesson_id")
+  lesson      Lesson    @relation(fields: [lessonId], references: [id])
+  score       Int // skor terbaik lintas percobaan (0-100)
+  stars       Int // 0-3
+  attempts    Int       @default(1)
+  completedAt DateTime? @map("completed_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  // Satu baris per user+lesson; retry meng-update baris ini (skor terbaik
+  // menang, attempts bertambah) -- timeline per-attempt (ADM-31)
+  // direkonstruksi dari XpEvent, bukan tabel terpisah.
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@map("user_lesson_progress")
+}
+
+enum ReviewItemType {
+  WORD
+  KANJI // entri Kanji sementara cuma Vocab yang ditandai begini -- entitas Kanji
+  // khusus dengan data stroke-order adalah Fase 2 (EX-06)
+}
+
+model ReviewItem {
+  id           String         @id @default(cuid())
+  userId       String         @map("user_id")
+  user         User           @relation(fields: [userId], references: [id])
+  itemType     ReviewItemType @map("item_type")
+  itemId       String         @map("item_id") // sengaja BUKAN FK (relasi polimorfik Vocab/Kanji) -- integritas di service layer
+  srsStage     Int            @default(0) @map("srs_stage") // index ke [1,3,7,14,30] hari
+  nextReviewAt DateTime       @map("next_review_at")
+  lastResult   Boolean?       @map("last_result")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  @@unique([userId, itemType, itemId])
+  @@index([userId, nextReviewAt])
+  @@map("review_items")
+}
+
+// ---------- Percakapan (template CONV, BEDA dari TutorModule -- lihat plan poin 6) ----------
+
+enum ScenarioStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum ScenarioMode {
+  PRACTICE
+  TEST
+}
+
+model Scenario {
+  id          String         @id @default(cuid())
+  titleJp     String         @map("title_jp")
+  titleId     String         @map("title_id")
+  level       LevelCode
+  payload     Json // shape CONV-02: roles, lines[], vocab[], grammar_notes[] -- TANPA field audio manual
+  status      ScenarioStatus @default(DRAFT)
+  createdById String?        @map("created_by_id")
+  createdBy   AdminUser?     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  attempts ScenarioAttempt[]
+
+  @@map("scenarios")
+}
+
+model ScenarioAttempt {
+  id          String       @id @default(cuid())
+  userId      String       @map("user_id")
+  user        User         @relation(fields: [userId], references: [id])
+  scenarioId  String       @map("scenario_id")
+  scenario    Scenario     @relation(fields: [scenarioId], references: [id])
+  mode        ScenarioMode
+  score       Int
+  durationSec Int          @map("duration_sec")
+  createdAt   DateTime     @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([scenarioId])
+  @@map("scenario_attempts")
+}
+
+// ---------- Gamifikasi ----------
+
+enum XpSource {
+  LESSON
+  CHECKPOINT
+  SCENARIO
+  DAILY_QUIZ
+  // Fase 2 tinggal tambah varian PRONUNCIATION di sini
+}
+
+model XpEvent {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  source    XpSource
+  amount    Int // selalu positif -- ledger append-only, lihat keputusan lintas-sektor di plan
+  refId     String?  @map("ref_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId, createdAt])
+  @@map("xp_events")
+}
+
+model Streak {
+  id               String    @id @default(cuid())
+  userId           String    @unique @map("user_id")
+  user             User      @relation(fields: [userId], references: [id])
+  current          Int       @default(0)
+  longest          Int       @default(0)
+  lastActivityDate DateTime? @map("last_activity_date") @db.Date
+  freezeAvailable  Boolean   @default(false) @map("freeze_available")
+
+  @@map("streaks")
+}
+
+model Badge {
+  id       String  @id @default(cuid())
+  code     String  @unique // statis: "FIRST_STEP","STREAK_7",... ; dinamis: "MASTER_UNIT_<unitId>"
+  nameId   String  @map("name_id")
+  criteria Json // dievaluasi badgeService.ts hasil porting
+  unitId   String? @map("unit_id")
+  unit     Unit?   @relation(fields: [unitId], references: [id])
+
+  userBadges UserBadge[]
+
+  @@map("badges")
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String   @map("user_id")
+  user     User     @relation(fields: [userId], references: [id])
+  badgeId  String   @map("badge_id")
+  badge    Badge    @relation(fields: [badgeId], references: [id])
+  earnedAt DateTime @default(now()) @map("earned_at")
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+  @@map("user_badges")
+}
+
+// ---------- Pengumuman (tabel saja untuk sekarang -- endpoint/modul Fase 2, ADM-42) ----------
+
+enum AnnouncementTarget {
+  ALL
+  CLASS
+}
+
+model Announcement {
+  id          String             @id @default(cuid())
+  title       String
+  body        String
+  target      AnnouncementTarget
+  classId     String?            @map("class_id")
+  class       Class?             @relation(fields: [classId], references: [id])
+  createdById String             @map("created_by_id")
+  createdBy   AdminUser          @relation(fields: [createdById], references: [id])
+  createdAt   DateTime           @default(now()) @map("created_at")
+
+  @@index([classId])
+  @@map("announcements")
+}
+
+// ---------- Cache audio (§9.4) ----------
+
+model AudioAsset {
+  id        String   @id @default(cuid())
+  textHash  String   @unique @map("text_hash") // sha256(teks jp persis) -- lihat plan poin 6 soal
+  // perluasan ke hash(teks+voiceId) untuk TutorModule nanti (tidak butuh migrasi baru,
+  // ini string hash opaque, tidak dipaksa sha256(text) murni di level DB)
+  textJp    String   @map("text_jp")
+  s3Url     String   @map("s3_url")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([textHash])
+  @@map("audio_assets")
+}
+
+// Catatan: PronunciationResult (ada di PRD §9.3) sengaja TIDAK dimodelkan
+// sekarang -- murni Fase 2.

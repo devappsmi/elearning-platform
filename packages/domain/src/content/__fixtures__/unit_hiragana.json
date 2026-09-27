@@ -1,0 +1,2950 @@
+{
+  "id": "unit_hiragana",
+  "order": 1,
+  "title": "Hiragana",
+  "description": "Membaca dan mengucapkan 46 hiragana dasar, dakuten, youon, sokuon, dan vokal panjang.",
+  "type": "kana",
+  "grammar_notes": [
+    {
+      "id": "g_dakuten",
+      "title": "Dakuten dan handakuten",
+      "body_md": "Dua titik kecil (゛) mengubah bunyi: か→が, さ→ざ, た→だ, は→ば. Lingkaran kecil (゜) hanya untuk baris は: は→ぱ."
+    },
+    {
+      "id": "g_youon",
+      "title": "Youon (ゃ ゅ ょ kecil)",
+      "body_md": "Kana berakhiran i digabung ゃ/ゅ/ょ kecil menjadi satu suku kata: き+ゃ = きゃ (kya)."
+    },
+    {
+      "id": "g_sokuon",
+      "title": "Sokuon (っ kecil) dan vokal panjang",
+      "body_md": "っ kecil menggandakan konsonan berikutnya: きって (kitte). Vokal panjang ditulis dengan menambah vokal: おかあさん (okaasan), とうきょう (toukyou)."
+    }
+  ],
+  "vocab": [
+    {
+      "id": "k_a",
+      "surface": "あ",
+      "kana": "あ",
+      "romaji": "a",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_a.mp3"
+    },
+    {
+      "id": "k_i",
+      "surface": "い",
+      "kana": "い",
+      "romaji": "i",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_i.mp3"
+    },
+    {
+      "id": "k_u",
+      "surface": "う",
+      "kana": "う",
+      "romaji": "u",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_u.mp3"
+    },
+    {
+      "id": "k_e",
+      "surface": "え",
+      "kana": "え",
+      "romaji": "e",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_e.mp3"
+    },
+    {
+      "id": "k_o",
+      "surface": "お",
+      "kana": "お",
+      "romaji": "o",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_o.mp3"
+    },
+    {
+      "id": "k_ka",
+      "surface": "か",
+      "kana": "か",
+      "romaji": "ka",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ka.mp3"
+    },
+    {
+      "id": "k_ki",
+      "surface": "き",
+      "kana": "き",
+      "romaji": "ki",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ki.mp3"
+    },
+    {
+      "id": "k_ku",
+      "surface": "く",
+      "kana": "く",
+      "romaji": "ku",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ku.mp3"
+    },
+    {
+      "id": "k_ke",
+      "surface": "け",
+      "kana": "け",
+      "romaji": "ke",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ke.mp3"
+    },
+    {
+      "id": "k_ko",
+      "surface": "こ",
+      "kana": "こ",
+      "romaji": "ko",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ko.mp3"
+    },
+    {
+      "id": "k_sa",
+      "surface": "さ",
+      "kana": "さ",
+      "romaji": "sa",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_sa.mp3"
+    },
+    {
+      "id": "k_shi",
+      "surface": "し",
+      "kana": "し",
+      "romaji": "shi",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_shi.mp3"
+    },
+    {
+      "id": "k_su",
+      "surface": "す",
+      "kana": "す",
+      "romaji": "su",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_su.mp3"
+    },
+    {
+      "id": "k_se",
+      "surface": "せ",
+      "kana": "せ",
+      "romaji": "se",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_se.mp3"
+    },
+    {
+      "id": "k_so",
+      "surface": "そ",
+      "kana": "そ",
+      "romaji": "so",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_so.mp3"
+    },
+    {
+      "id": "k_ta",
+      "surface": "た",
+      "kana": "た",
+      "romaji": "ta",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ta.mp3"
+    },
+    {
+      "id": "k_chi",
+      "surface": "ち",
+      "kana": "ち",
+      "romaji": "chi",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_chi.mp3"
+    },
+    {
+      "id": "k_tsu",
+      "surface": "つ",
+      "kana": "つ",
+      "romaji": "tsu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_tsu.mp3"
+    },
+    {
+      "id": "k_te",
+      "surface": "て",
+      "kana": "て",
+      "romaji": "te",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_te.mp3"
+    },
+    {
+      "id": "k_to",
+      "surface": "と",
+      "kana": "と",
+      "romaji": "to",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_to.mp3"
+    },
+    {
+      "id": "k_na",
+      "surface": "な",
+      "kana": "な",
+      "romaji": "na",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_na.mp3"
+    },
+    {
+      "id": "k_ni",
+      "surface": "に",
+      "kana": "に",
+      "romaji": "ni",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ni.mp3"
+    },
+    {
+      "id": "k_nu",
+      "surface": "ぬ",
+      "kana": "ぬ",
+      "romaji": "nu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_nu.mp3"
+    },
+    {
+      "id": "k_ne",
+      "surface": "ね",
+      "kana": "ね",
+      "romaji": "ne",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ne.mp3"
+    },
+    {
+      "id": "k_no",
+      "surface": "の",
+      "kana": "の",
+      "romaji": "no",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_no.mp3"
+    },
+    {
+      "id": "k_ha",
+      "surface": "は",
+      "kana": "は",
+      "romaji": "ha",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ha.mp3"
+    },
+    {
+      "id": "k_hi",
+      "surface": "ひ",
+      "kana": "ひ",
+      "romaji": "hi",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_hi.mp3"
+    },
+    {
+      "id": "k_fu",
+      "surface": "ふ",
+      "kana": "ふ",
+      "romaji": "fu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_fu.mp3"
+    },
+    {
+      "id": "k_he",
+      "surface": "へ",
+      "kana": "へ",
+      "romaji": "he",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_he.mp3"
+    },
+    {
+      "id": "k_ho",
+      "surface": "ほ",
+      "kana": "ほ",
+      "romaji": "ho",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ho.mp3"
+    },
+    {
+      "id": "k_ma",
+      "surface": "ま",
+      "kana": "ま",
+      "romaji": "ma",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ma.mp3"
+    },
+    {
+      "id": "k_mi",
+      "surface": "み",
+      "kana": "み",
+      "romaji": "mi",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_mi.mp3"
+    },
+    {
+      "id": "k_mu",
+      "surface": "む",
+      "kana": "む",
+      "romaji": "mu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_mu.mp3"
+    },
+    {
+      "id": "k_me",
+      "surface": "め",
+      "kana": "め",
+      "romaji": "me",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_me.mp3"
+    },
+    {
+      "id": "k_mo",
+      "surface": "も",
+      "kana": "も",
+      "romaji": "mo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_mo.mp3"
+    },
+    {
+      "id": "k_ya",
+      "surface": "や",
+      "kana": "や",
+      "romaji": "ya",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ya.mp3"
+    },
+    {
+      "id": "k_yu",
+      "surface": "ゆ",
+      "kana": "ゆ",
+      "romaji": "yu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_yu.mp3"
+    },
+    {
+      "id": "k_yo",
+      "surface": "よ",
+      "kana": "よ",
+      "romaji": "yo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_yo.mp3"
+    },
+    {
+      "id": "k_ra",
+      "surface": "ら",
+      "kana": "ら",
+      "romaji": "ra",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ra.mp3"
+    },
+    {
+      "id": "k_ri",
+      "surface": "り",
+      "kana": "り",
+      "romaji": "ri",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ri.mp3"
+    },
+    {
+      "id": "k_ru",
+      "surface": "る",
+      "kana": "る",
+      "romaji": "ru",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ru.mp3"
+    },
+    {
+      "id": "k_re",
+      "surface": "れ",
+      "kana": "れ",
+      "romaji": "re",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_re.mp3"
+    },
+    {
+      "id": "k_ro",
+      "surface": "ろ",
+      "kana": "ろ",
+      "romaji": "ro",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ro.mp3"
+    },
+    {
+      "id": "k_wa",
+      "surface": "わ",
+      "kana": "わ",
+      "romaji": "wa",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_wa.mp3"
+    },
+    {
+      "id": "k_wo",
+      "surface": "を",
+      "kana": "を",
+      "romaji": "wo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_wo.mp3"
+    },
+    {
+      "id": "k_n",
+      "surface": "ん",
+      "kana": "ん",
+      "romaji": "n",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_n.mp3"
+    },
+    {
+      "id": "k_ga",
+      "surface": "が",
+      "kana": "が",
+      "romaji": "ga",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ga.mp3"
+    },
+    {
+      "id": "k_gi",
+      "surface": "ぎ",
+      "kana": "ぎ",
+      "romaji": "gi",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_gi.mp3"
+    },
+    {
+      "id": "k_gu",
+      "surface": "ぐ",
+      "kana": "ぐ",
+      "romaji": "gu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_gu.mp3"
+    },
+    {
+      "id": "k_ge",
+      "surface": "げ",
+      "kana": "げ",
+      "romaji": "ge",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ge.mp3"
+    },
+    {
+      "id": "k_go",
+      "surface": "ご",
+      "kana": "ご",
+      "romaji": "go",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_go.mp3"
+    },
+    {
+      "id": "k_za",
+      "surface": "ざ",
+      "kana": "ざ",
+      "romaji": "za",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_za.mp3"
+    },
+    {
+      "id": "k_ji",
+      "surface": "じ",
+      "kana": "じ",
+      "romaji": "ji",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ji.mp3"
+    },
+    {
+      "id": "k_zu",
+      "surface": "ず",
+      "kana": "ず",
+      "romaji": "zu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_zu.mp3"
+    },
+    {
+      "id": "k_ze",
+      "surface": "ぜ",
+      "kana": "ぜ",
+      "romaji": "ze",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ze.mp3"
+    },
+    {
+      "id": "k_zo",
+      "surface": "ぞ",
+      "kana": "ぞ",
+      "romaji": "zo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_zo.mp3"
+    },
+    {
+      "id": "k_da",
+      "surface": "だ",
+      "kana": "だ",
+      "romaji": "da",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_da.mp3"
+    },
+    {
+      "id": "k_dji",
+      "surface": "ぢ",
+      "kana": "ぢ",
+      "romaji": "dji",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_dji.mp3"
+    },
+    {
+      "id": "k_dzu",
+      "surface": "づ",
+      "kana": "づ",
+      "romaji": "dzu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_dzu.mp3"
+    },
+    {
+      "id": "k_de",
+      "surface": "で",
+      "kana": "で",
+      "romaji": "de",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_de.mp3"
+    },
+    {
+      "id": "k_do",
+      "surface": "ど",
+      "kana": "ど",
+      "romaji": "do",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_do.mp3"
+    },
+    {
+      "id": "k_ba",
+      "surface": "ば",
+      "kana": "ば",
+      "romaji": "ba",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ba.mp3"
+    },
+    {
+      "id": "k_bi",
+      "surface": "び",
+      "kana": "び",
+      "romaji": "bi",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_bi.mp3"
+    },
+    {
+      "id": "k_bu",
+      "surface": "ぶ",
+      "kana": "ぶ",
+      "romaji": "bu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_bu.mp3"
+    },
+    {
+      "id": "k_be",
+      "surface": "べ",
+      "kana": "べ",
+      "romaji": "be",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_be.mp3"
+    },
+    {
+      "id": "k_bo",
+      "surface": "ぼ",
+      "kana": "ぼ",
+      "romaji": "bo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_bo.mp3"
+    },
+    {
+      "id": "k_pa",
+      "surface": "ぱ",
+      "kana": "ぱ",
+      "romaji": "pa",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_pa.mp3"
+    },
+    {
+      "id": "k_pi",
+      "surface": "ぴ",
+      "kana": "ぴ",
+      "romaji": "pi",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_pi.mp3"
+    },
+    {
+      "id": "k_pu",
+      "surface": "ぷ",
+      "kana": "ぷ",
+      "romaji": "pu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_pu.mp3"
+    },
+    {
+      "id": "k_pe",
+      "surface": "ぺ",
+      "kana": "ぺ",
+      "romaji": "pe",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_pe.mp3"
+    },
+    {
+      "id": "k_po",
+      "surface": "ぽ",
+      "kana": "ぽ",
+      "romaji": "po",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_po.mp3"
+    },
+    {
+      "id": "k_kya",
+      "surface": "きゃ",
+      "kana": "きゃ",
+      "romaji": "kya",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_kya.mp3"
+    },
+    {
+      "id": "k_kyu",
+      "surface": "きゅ",
+      "kana": "きゅ",
+      "romaji": "kyu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_kyu.mp3"
+    },
+    {
+      "id": "k_kyo",
+      "surface": "きょ",
+      "kana": "きょ",
+      "romaji": "kyo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_kyo.mp3"
+    },
+    {
+      "id": "k_sha",
+      "surface": "しゃ",
+      "kana": "しゃ",
+      "romaji": "sha",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_sha.mp3"
+    },
+    {
+      "id": "k_shu",
+      "surface": "しゅ",
+      "kana": "しゅ",
+      "romaji": "shu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_shu.mp3"
+    },
+    {
+      "id": "k_sho",
+      "surface": "しょ",
+      "kana": "しょ",
+      "romaji": "sho",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_sho.mp3"
+    },
+    {
+      "id": "k_cha",
+      "surface": "ちゃ",
+      "kana": "ちゃ",
+      "romaji": "cha",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_cha.mp3"
+    },
+    {
+      "id": "k_chu",
+      "surface": "ちゅ",
+      "kana": "ちゅ",
+      "romaji": "chu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_chu.mp3"
+    },
+    {
+      "id": "k_cho",
+      "surface": "ちょ",
+      "kana": "ちょ",
+      "romaji": "cho",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_cho.mp3"
+    },
+    {
+      "id": "k_nya",
+      "surface": "にゃ",
+      "kana": "にゃ",
+      "romaji": "nya",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_nya.mp3"
+    },
+    {
+      "id": "k_nyu",
+      "surface": "にゅ",
+      "kana": "にゅ",
+      "romaji": "nyu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_nyu.mp3"
+    },
+    {
+      "id": "k_nyo",
+      "surface": "にょ",
+      "kana": "にょ",
+      "romaji": "nyo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_nyo.mp3"
+    },
+    {
+      "id": "k_hya",
+      "surface": "ひゃ",
+      "kana": "ひゃ",
+      "romaji": "hya",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_hya.mp3"
+    },
+    {
+      "id": "k_hyu",
+      "surface": "ひゅ",
+      "kana": "ひゅ",
+      "romaji": "hyu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_hyu.mp3"
+    },
+    {
+      "id": "k_hyo",
+      "surface": "ひょ",
+      "kana": "ひょ",
+      "romaji": "hyo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_hyo.mp3"
+    },
+    {
+      "id": "k_mya",
+      "surface": "みゃ",
+      "kana": "みゃ",
+      "romaji": "mya",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_mya.mp3"
+    },
+    {
+      "id": "k_myu",
+      "surface": "みゅ",
+      "kana": "みゅ",
+      "romaji": "myu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_myu.mp3"
+    },
+    {
+      "id": "k_myo",
+      "surface": "みょ",
+      "kana": "みょ",
+      "romaji": "myo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_myo.mp3"
+    },
+    {
+      "id": "k_rya",
+      "surface": "りゃ",
+      "kana": "りゃ",
+      "romaji": "rya",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_rya.mp3"
+    },
+    {
+      "id": "k_ryu",
+      "surface": "りゅ",
+      "kana": "りゅ",
+      "romaji": "ryu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ryu.mp3"
+    },
+    {
+      "id": "k_ryo",
+      "surface": "りょ",
+      "kana": "りょ",
+      "romaji": "ryo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ryo.mp3"
+    },
+    {
+      "id": "k_gya",
+      "surface": "ぎゃ",
+      "kana": "ぎゃ",
+      "romaji": "gya",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_gya.mp3"
+    },
+    {
+      "id": "k_gyu",
+      "surface": "ぎゅ",
+      "kana": "ぎゅ",
+      "romaji": "gyu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_gyu.mp3"
+    },
+    {
+      "id": "k_gyo",
+      "surface": "ぎょ",
+      "kana": "ぎょ",
+      "romaji": "gyo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_gyo.mp3"
+    },
+    {
+      "id": "k_ja",
+      "surface": "じゃ",
+      "kana": "じゃ",
+      "romaji": "ja",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ja.mp3"
+    },
+    {
+      "id": "k_ju",
+      "surface": "じゅ",
+      "kana": "じゅ",
+      "romaji": "ju",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_ju.mp3"
+    },
+    {
+      "id": "k_jo",
+      "surface": "じょ",
+      "kana": "じょ",
+      "romaji": "jo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_jo.mp3"
+    },
+    {
+      "id": "k_bya",
+      "surface": "びゃ",
+      "kana": "びゃ",
+      "romaji": "bya",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_bya.mp3"
+    },
+    {
+      "id": "k_byu",
+      "surface": "びゅ",
+      "kana": "びゅ",
+      "romaji": "byu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_byu.mp3"
+    },
+    {
+      "id": "k_byo",
+      "surface": "びょ",
+      "kana": "びょ",
+      "romaji": "byo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_byo.mp3"
+    },
+    {
+      "id": "k_pya",
+      "surface": "ぴゃ",
+      "kana": "ぴゃ",
+      "romaji": "pya",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_pya.mp3"
+    },
+    {
+      "id": "k_pyu",
+      "surface": "ぴゅ",
+      "kana": "ぴゅ",
+      "romaji": "pyu",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_pyu.mp3"
+    },
+    {
+      "id": "k_pyo",
+      "surface": "ぴょ",
+      "kana": "ぴょ",
+      "romaji": "pyo",
+      "meaning_id": null,
+      "image": null,
+      "audio": "k_pyo.mp3"
+    }
+  ],
+  "sentences": [
+    {
+      "id": "w_ai",
+      "surface": "愛",
+      "kana": "あい",
+      "romaji": "ai",
+      "meaning_id": "cinta",
+      "words": [
+        {
+          "surface": "愛",
+          "kana": "あい"
+        }
+      ],
+      "assemble_tokens": [
+        "あ",
+        "い"
+      ],
+      "audio": "w_ai.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_ie",
+      "surface": "家",
+      "kana": "いえ",
+      "romaji": "ie",
+      "meaning_id": "rumah",
+      "words": [
+        {
+          "surface": "家",
+          "kana": "いえ"
+        }
+      ],
+      "assemble_tokens": [
+        "い",
+        "え"
+      ],
+      "audio": "w_ie.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_kasa",
+      "surface": "傘",
+      "kana": "かさ",
+      "romaji": "kasa",
+      "meaning_id": "payung",
+      "words": [
+        {
+          "surface": "傘",
+          "kana": "かさ"
+        }
+      ],
+      "assemble_tokens": [
+        "か",
+        "さ"
+      ],
+      "audio": "w_kasa.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_ao",
+      "surface": "青",
+      "kana": "あお",
+      "romaji": "ao",
+      "meaning_id": "biru",
+      "words": [
+        {
+          "surface": "青",
+          "kana": "あお"
+        }
+      ],
+      "assemble_tokens": [
+        "あ",
+        "お"
+      ],
+      "audio": "w_ao.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_aki",
+      "surface": "秋",
+      "kana": "あき",
+      "romaji": "aki",
+      "meaning_id": "musim gugur",
+      "words": [
+        {
+          "surface": "秋",
+          "kana": "あき"
+        }
+      ],
+      "assemble_tokens": [
+        "あ",
+        "き"
+      ],
+      "audio": "w_aki.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_eki",
+      "surface": "駅",
+      "kana": "えき",
+      "romaji": "eki",
+      "meaning_id": "stasiun",
+      "words": [
+        {
+          "surface": "駅",
+          "kana": "えき"
+        }
+      ],
+      "assemble_tokens": [
+        "え",
+        "き"
+      ],
+      "audio": "w_eki.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_sushi",
+      "surface": "寿司",
+      "kana": "すし",
+      "romaji": "sushi",
+      "meaning_id": "sushi",
+      "words": [
+        {
+          "surface": "寿司",
+          "kana": "すし"
+        }
+      ],
+      "assemble_tokens": [
+        "す",
+        "し"
+      ],
+      "audio": "w_sushi.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_sekai",
+      "surface": "世界",
+      "kana": "せかい",
+      "romaji": "sekai",
+      "meaning_id": "dunia",
+      "words": [
+        {
+          "surface": "世界",
+          "kana": "せかい"
+        }
+      ],
+      "assemble_tokens": [
+        "せ",
+        "か",
+        "い"
+      ],
+      "audio": "w_sekai.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_tako",
+      "surface": "たこ",
+      "kana": "たこ",
+      "romaji": "tako",
+      "meaning_id": "gurita",
+      "words": [
+        {
+          "surface": "たこ",
+          "kana": "たこ"
+        }
+      ],
+      "assemble_tokens": [
+        "た",
+        "こ"
+      ],
+      "audio": "w_tako.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_neko",
+      "surface": "猫",
+      "kana": "ねこ",
+      "romaji": "neko",
+      "meaning_id": "kucing",
+      "words": [
+        {
+          "surface": "猫",
+          "kana": "ねこ"
+        }
+      ],
+      "assemble_tokens": [
+        "ね",
+        "こ"
+      ],
+      "audio": "w_neko.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_hana",
+      "surface": "花",
+      "kana": "はな",
+      "romaji": "hana",
+      "meaning_id": "bunga",
+      "words": [
+        {
+          "surface": "花",
+          "kana": "はな"
+        }
+      ],
+      "assemble_tokens": [
+        "は",
+        "な"
+      ],
+      "audio": "w_hana.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_fune",
+      "surface": "船",
+      "kana": "ふね",
+      "romaji": "fune",
+      "meaning_id": "kapal",
+      "words": [
+        {
+          "surface": "船",
+          "kana": "ふね"
+        }
+      ],
+      "assemble_tokens": [
+        "ふ",
+        "ね"
+      ],
+      "audio": "w_fune.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_hoshi",
+      "surface": "星",
+      "kana": "ほし",
+      "romaji": "hoshi",
+      "meaning_id": "bintang",
+      "words": [
+        {
+          "surface": "星",
+          "kana": "ほし"
+        }
+      ],
+      "assemble_tokens": [
+        "ほ",
+        "し"
+      ],
+      "audio": "w_hoshi.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_inu",
+      "surface": "犬",
+      "kana": "いぬ",
+      "romaji": "inu",
+      "meaning_id": "anjing",
+      "words": [
+        {
+          "surface": "犬",
+          "kana": "いぬ"
+        }
+      ],
+      "assemble_tokens": [
+        "い",
+        "ぬ"
+      ],
+      "audio": "w_inu.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_tsukue",
+      "surface": "机",
+      "kana": "つくえ",
+      "romaji": "tsukue",
+      "meaning_id": "meja",
+      "words": [
+        {
+          "surface": "机",
+          "kana": "つくえ"
+        }
+      ],
+      "assemble_tokens": [
+        "つ",
+        "く",
+        "え"
+      ],
+      "audio": "w_tsukue.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_hito",
+      "surface": "人",
+      "kana": "ひと",
+      "romaji": "hito",
+      "meaning_id": "orang",
+      "words": [
+        {
+          "surface": "人",
+          "kana": "ひと"
+        }
+      ],
+      "assemble_tokens": [
+        "ひ",
+        "と"
+      ],
+      "audio": "w_hito.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_yama",
+      "surface": "山",
+      "kana": "やま",
+      "romaji": "yama",
+      "meaning_id": "gunung",
+      "words": [
+        {
+          "surface": "山",
+          "kana": "やま"
+        }
+      ],
+      "assemble_tokens": [
+        "や",
+        "ま"
+      ],
+      "audio": "w_yama.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_mimi",
+      "surface": "耳",
+      "kana": "みみ",
+      "romaji": "mimi",
+      "meaning_id": "telinga",
+      "words": [
+        {
+          "surface": "耳",
+          "kana": "みみ"
+        }
+      ],
+      "assemble_tokens": [
+        "み",
+        "み"
+      ],
+      "audio": "w_mimi.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_yoru",
+      "surface": "夜",
+      "kana": "よる",
+      "romaji": "yoru",
+      "meaning_id": "malam",
+      "words": [
+        {
+          "surface": "夜",
+          "kana": "よる"
+        }
+      ],
+      "assemble_tokens": [
+        "よ",
+        "る"
+      ],
+      "audio": "w_yoru.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_watashi",
+      "surface": "私",
+      "kana": "わたし",
+      "romaji": "watashi",
+      "meaning_id": "saya",
+      "words": [
+        {
+          "surface": "私",
+          "kana": "わたし"
+        }
+      ],
+      "assemble_tokens": [
+        "わ",
+        "た",
+        "し"
+      ],
+      "audio": "w_watashi.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_hon",
+      "surface": "本",
+      "kana": "ほん",
+      "romaji": "hon",
+      "meaning_id": "buku",
+      "words": [
+        {
+          "surface": "本",
+          "kana": "ほん"
+        }
+      ],
+      "assemble_tokens": [
+        "ほ",
+        "ん"
+      ],
+      "audio": "w_hon.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_sakura",
+      "surface": "桜",
+      "kana": "さくら",
+      "romaji": "sakura",
+      "meaning_id": "sakura",
+      "words": [
+        {
+          "surface": "桜",
+          "kana": "さくら"
+        }
+      ],
+      "assemble_tokens": [
+        "さ",
+        "く",
+        "ら"
+      ],
+      "audio": "w_sakura.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_umi",
+      "surface": "海",
+      "kana": "うみ",
+      "romaji": "umi",
+      "meaning_id": "laut",
+      "words": [
+        {
+          "surface": "海",
+          "kana": "うみ"
+        }
+      ],
+      "assemble_tokens": [
+        "う",
+        "み"
+      ],
+      "audio": "w_umi.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_yume",
+      "surface": "夢",
+      "kana": "ゆめ",
+      "romaji": "yume",
+      "meaning_id": "mimpi",
+      "words": [
+        {
+          "surface": "夢",
+          "kana": "ゆめ"
+        }
+      ],
+      "assemble_tokens": [
+        "ゆ",
+        "め"
+      ],
+      "audio": "w_yume.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_kagi",
+      "surface": "鍵",
+      "kana": "かぎ",
+      "romaji": "kagi",
+      "meaning_id": "kunci",
+      "words": [
+        {
+          "surface": "鍵",
+          "kana": "かぎ"
+        }
+      ],
+      "assemble_tokens": [
+        "か",
+        "ぎ"
+      ],
+      "audio": "w_kagi.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_kaze",
+      "surface": "風",
+      "kana": "かぜ",
+      "romaji": "kaze",
+      "meaning_id": "angin",
+      "words": [
+        {
+          "surface": "風",
+          "kana": "かぜ"
+        }
+      ],
+      "assemble_tokens": [
+        "か",
+        "ぜ"
+      ],
+      "audio": "w_kaze.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_mizu",
+      "surface": "水",
+      "kana": "みず",
+      "romaji": "mizu",
+      "meaning_id": "air",
+      "words": [
+        {
+          "surface": "水",
+          "kana": "みず"
+        }
+      ],
+      "assemble_tokens": [
+        "み",
+        "ず"
+      ],
+      "audio": "w_mizu.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_denwa",
+      "surface": "電話",
+      "kana": "でんわ",
+      "romaji": "denwa",
+      "meaning_id": "telepon",
+      "words": [
+        {
+          "surface": "電話",
+          "kana": "でんわ"
+        }
+      ],
+      "assemble_tokens": [
+        "で",
+        "ん",
+        "わ"
+      ],
+      "audio": "w_denwa.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_tegami",
+      "surface": "手紙",
+      "kana": "てがみ",
+      "romaji": "tegami",
+      "meaning_id": "surat",
+      "words": [
+        {
+          "surface": "手紙",
+          "kana": "てがみ"
+        }
+      ],
+      "assemble_tokens": [
+        "て",
+        "が",
+        "み"
+      ],
+      "audio": "w_tegami.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_gohan",
+      "surface": "ご飯",
+      "kana": "ごはん",
+      "romaji": "gohan",
+      "meaning_id": "nasi",
+      "words": [
+        {
+          "surface": "ご飯",
+          "kana": "ごはん"
+        }
+      ],
+      "assemble_tokens": [
+        "ご",
+        "は",
+        "ん"
+      ],
+      "audio": "w_gohan.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_tamago",
+      "surface": "卵",
+      "kana": "たまご",
+      "romaji": "tamago",
+      "meaning_id": "telur",
+      "words": [
+        {
+          "surface": "卵",
+          "kana": "たまご"
+        }
+      ],
+      "assemble_tokens": [
+        "た",
+        "ま",
+        "ご"
+      ],
+      "audio": "w_tamago.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_daigaku",
+      "surface": "大学",
+      "kana": "だいがく",
+      "romaji": "daigaku",
+      "meaning_id": "universitas",
+      "words": [
+        {
+          "surface": "大学",
+          "kana": "だいがく"
+        }
+      ],
+      "assemble_tokens": [
+        "だ",
+        "い",
+        "が",
+        "く"
+      ],
+      "audio": "w_daigaku.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_buta",
+      "surface": "豚",
+      "kana": "ぶた",
+      "romaji": "buta",
+      "meaning_id": "babi",
+      "words": [
+        {
+          "surface": "豚",
+          "kana": "ぶた"
+        }
+      ],
+      "assemble_tokens": [
+        "ぶ",
+        "た"
+      ],
+      "audio": "w_buta.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_kaban",
+      "surface": "かばん",
+      "kana": "かばん",
+      "romaji": "kaban",
+      "meaning_id": "tas",
+      "words": [
+        {
+          "surface": "かばん",
+          "kana": "かばん"
+        }
+      ],
+      "assemble_tokens": [
+        "か",
+        "ば",
+        "ん"
+      ],
+      "audio": "w_kaban.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_enpitsu",
+      "surface": "鉛筆",
+      "kana": "えんぴつ",
+      "romaji": "enpitsu",
+      "meaning_id": "pensil",
+      "words": [
+        {
+          "surface": "鉛筆",
+          "kana": "えんぴつ"
+        }
+      ],
+      "assemble_tokens": [
+        "え",
+        "ん",
+        "ぴ",
+        "つ"
+      ],
+      "audio": "w_enpitsu.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_tabemono",
+      "surface": "食べ物",
+      "kana": "たべもの",
+      "romaji": "tabemono",
+      "meaning_id": "makanan",
+      "words": [
+        {
+          "surface": "食べ物",
+          "kana": "たべもの"
+        }
+      ],
+      "assemble_tokens": [
+        "た",
+        "べ",
+        "も",
+        "の"
+      ],
+      "audio": "w_tabemono.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_pan",
+      "surface": "パン",
+      "kana": "ぱん",
+      "romaji": "pan",
+      "meaning_id": "roti",
+      "words": [
+        {
+          "surface": "パン",
+          "kana": "ぱん"
+        }
+      ],
+      "assemble_tokens": [
+        "ぱ",
+        "ん"
+      ],
+      "audio": "w_pan.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_sanpo",
+      "surface": "散歩",
+      "kana": "さんぽ",
+      "romaji": "sanpo",
+      "meaning_id": "jalan-jalan",
+      "words": [
+        {
+          "surface": "散歩",
+          "kana": "さんぽ"
+        }
+      ],
+      "assemble_tokens": [
+        "さ",
+        "ん",
+        "ぽ"
+      ],
+      "audio": "w_sanpo.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_bangohan",
+      "surface": "晩ご飯",
+      "kana": "ばんごはん",
+      "romaji": "bangohan",
+      "meaning_id": "makan malam",
+      "words": [
+        {
+          "surface": "晩ご飯",
+          "kana": "ばんごはん"
+        }
+      ],
+      "assemble_tokens": [
+        "ば",
+        "ん",
+        "ご",
+        "は",
+        "ん"
+      ],
+      "audio": "w_bangohan.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_shinbun",
+      "surface": "新聞",
+      "kana": "しんぶん",
+      "romaji": "shinbun",
+      "meaning_id": "koran",
+      "words": [
+        {
+          "surface": "新聞",
+          "kana": "しんぶん"
+        }
+      ],
+      "assemble_tokens": [
+        "し",
+        "ん",
+        "ぶ",
+        "ん"
+      ],
+      "audio": "w_shinbun.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_shashin",
+      "surface": "写真",
+      "kana": "しゃしん",
+      "romaji": "shashin",
+      "meaning_id": "foto",
+      "words": [
+        {
+          "surface": "写真",
+          "kana": "しゃしん"
+        }
+      ],
+      "assemble_tokens": [
+        "しゃ",
+        "し",
+        "ん"
+      ],
+      "audio": "w_shashin.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_ocha",
+      "surface": "お茶",
+      "kana": "おちゃ",
+      "romaji": "ocha",
+      "meaning_id": "teh",
+      "words": [
+        {
+          "surface": "お茶",
+          "kana": "おちゃ"
+        }
+      ],
+      "assemble_tokens": [
+        "お",
+        "ちゃ"
+      ],
+      "audio": "w_ocha.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_kyaku",
+      "surface": "客",
+      "kana": "きゃく",
+      "romaji": "kyaku",
+      "meaning_id": "tamu",
+      "words": [
+        {
+          "surface": "客",
+          "kana": "きゃく"
+        }
+      ],
+      "assemble_tokens": [
+        "きゃ",
+        "く"
+      ],
+      "audio": "w_kyaku.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_kyou",
+      "surface": "今日",
+      "kana": "きょう",
+      "romaji": "kyou",
+      "meaning_id": "hari ini",
+      "words": [
+        {
+          "surface": "今日",
+          "kana": "きょう"
+        }
+      ],
+      "assemble_tokens": [
+        "きょ",
+        "う"
+      ],
+      "audio": "w_kyou.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_shukudai",
+      "surface": "宿題",
+      "kana": "しゅくだい",
+      "romaji": "shukudai",
+      "meaning_id": "PR (pekerjaan rumah)",
+      "words": [
+        {
+          "surface": "宿題",
+          "kana": "しゅくだい"
+        }
+      ],
+      "assemble_tokens": [
+        "しゅ",
+        "く",
+        "だ",
+        "い"
+      ],
+      "audio": "w_shukudai.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_chawan",
+      "surface": "茶碗",
+      "kana": "ちゃわん",
+      "romaji": "chawan",
+      "meaning_id": "mangkuk",
+      "words": [
+        {
+          "surface": "茶碗",
+          "kana": "ちゃわん"
+        }
+      ],
+      "assemble_tokens": [
+        "ちゃ",
+        "わ",
+        "ん"
+      ],
+      "audio": "w_chawan.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_shokuji",
+      "surface": "食事",
+      "kana": "しょくじ",
+      "romaji": "shokuji",
+      "meaning_id": "makan",
+      "words": [
+        {
+          "surface": "食事",
+          "kana": "しょくじ"
+        }
+      ],
+      "assemble_tokens": [
+        "しょ",
+        "く",
+        "じ"
+      ],
+      "audio": "w_shokuji.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_kyuuri",
+      "surface": "きゅうり",
+      "kana": "きゅうり",
+      "romaji": "kyuuri",
+      "meaning_id": "mentimun",
+      "words": [
+        {
+          "surface": "きゅうり",
+          "kana": "きゅうり"
+        }
+      ],
+      "assemble_tokens": [
+        "きゅ",
+        "う",
+        "り"
+      ],
+      "audio": "w_kyuuri.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_hyaku",
+      "surface": "百",
+      "kana": "ひゃく",
+      "romaji": "hyaku",
+      "meaning_id": "seratus",
+      "words": [
+        {
+          "surface": "百",
+          "kana": "ひゃく"
+        }
+      ],
+      "assemble_tokens": [
+        "ひゃ",
+        "く"
+      ],
+      "audio": "w_hyaku.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_ryokou",
+      "surface": "旅行",
+      "kana": "りょこう",
+      "romaji": "ryokou",
+      "meaning_id": "perjalanan",
+      "words": [
+        {
+          "surface": "旅行",
+          "kana": "りょこう"
+        }
+      ],
+      "assemble_tokens": [
+        "りょ",
+        "こ",
+        "う"
+      ],
+      "audio": "w_ryokou.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_juu",
+      "surface": "十",
+      "kana": "じゅう",
+      "romaji": "juu",
+      "meaning_id": "sepuluh",
+      "words": [
+        {
+          "surface": "十",
+          "kana": "じゅう"
+        }
+      ],
+      "assemble_tokens": [
+        "じゅ",
+        "う"
+      ],
+      "audio": "w_juu.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_gyuunyuu",
+      "surface": "牛乳",
+      "kana": "ぎゅうにゅう",
+      "romaji": "gyuunyuu",
+      "meaning_id": "susu",
+      "words": [
+        {
+          "surface": "牛乳",
+          "kana": "ぎゅうにゅう"
+        }
+      ],
+      "assemble_tokens": [
+        "ぎゅ",
+        "う",
+        "にゅ",
+        "う"
+      ],
+      "audio": "w_gyuunyuu.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_byouin",
+      "surface": "病院",
+      "kana": "びょういん",
+      "romaji": "byouin",
+      "meaning_id": "rumah sakit",
+      "words": [
+        {
+          "surface": "病院",
+          "kana": "びょういん"
+        }
+      ],
+      "assemble_tokens": [
+        "びょ",
+        "う",
+        "い",
+        "ん"
+      ],
+      "audio": "w_byouin.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_kitte",
+      "surface": "切手",
+      "kana": "きって",
+      "romaji": "kitte",
+      "meaning_id": "perangko",
+      "words": [
+        {
+          "surface": "切手",
+          "kana": "きって"
+        }
+      ],
+      "assemble_tokens": [
+        "き",
+        "っ",
+        "て"
+      ],
+      "audio": "w_kitte.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_gakkou",
+      "surface": "学校",
+      "kana": "がっこう",
+      "romaji": "gakkou",
+      "meaning_id": "sekolah",
+      "words": [
+        {
+          "surface": "学校",
+          "kana": "がっこう"
+        }
+      ],
+      "assemble_tokens": [
+        "が",
+        "っ",
+        "こ",
+        "う"
+      ],
+      "audio": "w_gakkou.mp3",
+      "voice": "female"
+    },
+    {
+      "id": "w_okaasan",
+      "surface": "お母さん",
+      "kana": "おかあさん",
+      "romaji": "okaasan",
+      "meaning_id": "ibu",
+      "words": [
+        {
+          "surface": "お母さん",
+          "kana": "おかあさん"
+        }
+      ],
+      "assemble_tokens": [
+        "お",
+        "か",
+        "あ",
+        "さ",
+        "ん"
+      ],
+      "audio": "w_okaasan.mp3",
+      "voice": "female"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l1",
+      "title": "Baris a, ka, sa",
+      "exercises": [
+        {
+          "type": "choose",
+          "ref": "k_a",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_i",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_u",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_e",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_o",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_ai"
+        },
+        {
+          "type": "speak",
+          "ref": "w_ai"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_ie"
+        },
+        {
+          "type": "speak",
+          "ref": "w_ie"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_kasa"
+        },
+        {
+          "type": "speak",
+          "ref": "w_kasa"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ka",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ki",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ku",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ke",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ko",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_ao"
+        },
+        {
+          "type": "speak",
+          "ref": "w_ao"
+        },
+        {
+          "type": "speak",
+          "ref": "w_aki"
+        },
+        {
+          "type": "speak",
+          "ref": "w_eki"
+        },
+        {
+          "type": "choose",
+          "ref": "k_sa",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_shi",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_su",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_se",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_so",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_sushi"
+        },
+        {
+          "type": "speak",
+          "ref": "w_sekai"
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "title": "Baris ta, na, ha",
+      "exercises": [
+        {
+          "type": "choose",
+          "ref": "k_ta",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_chi",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_tsu",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_te",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_to",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_tako"
+        },
+        {
+          "type": "speak",
+          "ref": "w_tako"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_neko"
+        },
+        {
+          "type": "speak",
+          "ref": "w_neko"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_hana"
+        },
+        {
+          "type": "speak",
+          "ref": "w_hana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_na",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ni",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_nu",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ne",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_no",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_fune"
+        },
+        {
+          "type": "speak",
+          "ref": "w_fune"
+        },
+        {
+          "type": "speak",
+          "ref": "w_hoshi"
+        },
+        {
+          "type": "speak",
+          "ref": "w_inu"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ha",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_hi",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_fu",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_he",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ho",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_tsukue"
+        },
+        {
+          "type": "speak",
+          "ref": "w_hito"
+        }
+      ]
+    },
+    {
+      "id": "l3",
+      "title": "Baris ma, ya, ra, wa, n",
+      "exercises": [
+        {
+          "type": "choose",
+          "ref": "k_ma",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_mi",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_mu",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_me",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_mo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_yama"
+        },
+        {
+          "type": "speak",
+          "ref": "w_yama"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_mimi"
+        },
+        {
+          "type": "speak",
+          "ref": "w_mimi"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ya",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_yu",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_yo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_yoru"
+        },
+        {
+          "type": "speak",
+          "ref": "w_yoru"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_watashi"
+        },
+        {
+          "type": "speak",
+          "ref": "w_watashi"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ra",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ri",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ru",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_re",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ro",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_hon"
+        },
+        {
+          "type": "speak",
+          "ref": "w_sakura"
+        },
+        {
+          "type": "choose",
+          "ref": "k_wa",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_wo",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_n",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_umi"
+        },
+        {
+          "type": "speak",
+          "ref": "w_yume"
+        }
+      ]
+    },
+    {
+      "id": "l4",
+      "title": "Dakuten: ga, za, da",
+      "exercises": [
+        {
+          "type": "choose",
+          "ref": "k_ga",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_gi",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_gu",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ge",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_go",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_kagi"
+        },
+        {
+          "type": "speak",
+          "ref": "w_kagi"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_kaze"
+        },
+        {
+          "type": "speak",
+          "ref": "w_kaze"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_mizu"
+        },
+        {
+          "type": "speak",
+          "ref": "w_mizu"
+        },
+        {
+          "type": "choose",
+          "ref": "k_za",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ji",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_zu",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ze",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_zo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_denwa"
+        },
+        {
+          "type": "speak",
+          "ref": "w_denwa"
+        },
+        {
+          "type": "speak",
+          "ref": "w_tegami"
+        },
+        {
+          "type": "speak",
+          "ref": "w_gohan"
+        },
+        {
+          "type": "choose",
+          "ref": "k_da",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_dji",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_dzu",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_de",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_do",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_tamago"
+        },
+        {
+          "type": "speak",
+          "ref": "w_daigaku"
+        }
+      ]
+    },
+    {
+      "id": "l5",
+      "title": "Dakuten ba dan handakuten pa",
+      "exercises": [
+        {
+          "type": "choose",
+          "ref": "k_ba",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_bi",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_bu",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_be",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_bo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_buta"
+        },
+        {
+          "type": "speak",
+          "ref": "w_buta"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_kaban"
+        },
+        {
+          "type": "speak",
+          "ref": "w_kaban"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_enpitsu"
+        },
+        {
+          "type": "speak",
+          "ref": "w_enpitsu"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_tabemono"
+        },
+        {
+          "type": "speak",
+          "ref": "w_tabemono"
+        },
+        {
+          "type": "choose",
+          "ref": "k_pa",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_pi",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_pu",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_pe",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_po",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_pan"
+        },
+        {
+          "type": "speak",
+          "ref": "w_sanpo"
+        },
+        {
+          "type": "speak",
+          "ref": "w_bangohan"
+        },
+        {
+          "type": "speak",
+          "ref": "w_shinbun"
+        }
+      ]
+    },
+    {
+      "id": "l6",
+      "title": "Youon 1: kya, sha, cha, nya",
+      "exercises": [
+        {
+          "type": "choose",
+          "ref": "k_kya",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_kyu",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_kyo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_shashin"
+        },
+        {
+          "type": "speak",
+          "ref": "w_shashin"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_ocha"
+        },
+        {
+          "type": "speak",
+          "ref": "w_ocha"
+        },
+        {
+          "type": "choose",
+          "ref": "k_sha",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_shu",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_sho",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_kyaku"
+        },
+        {
+          "type": "speak",
+          "ref": "w_kyaku"
+        },
+        {
+          "type": "assemble",
+          "ref": "w_kyou"
+        },
+        {
+          "type": "speak",
+          "ref": "w_kyou"
+        },
+        {
+          "type": "choose",
+          "ref": "k_cha",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_chu",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_cho",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_shukudai"
+        },
+        {
+          "type": "speak",
+          "ref": "w_chawan"
+        },
+        {
+          "type": "choose",
+          "ref": "k_nya",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_nyu",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_nyo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_shokuji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_kyuuri"
+        }
+      ]
+    },
+    {
+      "id": "l7",
+      "title": "Youon 2, sokuon, dan vokal panjang",
+      "exercises": [
+        {
+          "type": "choose",
+          "ref": "k_hya",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_hyu",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_hyo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_hyaku"
+        },
+        {
+          "type": "speak",
+          "ref": "w_ryokou"
+        },
+        {
+          "type": "choose",
+          "ref": "k_mya",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_myu",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_myo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_juu"
+        },
+        {
+          "type": "speak",
+          "ref": "w_gyuunyuu"
+        },
+        {
+          "type": "choose",
+          "ref": "k_rya",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ryu",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ryo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_byouin"
+        },
+        {
+          "type": "speak",
+          "ref": "w_kitte"
+        },
+        {
+          "type": "choose",
+          "ref": "k_gya",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_gyu",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_gyo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "speak",
+          "ref": "w_gakkou"
+        },
+        {
+          "type": "speak",
+          "ref": "w_okaasan"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ja",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_ju",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_jo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_bya",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_byu",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_byo",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_pya",
+          "variant": "kana_to_romaji"
+        },
+        {
+          "type": "choose",
+          "ref": "k_pyu",
+          "variant": "romaji_to_kana"
+        },
+        {
+          "type": "choose",
+          "ref": "k_pyo",
+          "variant": "kana_to_romaji"
+        }
+      ]
+    }
+  ]
+}

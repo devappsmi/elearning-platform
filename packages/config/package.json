@@ -2,6 +2,7 @@
   "name": "@elearning/config",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "main": "index.js",
   "exports": {
     "./eslint": "./eslint-preset.js",
