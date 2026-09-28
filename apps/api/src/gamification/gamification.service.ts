@@ -5,13 +5,7 @@ import type { XpSource } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { REDIS_CLIENT } from "../redis/redis.module";
 import { weekKey } from "./week.util";
-
-export interface LeaderboardEntry {
-  userId: string;
-  name: string;
-  xp: number;
-  rank: number;
-}
+import type { LeaderboardResponseDto } from "./dto/leaderboard-view.dto";
 
 /** GAM-01/02/03/04/05: XP ledger + streak + badge + leaderboard mingguan.
  * Satu-satunya jalur penulisan XpEvent -- lihat "Keputusan Lintas-Sektor" di
@@ -145,7 +139,7 @@ export class GamificationService {
    * dapat lencana mingguan" BELUM diimplementasikan -- butuh job terjadwal
    * di rollover minggu (@nestjs/schedule belum jadi dependency), lihat
    * docs/PLAN.md. */
-  async classLeaderboard(userId: string): Promise<{ weekOf: string; entries: LeaderboardEntry[] }> {
+  async classLeaderboard(userId: string): Promise<LeaderboardResponseDto> {
     const user = await this.prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { classId: true } });
     const now = new Date();
     const raw = await this.redis.zrevrange(this.leaderboardKey(user.classId, now), 0, 49, "WITHSCORES");

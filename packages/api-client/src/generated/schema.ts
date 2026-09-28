@@ -652,6 +652,16 @@ export interface components {
             /** @enum {number} */
             dailyXpGoal?: 10 | 30 | 50;
         };
+        LeaderboardEntryDto: {
+            userId: string;
+            name: string;
+            xp: number;
+            rank: number;
+        };
+        LeaderboardResponseDto: {
+            weekOf: string;
+            entries: components["schemas"]["LeaderboardEntryDto"][];
+        };
         PathLessonView: {
             /** @enum {string} */
             state: "done" | "available" | "locked";
@@ -946,6 +956,17 @@ export interface components {
             mode: "PRACTICE" | "TEST";
             events: components["schemas"]["ScenarioAnswerEventDto"][];
             durationSec: number;
+        };
+        DictionaryEntryDto: {
+            id: string;
+            surface: string;
+            reading: string;
+            romaji: string;
+            meaning: string | null;
+            partOfSpeech: string | null;
+            exampleJp: string | null;
+            exampleId: string | null;
+            audio: string;
         };
         ReviewFlashcardDto: {
             itemId: string;
@@ -1248,7 +1269,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["LeaderboardResponseDto"];
+                };
             };
         };
     };
@@ -1779,7 +1802,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["DictionaryEntryDto"][];
                 };
             };
         };

@@ -357,7 +357,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaderboardResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1237,7 +1244,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/DictionaryEntryDto"
                   }
                 }
               }
@@ -1575,6 +1582,47 @@
             ]
           }
         }
+      },
+      "LeaderboardEntryDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "xp": {
+            "type": "number"
+          },
+          "rank": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "userId",
+          "name",
+          "xp",
+          "rank"
+        ]
+      },
+      "LeaderboardResponseDto": {
+        "type": "object",
+        "properties": {
+          "weekOf": {
+            "type": "string"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeaderboardEntryDto"
+            }
+          }
+        },
+        "required": [
+          "weekOf",
+          "entries"
+        ]
       },
       "PathLessonView": {
         "type": "object",
@@ -2707,6 +2755,53 @@
           "mode",
           "events",
           "durationSec"
+        ]
+      },
+      "DictionaryEntryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "surface": {
+            "type": "string"
+          },
+          "reading": {
+            "type": "string"
+          },
+          "romaji": {
+            "type": "string"
+          },
+          "meaning": {
+            "type": "string",
+            "nullable": true
+          },
+          "partOfSpeech": {
+            "type": "string",
+            "nullable": true
+          },
+          "exampleJp": {
+            "type": "string",
+            "nullable": true
+          },
+          "exampleId": {
+            "type": "string",
+            "nullable": true
+          },
+          "audio": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "surface",
+          "reading",
+          "romaji",
+          "meaning",
+          "partOfSpeech",
+          "exampleJp",
+          "exampleId",
+          "audio"
         ]
       },
       "ReviewFlashcardDto": {

@@ -2,20 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { hashAudioKey } from "../audio/audio-hash.util";
 import { loadAudioUrlsByHash } from "../audio/audio-lookup.util";
+import type { DictionaryEntryDto } from "./dto/dictionary-entry.dto";
 
 const SEARCH_LIMIT = 50;
-
-export interface DictionaryEntry {
-  id: string;
-  surface: string;
-  reading: string;
-  romaji: string;
-  meaning: string | null;
-  partOfSpeech: string | null;
-  exampleJp: string | null;
-  exampleId: string | null;
-  audio: string;
-}
 
 /** SUP-01: "cari via romaji/kana/kanji/Indonesia". Pakai tabel `Vocab` yang
  * SUDAH ADA (schema.prisma) -- `unitId` nullable-nya JUSTRU untuk kasus ini,
@@ -31,7 +20,7 @@ export interface DictionaryEntry {
 export class DictionaryService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async search(q: string): Promise<DictionaryEntry[]> {
+  async search(q: string): Promise<DictionaryEntryDto[]> {
     const query = q.trim();
     if (query.length === 0) return [];
 

@@ -48,8 +48,12 @@ export function AuthGuard() {
     setState({ status: "unauthenticated" });
   }
 
+  function setMe(me: Me) {
+    setState({ status: "authenticated", me });
+  }
+
   return (
-    <AuthContext.Provider value={{ me: state.me, logout }}>
+    <AuthContext.Provider value={{ me: state.me, logout, setMe }}>
       <Outlet />
     </AuthContext.Provider>
   );

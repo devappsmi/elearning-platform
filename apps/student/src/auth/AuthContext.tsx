@@ -6,6 +6,10 @@ export type Me = components["schemas"]["MeDto"];
 export interface AuthContextValue {
   me: Me;
   logout: () => void;
+  // Dipanggil ProfilePage setelah PATCH /me sukses -- supaya nav ("Halo,
+  // {nama}") dan halaman lain yang baca `me` dari context langsung
+  // konsisten TANPA reload, bukan cuma halaman profil sendiri yang update.
+  setMe: (me: Me) => void;
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null);

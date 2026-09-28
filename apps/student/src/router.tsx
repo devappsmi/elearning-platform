@@ -6,12 +6,15 @@ import { LessonPage } from "./pages/LessonPage";
 import { LessonResultPage } from "./pages/LessonResultPage";
 import { LoginPage } from "./pages/LoginPage";
 import { StubPage } from "./pages/StubPage";
+import { KamusPage } from "./pages/KamusPage";
+import { LeaderboardPage } from "./pages/LeaderboardPage";
+import { ProfilePage } from "./pages/ProfilePage";
 
 /**
- * Route skeleton -- inti alur belajar (Beranda/Belajar/Hasil Belajar) dan
- * /login sekarang sungguhan (Fase 1 lanjutan, lihat docs/PLAN.md bagian 7c);
- * rute lain (Percakapan/Kamus/Flashcard/Leaderboard/Profil/admin) masih
- * StubPage, plan Fase 1 terpisah berikutnya.
+ * Route skeleton -- inti alur belajar (Beranda/Belajar/Hasil Belajar, bagian
+ * 7c), /login, dan sekarang Kamus/Leaderboard/Profil (bagian 7f) sudah
+ * sungguhan. Percakapan (3 rute) dan Flashcard masih StubPage, lihat
+ * docs/PLAN.md.
  *
  * Public routes (no AuthGuard): /invite/:token, /login, /forgot-password,
  * /reset-password/:token. Everything else is wrapped in AuthGuard + the
@@ -38,10 +41,10 @@ export const router = createBrowserRouter([
             path: "/conversation/:id/result",
             element: <StubPage title="Hasil Percakapan" />,
           },
-          { path: "/dictionary", element: <StubPage title="Kamus" /> },
+          { path: "/dictionary", element: <KamusPage /> },
           { path: "/flashcards", element: <StubPage title="Flashcard" /> },
-          { path: "/leaderboard", element: <StubPage title="Leaderboard" /> },
-          { path: "/profile", element: <StubPage title="Profil" /> },
+          { path: "/leaderboard", element: <LeaderboardPage /> },
+          { path: "/profile", element: <ProfilePage /> },
         ],
       },
     ],
