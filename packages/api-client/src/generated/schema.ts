@@ -836,10 +836,91 @@ export interface components {
             updatedAt: string;
             class: components["schemas"]["InvitationClassSummaryDto"];
         };
+        StudentClassSummaryDto: {
+            id: string;
+            name: string;
+        };
+        StudentListItemDto: {
+            /** @enum {string} */
+            status: "ACTIVE" | "INACTIVE";
+            id: string;
+            name: string;
+            email: string;
+            /** Format: date-time */
+            lastActiveAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            class: components["schemas"]["StudentClassSummaryDto"];
+            totalXp: number;
+            streak: number;
+        };
+        StudentDetailDto: {
+            /** @enum {string} */
+            status: "ACTIVE" | "INACTIVE";
+            id: string;
+            name: string;
+            email: string;
+            avatarUrl: string | null;
+            dailyXpGoal: number;
+            /** Format: date-time */
+            lastActiveAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            class: components["schemas"]["StudentClassSummaryDto"];
+        };
+        LevelInfoDto: {
+            level: number;
+            xpIntoLevel: number;
+            xpForNextLevel: number;
+        };
+        StreakInfoDto: {
+            current: number;
+            longest: number;
+        };
+        UnitProgressDto: {
+            unitId: string;
+            unitTitle: string;
+            completedLessons: number;
+            totalStars: number;
+            averageStars: number;
+        };
+        ScenarioProgressDto: {
+            scenarioId: string;
+            titleJp: string;
+            titleId: string;
+            attempts: number;
+            bestScore: number;
+            /** Format: date-time */
+            lastAttemptAt: string;
+        };
+        RecentActivityDto: {
+            /** @enum {string} */
+            source: "LESSON" | "CHECKPOINT" | "SCENARIO" | "DAILY_QUIZ";
+            amount: number;
+            refId: string | null;
+            /** Format: date-time */
+            at: string;
+        };
+        ActivityHeatmapPointDto: {
+            date: string;
+            xp: number;
+        };
+        StudentProgressDto: {
+            xpTotal: number;
+            level: components["schemas"]["LevelInfoDto"];
+            streak: components["schemas"]["StreakInfoDto"];
+            unitProgress: components["schemas"]["UnitProgressDto"][];
+            scenarioProgress: components["schemas"]["ScenarioProgressDto"][];
+            recentActivity: components["schemas"]["RecentActivityDto"][];
+            activityHeatmap: components["schemas"]["ActivityHeatmapPointDto"][];
+        };
         UpdateStudentDto: {
             classId?: string;
             /** @enum {string} */
             status?: "ACTIVE" | "INACTIVE";
+        };
+        ResetPasswordResponseDto: {
+            message: string;
         };
         ClassCompletionRateDto: {
             classId: string;
@@ -1506,7 +1587,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["StudentListItemDto"][];
+                };
             };
         };
     };
@@ -1525,7 +1608,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["StudentDetailDto"];
+                };
             };
         };
     };
@@ -1548,7 +1633,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["StudentDetailDto"];
+                };
             };
         };
     };
@@ -1567,7 +1654,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["StudentProgressDto"];
+                };
             };
         };
     };
@@ -1586,7 +1675,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ResetPasswordResponseDto"];
+                };
             };
         };
     };

@@ -5,6 +5,7 @@ import { AuthService } from "../auth/auth.service";
 import { AdminClassesService } from "../admin-classes/admin-classes.service";
 import { GamificationService } from "../gamification/gamification.service";
 import type { ListStudentsQueryDto, UpdateStudentDto } from "./dto/update-student.dto";
+import type { StudentDetailDto, StudentListItemDto, StudentProgressDto } from "./dto/student-view.dto";
 
 const HEATMAP_WINDOW_DAYS = 90;
 
@@ -19,7 +20,7 @@ export class AdminStudentsService {
     private readonly gamification: GamificationService,
   ) {}
 
-  async list(query: ListStudentsQueryDto) {
+  async list(query: ListStudentsQueryDto): Promise<StudentListItemDto[]> {
     const users = await this.prisma.user.findMany({
       where: { classId: query.classId },
       select: { id: true, name: true, email: true, status: true, lastActiveAt: true, createdAt: true, class: { select: { id: true, name: true } } },
@@ -38,7 +39,7 @@ export class AdminStudentsService {
     return users.map((u) => ({ ...u, totalXp: xpByUser.get(u.id) ?? 0, streak: streakByUser.get(u.id) ?? 0 }));
   }
 
-  async detail(id: string) {
+  async detail(id: string): Promise<StudentDetailDto> {
     const user = await this.prisma.user.findUnique({
       where: { id },
       select: {
@@ -57,7 +58,7 @@ export class AdminStudentsService {
     return user;
   }
 
-  async update(id: string, dto: UpdateStudentDto) {
+  async update(id: string, dto: UpdateStudentDto): Promise<StudentDetailDto> {
     await this.assertExists(id);
     if (dto.classId) await this.classes.assertActiveClass(dto.classId);
     await this.prisma.user.update({ where: { id }, data: { classId: dto.classId, status: dto.status } });
@@ -75,19 +76,26 @@ export class AdminStudentsService {
   }
 
   /** ADM-31: statistik untuk halaman detail murid -- level/XP/streak, progres
-   * per unit, aktivitas 90 hari terakhir (dipakai untuk heatmap DAN daftar
-   * "recent activity" sekaligus, satu query). "Skor percakapan"/pronunciation
-   * dari AC ADM-31 SENGAJA tidak ada di sini -- ScenariosModule (Milestone 9
-   * lanjutan) dan pronunciation (Fase 2) belum dibangun, tidak ada data untuk
-   * itu (jujur, bukan field dihilangkan diam-diam). */
-  async progress(id: string) {
+   * per unit, skor percakapan per skenario, aktivitas 90 hari terakhir
+   * (dipakai untuk heatmap DAN daftar "recent activity" sekaligus, satu
+   * query). Pronunciation (Fase 2) TETAP tidak ada di sini -- belum
+   * dibangun sama sekali, tidak ada data untuk itu (jujur, bukan field
+   * dihilangkan diam-diam). `scenarioProgress` BARU sesi ini -- GAP yang
+   * dicatat sejak bagian 6c (ScenarioAttempt sudah ada sejak Milestone 9
+   * lanjutan tapi belum disertakan di sini) sekarang ditutup. */
+  async progress(id: string): Promise<StudentProgressDto> {
     await this.assertExists(id);
 
     const since = new Date(Date.now() - HEATMAP_WINDOW_DAYS * 24 * 60 * 60 * 1000);
-    const [progressRows, streak, xpTotal, recentEvents] = await Promise.all([
+    const [progressRows, scenarioAttempts, streak, xpTotal, recentEvents] = await Promise.all([
       this.prisma.userLessonProgress.findMany({
         where: { userId: id },
         include: { lesson: { select: { title: true, unit: { select: { id: true, title: true } } } } },
+      }),
+      this.prisma.scenarioAttempt.findMany({
+        where: { userId: id },
+        include: { scenario: { select: { titleJp: true, titleId: true } } },
+        orderBy: { createdAt: "desc" },
       }),
       this.prisma.streak.findUnique({ where: { userId: id } }),
       this.gamification.totalXp(id),
@@ -104,6 +112,27 @@ export class AdminStudentsService {
       unitProgress.set(u.id, entry);
     }
 
+    // Digabung per skenario (bukan daftar attempt mentah) -- skor TERBAIK
+    // lintas mode PRACTICE+TEST, konsisten dengan "bintang terbaik" di
+    // unitProgress di atas. attempts dihitung dari SEMUA percobaan (retry
+    // practice tanpa batas ikut terhitung, itu sengaja -- menunjukkan
+    // seberapa sering murid berlatih, bukan cuma seberapa sering "lulus").
+    const scenarioProgress = new Map<string, { scenarioId: string; titleJp: string; titleId: string; attempts: number; bestScore: number; lastAttemptAt: Date }>();
+    for (const a of scenarioAttempts) {
+      const entry = scenarioProgress.get(a.scenarioId) ?? {
+        scenarioId: a.scenarioId,
+        titleJp: a.scenario.titleJp,
+        titleId: a.scenario.titleId,
+        attempts: 0,
+        bestScore: 0,
+        lastAttemptAt: a.createdAt,
+      };
+      entry.attempts++;
+      entry.bestScore = Math.max(entry.bestScore, a.score);
+      if (a.createdAt > entry.lastAttemptAt) entry.lastAttemptAt = a.createdAt;
+      scenarioProgress.set(a.scenarioId, entry);
+    }
+
     const heatmap = new Map<string, number>();
     for (const e of recentEvents) {
       const day = dateKey(e.createdAt);
@@ -115,6 +144,7 @@ export class AdminStudentsService {
       level: XpService.levelForXp(xpTotal),
       streak: streak ? { current: streak.current, longest: streak.longest } : { current: 0, longest: 0 },
       unitProgress: [...unitProgress.values()].map((u) => ({ ...u, averageStars: u.totalStars / u.completedLessons })),
+      scenarioProgress: [...scenarioProgress.values()],
       recentActivity: recentEvents.slice(0, 50).map((e) => ({ source: e.source, amount: e.amount, refId: e.refId, at: e.createdAt })),
       activityHeatmap: [...heatmap.entries()].map(([date, xp]) => ({ date, xp })).sort((a, b) => a.date.localeCompare(b.date)),
     };

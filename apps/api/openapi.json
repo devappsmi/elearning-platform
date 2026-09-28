@@ -916,7 +916,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentListItemDto"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -944,7 +954,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentDetailDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -980,7 +997,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentDetailDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1008,7 +1032,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentProgressDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1036,7 +1067,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -2243,6 +2281,308 @@
           "class"
         ]
       },
+      "StudentClassSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "StudentListItemDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "lastActiveAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "class": {
+            "$ref": "#/components/schemas/StudentClassSummaryDto"
+          },
+          "totalXp": {
+            "type": "number"
+          },
+          "streak": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "email",
+          "lastActiveAt",
+          "createdAt",
+          "class",
+          "totalXp",
+          "streak"
+        ]
+      },
+      "StudentDetailDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "dailyXpGoal": {
+            "type": "number"
+          },
+          "lastActiveAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "class": {
+            "$ref": "#/components/schemas/StudentClassSummaryDto"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "email",
+          "avatarUrl",
+          "dailyXpGoal",
+          "lastActiveAt",
+          "createdAt",
+          "class"
+        ]
+      },
+      "LevelInfoDto": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "number"
+          },
+          "xpIntoLevel": {
+            "type": "number"
+          },
+          "xpForNextLevel": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "level",
+          "xpIntoLevel",
+          "xpForNextLevel"
+        ]
+      },
+      "StreakInfoDto": {
+        "type": "object",
+        "properties": {
+          "current": {
+            "type": "number"
+          },
+          "longest": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "current",
+          "longest"
+        ]
+      },
+      "UnitProgressDto": {
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string"
+          },
+          "unitTitle": {
+            "type": "string"
+          },
+          "completedLessons": {
+            "type": "number"
+          },
+          "totalStars": {
+            "type": "number"
+          },
+          "averageStars": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "unitId",
+          "unitTitle",
+          "completedLessons",
+          "totalStars",
+          "averageStars"
+        ]
+      },
+      "ScenarioProgressDto": {
+        "type": "object",
+        "properties": {
+          "scenarioId": {
+            "type": "string"
+          },
+          "titleJp": {
+            "type": "string"
+          },
+          "titleId": {
+            "type": "string"
+          },
+          "attempts": {
+            "type": "number"
+          },
+          "bestScore": {
+            "type": "number"
+          },
+          "lastAttemptAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scenarioId",
+          "titleJp",
+          "titleId",
+          "attempts",
+          "bestScore",
+          "lastAttemptAt"
+        ]
+      },
+      "RecentActivityDto": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "LESSON",
+              "CHECKPOINT",
+              "SCENARIO",
+              "DAILY_QUIZ"
+            ]
+          },
+          "amount": {
+            "type": "number"
+          },
+          "refId": {
+            "type": "string",
+            "nullable": true
+          },
+          "at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "amount",
+          "refId",
+          "at"
+        ]
+      },
+      "ActivityHeatmapPointDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "xp": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "xp"
+        ]
+      },
+      "StudentProgressDto": {
+        "type": "object",
+        "properties": {
+          "xpTotal": {
+            "type": "number"
+          },
+          "level": {
+            "$ref": "#/components/schemas/LevelInfoDto"
+          },
+          "streak": {
+            "$ref": "#/components/schemas/StreakInfoDto"
+          },
+          "unitProgress": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UnitProgressDto"
+            }
+          },
+          "scenarioProgress": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScenarioProgressDto"
+            }
+          },
+          "recentActivity": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecentActivityDto"
+            }
+          },
+          "activityHeatmap": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ActivityHeatmapPointDto"
+            }
+          }
+        },
+        "required": [
+          "xpTotal",
+          "level",
+          "streak",
+          "unitProgress",
+          "scenarioProgress",
+          "recentActivity",
+          "activityHeatmap"
+        ]
+      },
       "UpdateStudentDto": {
         "type": "object",
         "properties": {
@@ -2257,6 +2597,17 @@
             ]
           }
         }
+      },
+      "ResetPasswordResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
       },
       "ClassCompletionRateDto": {
         "type": "object",
