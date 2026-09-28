@@ -489,7 +489,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ClassWithLevelDto"
                 }
               }
             }
@@ -528,7 +528,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/ClassListItemDto"
                   }
                 }
               }
@@ -564,7 +564,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ClassDetailDto"
                 }
               }
             }
@@ -607,7 +607,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ClassWithLevelDto"
                 }
               }
             }
@@ -638,7 +638,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -666,7 +673,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -721,7 +735,14 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -767,7 +788,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/InvitationListItemDto"
                   }
                 }
               }
@@ -825,7 +846,14 @@
         ],
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -853,7 +881,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1020,7 +1055,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummaryDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1749,6 +1791,240 @@
           "name"
         ]
       },
+      "LevelSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "name",
+          "order"
+        ]
+      },
+      "ClassWithLevelDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "ARCHIVED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "targetLevelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "targetLevel": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LevelSummaryDto"
+              }
+            ]
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "targetLevelId",
+          "targetLevel",
+          "description",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "StudentCountDto": {
+        "type": "object",
+        "properties": {
+          "students": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "students"
+        ]
+      },
+      "ClassListItemDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "ARCHIVED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "targetLevelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "targetLevel": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LevelSummaryDto"
+              }
+            ]
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "_count": {
+            "$ref": "#/components/schemas/StudentCountDto"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "targetLevelId",
+          "targetLevel",
+          "description",
+          "createdAt",
+          "updatedAt",
+          "_count"
+        ]
+      },
+      "ClassStudentSummaryDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "lastActiveAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "email",
+          "lastActiveAt"
+        ]
+      },
+      "ClassDetailDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "ARCHIVED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "targetLevelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "targetLevel": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LevelSummaryDto"
+              }
+            ]
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "students": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassStudentSummaryDto"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "targetLevelId",
+          "targetLevel",
+          "description",
+          "createdAt",
+          "updatedAt",
+          "students"
+        ]
+      },
       "UpdateClassDto": {
         "type": "object",
         "properties": {
@@ -1763,6 +2039,49 @@
             "type": "string"
           }
         }
+      },
+      "ClassDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "ARCHIVED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "targetLevelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "targetLevelId",
+          "description",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "CreateInvitationDto": {
         "type": "object",
@@ -1785,6 +2104,145 @@
           "classId"
         ]
       },
+      "InvitationDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "EXPIRED",
+              "REVOKED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "classId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "acceptedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "revokedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "classId",
+          "name",
+          "email",
+          "expiresAt",
+          "acceptedAt",
+          "revokedAt",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "InvitationClassSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "InvitationListItemDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "EXPIRED",
+              "REVOKED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "classId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "acceptedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "revokedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "class": {
+            "$ref": "#/components/schemas/InvitationClassSummaryDto"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "classId",
+          "name",
+          "email",
+          "expiresAt",
+          "acceptedAt",
+          "revokedAt",
+          "createdAt",
+          "updatedAt",
+          "class"
+        ]
+      },
       "UpdateStudentDto": {
         "type": "object",
         "properties": {
@@ -1799,6 +2257,62 @@
             ]
           }
         }
+      },
+      "ClassCompletionRateDto": {
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "string"
+          },
+          "className": {
+            "type": "string"
+          },
+          "studentCount": {
+            "type": "number"
+          },
+          "completionRate": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "classId",
+          "className",
+          "studentCount",
+          "completionRate"
+        ]
+      },
+      "DashboardSummaryDto": {
+        "type": "object",
+        "properties": {
+          "streakDistribution": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "activeStudentsThisWeek": {
+            "type": "number"
+          },
+          "totalActiveStudents": {
+            "type": "number"
+          },
+          "averageXp": {
+            "type": "number"
+          },
+          "lessonCompletionRateByClass": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassCompletionRateDto"
+            }
+          }
+        },
+        "required": [
+          "streakDistribution",
+          "activeStudentsThisWeek",
+          "totalActiveStudents",
+          "averageXp",
+          "lessonCompletionRateByClass"
+        ]
       },
       "ScenarioAnswerEventDto": {
         "type": "object",

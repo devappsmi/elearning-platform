@@ -3,12 +3,14 @@ import { AuthGuard } from "./auth/AuthGuard";
 import { RootLayout } from "./components/RootLayout";
 import { LoginPage } from "./pages/LoginPage";
 import { StubPage } from "./pages/StubPage";
+import { AdminDashboardPage } from "./pages/AdminDashboardPage";
+import { AdminClassesPage } from "./pages/AdminClassesPage";
+import { AdminInvitationsPage } from "./pages/AdminInvitationsPage";
 
 /**
- * Route skeleton for Milestone 10 — every route resolves to a stub page,
- * KECUALI /login yang sekarang beneran (Milestone 10 lanjutan, lihat
- * docs/PLAN.md). Real per-screen UI (data tables etc.) is a separate Fase 1
- * plan.
+ * Route skeleton for Milestone 10 — /login, / (ADM-30), /classes (ADM-20),
+ * and /invitations (ADM-10/11/12) are now real; the rest still resolve to
+ * stub pages. See docs/PLAN.md.
  *
  * `/content` (A7) and `/reports` (A8) are Fase 2 features and are
  * deliberately NOT registered here — the router stays honest about what
@@ -23,9 +25,9 @@ export const router = createBrowserRouter([
       {
         element: <RootLayout />,
         children: [
-          { path: "/", element: <StubPage title="Dashboard" /> },
-          { path: "/invitations", element: <StubPage title="Undangan" /> },
-          { path: "/classes", element: <StubPage title="Kelas" /> },
+          { path: "/", element: <AdminDashboardPage /> },
+          { path: "/invitations", element: <AdminInvitationsPage /> },
+          { path: "/classes", element: <AdminClassesPage /> },
           { path: "/students", element: <StubPage title="Murid" /> },
           { path: "/students/:id", element: <StubPage title="Detail Murid" /> },
           { path: "/settings", element: <StubPage title="Pengaturan" /> },

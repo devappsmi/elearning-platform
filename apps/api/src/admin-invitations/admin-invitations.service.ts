@@ -1,7 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { isEmail } from "class-validator";
-import type { Invitation } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { MailService } from "../mail/mail.service";
 import { AdminClassesService } from "../admin-classes/admin-classes.service";
@@ -10,8 +9,31 @@ import { addDuration } from "../common/duration.util";
 import type { Env } from "../config/env.validation";
 import { parseInvitationCsv } from "./invitation-csv.util";
 import type { ListInvitationsQueryDto } from "./dto/invitation.dto";
+import type { InvitationDto, InvitationListItemDto } from "./dto/invitation-view.dto";
 
 const INVITATION_TTL = "7d"; // AUTH-01 AC: masa berlaku 7 hari
+
+// Field publik Invitation -- SENGAJA tanpa `tokenHash` (bukan bagian API
+// publik sama sekali, cuma dipakai internal untuk memvalidasi token mentah
+// dari link email di AuthService.register). Dipakai sebagai `select` di
+// SETIAP query invitation di bawah -- sebelumnya beberapa jalur (create,
+// resend, revoke) tidak pakai `select`/`include` eksplisit sama sekali,
+// yang berarti Prisma balikin SEMUA field skalar termasuk tokenHash secara
+// default; ketahuan pas menulis DTO respons ini, diperbaiki sekalian (lihat
+// catatan lengkap kenapa ini bukan celah eksploitasi praktis di
+// dto/invitation-view.dto.ts).
+const INVITATION_SELECT = {
+  id: true,
+  classId: true,
+  name: true,
+  email: true,
+  status: true,
+  expiresAt: true,
+  acceptedAt: true,
+  revokedAt: true,
+  createdAt: true,
+  updatedAt: true,
+} as const;
 
 export interface BulkInviteRowResult {
   row: number;
@@ -39,7 +61,7 @@ export class AdminInvitationsService {
     private readonly config: ConfigService<Env, true>,
   ) {}
 
-  async createSingle(dto: { name: string; email: string; classId: string }): Promise<Invitation> {
+  async createSingle(dto: { name: string; email: string; classId: string }): Promise<InvitationDto> {
     const klass = await this.classes.assertActiveClass(dto.classId);
     await this.assertEmailInvitable(dto.email);
     return this.createInvitationRow(dto.name, dto.email, klass.id, klass.name);
@@ -59,10 +81,11 @@ export class AdminInvitationsService {
     }
   }
 
-  private async createInvitationRow(name: string, email: string, classId: string, className: string): Promise<Invitation> {
+  private async createInvitationRow(name: string, email: string, classId: string, className: string): Promise<InvitationDto> {
     const { token, tokenHash } = generateOpaqueToken();
     const invitation = await this.prisma.invitation.create({
       data: { classId, name, email, tokenHash, expiresAt: addDuration(new Date(), INVITATION_TTL) },
+      select: INVITATION_SELECT,
     });
     await this.sendInvitationEmail({ email, name, className }, token);
     return invitation;
@@ -116,10 +139,10 @@ export class AdminInvitationsService {
     };
   }
 
-  async list(query: ListInvitationsQueryDto) {
+  async list(query: ListInvitationsQueryDto): Promise<InvitationListItemDto[]> {
     return this.prisma.invitation.findMany({
       where: { status: query.status, classId: query.classId },
-      include: { class: { select: { id: true, name: true } } },
+      select: { ...INVITATION_SELECT, class: { select: { id: true, name: true } } },
       orderBy: { createdAt: "desc" },
     });
   }
@@ -128,7 +151,7 @@ export class AdminInvitationsService {
    * berlaku diperbarui, status EXPIRED kembali jadi PENDING). ACCEPTED
    * (sudah dipakai) dan REVOKED (sengaja dicabut admin) sengaja ditolak --
    * lihat komentar masing-masing di bawah. */
-  async resend(id: string): Promise<Invitation> {
+  async resend(id: string): Promise<InvitationDto> {
     const invitation = await this.prisma.invitation.findUnique({ where: { id }, include: { class: { select: { name: true } } } });
     if (!invitation) throw new NotFoundException(`Undangan tidak ditemukan: ${id}`);
     if (invitation.status === "ACCEPTED") throw new BadRequestException("Undangan sudah dipakai untuk registrasi, tidak bisa dikirim ulang");
@@ -138,16 +161,17 @@ export class AdminInvitationsService {
     const updated = await this.prisma.invitation.update({
       where: { id },
       data: { tokenHash, expiresAt: addDuration(new Date(), INVITATION_TTL), status: "PENDING" },
+      select: INVITATION_SELECT,
     });
     await this.sendInvitationEmail({ email: invitation.email, name: invitation.name, className: invitation.class.name }, token);
     return updated;
   }
 
-  async revoke(id: string): Promise<Invitation> {
+  async revoke(id: string): Promise<InvitationDto> {
     const invitation = await this.prisma.invitation.findUnique({ where: { id }, select: { id: true, status: true } });
     if (!invitation) throw new NotFoundException(`Undangan tidak ditemukan: ${id}`);
     if (invitation.status === "ACCEPTED") throw new BadRequestException("Undangan yang sudah dipakai untuk registrasi tidak bisa dicabut");
 
-    return this.prisma.invitation.update({ where: { id }, data: { status: "REVOKED", revokedAt: new Date() } });
+    return this.prisma.invitation.update({ where: { id }, data: { status: "REVOKED", revokedAt: new Date() }, select: INVITATION_SELECT });
   }
 }

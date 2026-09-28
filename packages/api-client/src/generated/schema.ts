@@ -713,10 +713,81 @@ export interface components {
             targetLevelId?: string;
             description?: string;
         };
+        LevelSummaryDto: {
+            id: string;
+            code: string;
+            name: string;
+            order: number;
+        };
+        ClassWithLevelDto: {
+            /** @enum {string} */
+            status: "ACTIVE" | "ARCHIVED";
+            id: string;
+            name: string;
+            targetLevelId: string | null;
+            targetLevel: components["schemas"]["LevelSummaryDto"] | null;
+            description: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        StudentCountDto: {
+            students: number;
+        };
+        ClassListItemDto: {
+            /** @enum {string} */
+            status: "ACTIVE" | "ARCHIVED";
+            id: string;
+            name: string;
+            targetLevelId: string | null;
+            targetLevel: components["schemas"]["LevelSummaryDto"] | null;
+            description: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            _count: components["schemas"]["StudentCountDto"];
+        };
+        ClassStudentSummaryDto: {
+            /** @enum {string} */
+            status: "ACTIVE" | "INACTIVE";
+            id: string;
+            name: string;
+            email: string;
+            /** Format: date-time */
+            lastActiveAt: string | null;
+        };
+        ClassDetailDto: {
+            /** @enum {string} */
+            status: "ACTIVE" | "ARCHIVED";
+            id: string;
+            name: string;
+            targetLevelId: string | null;
+            targetLevel: components["schemas"]["LevelSummaryDto"] | null;
+            description: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            students: components["schemas"]["ClassStudentSummaryDto"][];
+        };
         UpdateClassDto: {
             name?: string;
             targetLevelId?: string;
             description?: string;
+        };
+        ClassDto: {
+            /** @enum {string} */
+            status: "ACTIVE" | "ARCHIVED";
+            id: string;
+            name: string;
+            targetLevelId: string | null;
+            description: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
         };
         CreateInvitationDto: {
             name: string;
@@ -724,10 +795,66 @@ export interface components {
             email: string;
             classId: string;
         };
+        InvitationDto: {
+            /** @enum {string} */
+            status: "PENDING" | "ACCEPTED" | "EXPIRED" | "REVOKED";
+            id: string;
+            classId: string;
+            name: string;
+            email: string;
+            /** Format: date-time */
+            expiresAt: string;
+            /** Format: date-time */
+            acceptedAt: string | null;
+            /** Format: date-time */
+            revokedAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        InvitationClassSummaryDto: {
+            id: string;
+            name: string;
+        };
+        InvitationListItemDto: {
+            /** @enum {string} */
+            status: "PENDING" | "ACCEPTED" | "EXPIRED" | "REVOKED";
+            id: string;
+            classId: string;
+            name: string;
+            email: string;
+            /** Format: date-time */
+            expiresAt: string;
+            /** Format: date-time */
+            acceptedAt: string | null;
+            /** Format: date-time */
+            revokedAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            class: components["schemas"]["InvitationClassSummaryDto"];
+        };
         UpdateStudentDto: {
             classId?: string;
             /** @enum {string} */
             status?: "ACTIVE" | "INACTIVE";
+        };
+        ClassCompletionRateDto: {
+            classId: string;
+            className: string;
+            studentCount: number;
+            completionRate: number;
+        };
+        DashboardSummaryDto: {
+            streakDistribution: {
+                [key: string]: number;
+            };
+            activeStudentsThisWeek: number;
+            totalActiveStudents: number;
+            averageXp: number;
+            lessonCompletionRateByClass: components["schemas"]["ClassCompletionRateDto"][];
         };
         ScenarioAnswerEventDto: {
             lineIndex: number;
@@ -1123,7 +1250,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["ClassListItemDto"][];
                 };
             };
         };
@@ -1146,7 +1273,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["ClassWithLevelDto"];
                 };
             };
         };
@@ -1167,7 +1294,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["ClassDetailDto"];
                 };
             };
         };
@@ -1192,7 +1319,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["ClassWithLevelDto"];
                 };
             };
         };
@@ -1212,7 +1339,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ClassDto"];
+                };
             };
         };
     };
@@ -1231,7 +1360,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["ClassDto"];
+                };
             };
         };
     };
@@ -1271,7 +1402,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["InvitationListItemDto"][];
                 };
             };
         };
@@ -1293,7 +1424,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["InvitationDto"];
+                };
             };
         };
     };
@@ -1331,7 +1464,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["InvitationDto"];
+                };
             };
         };
     };
@@ -1350,7 +1485,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["InvitationDto"];
+                };
             };
         };
     };
@@ -1466,7 +1603,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["DashboardSummaryDto"];
+                };
             };
         };
     };

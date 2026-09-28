@@ -4,6 +4,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { JwtAdminAuthGuard } from "../admin-auth/guards/jwt-admin-auth.guard";
 import { AdminInvitationsService } from "./admin-invitations.service";
 import { CreateInvitationDto, ListInvitationsQueryDto } from "./dto/invitation.dto";
+import { InvitationDto, InvitationListItemDto } from "./dto/invitation-view.dto";
 
 const CSV_TEMPLATE = "nama,email,kelas\nContoh Nama,contoh@email.com,Nama Kelas Persis Seperti di Sistem\n";
 const MAX_CSV_BYTES = 1_000_000; // 1MB -- lebih dari cukup untuk beberapa ribu baris
@@ -24,7 +25,7 @@ export class AdminInvitationsController {
   }
 
   @Post()
-  createSingle(@Body() dto: CreateInvitationDto) {
+  createSingle(@Body() dto: CreateInvitationDto): Promise<InvitationDto> {
     return this.invitations.createSingle(dto);
   }
 
@@ -36,17 +37,17 @@ export class AdminInvitationsController {
   }
 
   @Get()
-  list(@Query() query: ListInvitationsQueryDto) {
+  list(@Query() query: ListInvitationsQueryDto): Promise<InvitationListItemDto[]> {
     return this.invitations.list(query);
   }
 
   @Post(":id/resend")
-  resend(@Param("id") id: string) {
+  resend(@Param("id") id: string): Promise<InvitationDto> {
     return this.invitations.resend(id);
   }
 
   @Delete(":id")
-  revoke(@Param("id") id: string) {
+  revoke(@Param("id") id: string): Promise<InvitationDto> {
     return this.invitations.revoke(id);
   }
 }

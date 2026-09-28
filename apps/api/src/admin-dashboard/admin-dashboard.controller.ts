@@ -2,6 +2,7 @@ import { Controller, Get, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtAdminAuthGuard } from "../admin-auth/guards/jwt-admin-auth.guard";
 import { AdminDashboardService } from "./admin-dashboard.service";
+import { DashboardSummaryDto } from "./dto/dashboard-summary.dto";
 
 @ApiTags("Admin Dashboard")
 @ApiBearerAuth("admin-access-token")
@@ -11,7 +12,7 @@ export class AdminDashboardController {
   constructor(private readonly dashboard: AdminDashboardService) {}
 
   @Get()
-  summary() {
+  summary(): Promise<DashboardSummaryDto> {
     return this.dashboard.summary();
   }
 }
