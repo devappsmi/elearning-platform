@@ -5,24 +5,8 @@ import { GamificationService } from "../gamification/gamification.service";
 import { hashAudioKey } from "../audio/audio-hash.util";
 import { loadAudioUrlsByHash, type AudioUrlByHash } from "../audio/audio-lookup.util";
 import type { ScenarioAnswerEventDto } from "./dto/submit-scenario-attempt.dto";
-
-export interface ScenarioSummary {
-  id: string;
-  titleJp: string;
-  titleId: string;
-  level: string;
-  roles: string[];
-  estimatedMinutes: number;
-}
-
-export interface ScenarioAttemptResult {
-  passed: boolean;
-  accuracyPercent: number;
-  score: number;
-  mistakeCount: number;
-  failed: boolean;
-  xpAwarded: number;
-}
+import type { ScenarioSummaryDto } from "./dto/scenario-summary.dto";
+import type { ScenarioAttemptResultDto } from "./dto/scenario-attempt-result.dto";
 
 /** CONV-01..05. Payload `Scenario.payload` disimpan sebagai SATU blob JSON
  * (beda dari konten lesson yang didekomposisi jadi baris relasional Vocab/
@@ -39,7 +23,7 @@ export class ScenariosService {
     private readonly gamification: GamificationService,
   ) {}
 
-  async list(): Promise<ScenarioSummary[]> {
+  async list(): Promise<ScenarioSummaryDto[]> {
     const rows = await this.prisma.scenario.findMany({ where: { status: "PUBLISHED" }, orderBy: { createdAt: "asc" } });
     return rows.map((row) => {
       const content = this.parseContent(row.id, row.payload);
@@ -66,7 +50,7 @@ export class ScenariosService {
     mode: "PRACTICE" | "TEST",
     events: ScenarioAnswerEventDto[],
     durationSec: number,
-  ): Promise<ScenarioAttemptResult> {
+  ): Promise<ScenarioAttemptResultDto> {
     const row = await this.getPublishedRow(scenarioId);
     const content = this.parseContent(row.id, row.payload);
 

@@ -1132,7 +1132,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/ScenarioSummaryDto"
                   }
                 }
               }
@@ -1206,7 +1206,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/ScenarioAttemptResultDto"
                 }
               }
             }
@@ -2713,6 +2713,40 @@
           "lessonCompletionRateByClass"
         ]
       },
+      "ScenarioSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "titleJp": {
+            "type": "string"
+          },
+          "titleId": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "estimatedMinutes": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "titleJp",
+          "titleId",
+          "level",
+          "roles",
+          "estimatedMinutes"
+        ]
+      },
       "ScenarioAnswerEventDto": {
         "type": "object",
         "properties": {
@@ -2755,6 +2789,37 @@
           "mode",
           "events",
           "durationSec"
+        ]
+      },
+      "ScenarioAttemptResultDto": {
+        "type": "object",
+        "properties": {
+          "passed": {
+            "type": "boolean"
+          },
+          "accuracyPercent": {
+            "type": "number"
+          },
+          "score": {
+            "type": "number"
+          },
+          "mistakeCount": {
+            "type": "number"
+          },
+          "failed": {
+            "type": "boolean"
+          },
+          "xpAwarded": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "passed",
+          "accuracyPercent",
+          "score",
+          "mistakeCount",
+          "failed",
+          "xpAwarded"
         ]
       },
       "DictionaryEntryDto": {

@@ -947,6 +947,14 @@ export interface components {
             averageXp: number;
             lessonCompletionRateByClass: components["schemas"]["ClassCompletionRateDto"][];
         };
+        ScenarioSummaryDto: {
+            id: string;
+            titleJp: string;
+            titleId: string;
+            level: string;
+            roles: string[];
+            estimatedMinutes: number;
+        };
         ScenarioAnswerEventDto: {
             lineIndex: number;
             optionIndex: number;
@@ -956,6 +964,14 @@ export interface components {
             mode: "PRACTICE" | "TEST";
             events: components["schemas"]["ScenarioAnswerEventDto"][];
             durationSec: number;
+        };
+        ScenarioAttemptResultDto: {
+            passed: boolean;
+            accuracyPercent: number;
+            score: number;
+            mistakeCount: number;
+            failed: boolean;
+            xpAwarded: number;
         };
         DictionaryEntryDto: {
             id: string;
@@ -1737,7 +1753,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["ScenarioSummaryDto"][];
                 };
             };
         };
@@ -1781,7 +1797,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["ScenarioAttemptResultDto"];
                 };
             };
         };

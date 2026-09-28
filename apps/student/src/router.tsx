@@ -9,11 +9,14 @@ import { StubPage } from "./pages/StubPage";
 import { KamusPage } from "./pages/KamusPage";
 import { LeaderboardPage } from "./pages/LeaderboardPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { ConversationCatalogPage } from "./pages/ConversationCatalogPage";
+import { ConversationPage } from "./pages/ConversationPage";
+import { ConversationResultPage } from "./pages/ConversationResultPage";
 
 /**
  * Route skeleton -- inti alur belajar (Beranda/Belajar/Hasil Belajar, bagian
- * 7c), /login, dan sekarang Kamus/Leaderboard/Profil (bagian 7f) sudah
- * sungguhan. Percakapan (3 rute) dan Flashcard masih StubPage, lihat
+ * 7c), /login, Kamus/Leaderboard/Profil (bagian 7f), dan sekarang Percakapan
+ * (bagian 7g) sudah sungguhan. Cuma Flashcard yang masih StubPage, lihat
  * docs/PLAN.md.
  *
  * Public routes (no AuthGuard): /invite/:token, /login, /forgot-password,
@@ -35,11 +38,11 @@ export const router = createBrowserRouter([
           { path: "/", element: <HomePage /> },
           { path: "/learn/:lessonId", element: <LessonPage /> },
           { path: "/learn/:lessonId/result", element: <LessonResultPage /> },
-          { path: "/conversation", element: <StubPage title="Percakapan" /> },
-          { path: "/conversation/:id", element: <StubPage title="Detail Percakapan" /> },
+          { path: "/conversation", element: <ConversationCatalogPage /> },
+          { path: "/conversation/:id", element: <ConversationPage /> },
           {
             path: "/conversation/:id/result",
-            element: <StubPage title="Hasil Percakapan" />,
+            element: <ConversationResultPage />,
           },
           { path: "/dictionary", element: <KamusPage /> },
           { path: "/flashcards", element: <StubPage title="Flashcard" /> },
