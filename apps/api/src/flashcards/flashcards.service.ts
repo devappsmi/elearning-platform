@@ -3,19 +3,9 @@ import { PrismaService } from "../prisma/prisma.service";
 import { SrsService } from "../srs/srs.service";
 import { hashAudioKey } from "../audio/audio-hash.util";
 import { loadAudioUrlsByHash } from "../audio/audio-lookup.util";
+import type { DueFlashcardDto } from "./dto/due-flashcard.dto";
 
 const DUE_LIMIT = 30;
-
-export interface DueFlashcard {
-  itemId: string;
-  surface: string;
-  reading: string;
-  romaji: string;
-  meaning: string | null;
-  audio: string;
-  srsStage: number;
-  nextReviewAt: Date;
-}
 
 /** SUP-02: deck otomatis dari ReviewItem yang SrsModule sudah tulis (lihat
  * catatan lengkap SRS di srs.service.ts/LessonsModule) -- modul ini murni
@@ -31,7 +21,7 @@ export class FlashcardsService {
     private readonly srs: SrsService,
   ) {}
 
-  async due(userId: string): Promise<DueFlashcard[]> {
+  async due(userId: string): Promise<DueFlashcardDto[]> {
     const dueItems = await this.prisma.reviewItem.findMany({
       where: { userId, itemType: "WORD", nextReviewAt: { lte: new Date() } },
       orderBy: { nextReviewAt: "asc" },
@@ -47,7 +37,7 @@ export class FlashcardsService {
       vocabRows.map((v) => hashAudioKey(v.jp, "female")),
     );
 
-    const result: DueFlashcard[] = [];
+    const result: DueFlashcardDto[] = [];
     for (const item of dueItems) {
       const vocab = vocabById.get(item.itemId);
       // Vocab-nya dihapus/berubah setelah jadi ReviewItem (konten diedit) --

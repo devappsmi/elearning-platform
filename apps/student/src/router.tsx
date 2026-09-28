@@ -12,12 +12,14 @@ import { ProfilePage } from "./pages/ProfilePage";
 import { ConversationCatalogPage } from "./pages/ConversationCatalogPage";
 import { ConversationPage } from "./pages/ConversationPage";
 import { ConversationResultPage } from "./pages/ConversationResultPage";
+import { FlashcardsPage } from "./pages/FlashcardsPage";
 
 /**
- * Route skeleton -- inti alur belajar (Beranda/Belajar/Hasil Belajar, bagian
- * 7c), /login, Kamus/Leaderboard/Profil (bagian 7f), dan sekarang Percakapan
- * (bagian 7g) sudah sungguhan. Cuma Flashcard yang masih StubPage, lihat
- * docs/PLAN.md.
+ * Route skeleton -- SEMUA rute murid sekarang sungguhan KECUALI /welcome,
+ * /invite/:token, /forgot-password, /reset-password/:token (alur onboarding
+ * terpisah, di luar scope Fase 1 ini). Inti alur belajar (7c),
+ * Kamus/Leaderboard/Profil (7f), Percakapan (7g), dan sekarang Flashcard
+ * (7h) sudah sungguhan -- lihat docs/PLAN.md.
  *
  * Public routes (no AuthGuard): /invite/:token, /login, /forgot-password,
  * /reset-password/:token. Everything else is wrapped in AuthGuard + the
@@ -45,7 +47,7 @@ export const router = createBrowserRouter([
             element: <ConversationResultPage />,
           },
           { path: "/dictionary", element: <KamusPage /> },
-          { path: "/flashcards", element: <StubPage title="Flashcard" /> },
+          { path: "/flashcards", element: <FlashcardsPage /> },
           { path: "/leaderboard", element: <LeaderboardPage /> },
           { path: "/profile", element: <ProfilePage /> },
         ],

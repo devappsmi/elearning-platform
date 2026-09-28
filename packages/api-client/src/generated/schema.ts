@@ -984,9 +984,23 @@ export interface components {
             exampleId: string | null;
             audio: string;
         };
+        DueFlashcardDto: {
+            itemId: string;
+            surface: string;
+            reading: string;
+            romaji: string;
+            meaning: string | null;
+            audio: string;
+            srsStage: number;
+            /** Format: date-time */
+            nextReviewAt: string;
+        };
         ReviewFlashcardDto: {
             itemId: string;
             correct: boolean;
+        };
+        FlashcardReviewResponseDto: {
+            message: string;
         };
     };
     responses: never;
@@ -1837,7 +1851,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["DueFlashcardDto"][];
                 };
             };
         };
@@ -1859,7 +1873,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["FlashcardReviewResponseDto"];
+                };
             };
         };
     };

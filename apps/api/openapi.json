@@ -1273,7 +1273,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/DueFlashcardDto"
                   }
                 }
               }
@@ -1306,7 +1306,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlashcardReviewResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -2869,6 +2876,47 @@
           "audio"
         ]
       },
+      "DueFlashcardDto": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string"
+          },
+          "surface": {
+            "type": "string"
+          },
+          "reading": {
+            "type": "string"
+          },
+          "romaji": {
+            "type": "string"
+          },
+          "meaning": {
+            "type": "string",
+            "nullable": true
+          },
+          "audio": {
+            "type": "string"
+          },
+          "srsStage": {
+            "type": "number"
+          },
+          "nextReviewAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "itemId",
+          "surface",
+          "reading",
+          "romaji",
+          "meaning",
+          "audio",
+          "srsStage",
+          "nextReviewAt"
+        ]
+      },
       "ReviewFlashcardDto": {
         "type": "object",
         "properties": {
@@ -2882,6 +2930,17 @@
         "required": [
           "itemId",
           "correct"
+        ]
+      },
+      "FlashcardReviewResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
         ]
       }
     }
