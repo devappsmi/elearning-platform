@@ -55,6 +55,18 @@ const CHAT_FAMILY = (id: string) => /^(gpt-|o\d|chatgpt)/.test(id) && !/(tts|tra
 const TTS_FAMILY = (id: string) => /tts/.test(id);
 const STT_FAMILY = (id: string) => /(transcribe|whisper)/.test(id);
 
+/** Model keluarga tertentu yang SUNGGUH tersedia untuk akun ini. Kunci berizin terbatas (project key tanpa
+ * scope baca model) tidak bisa memanggil `models.list()`: itu dilaporkan apa adanya, bukan menimpa galat asli. */
+async function availableModels(family: (id: string) => boolean): Promise<string> {
+  try {
+    const ids: string[] = [];
+    for await (const item of new OpenAI({ apiKey }).models.list()) ids.push(item.id);
+    return ids.filter(family).sort().join(", ") || "(tidak ada yang cocok)";
+  } catch (error) {
+    return `(daftar model tidak bisa dibaca dengan kunci ini: ${(error as Error).message})`;
+  }
+}
+
 /** Galat 404/400 karena nama model: sertakan model yang SUNGGUH tersedia untuk akun ini supaya
  * env yang salah bisa langsung dibetulkan. */
 async function explainModelError<T>(envName: string, model: string, family: (id: string) => boolean, call: () => Promise<T>): Promise<T> {
@@ -63,10 +75,7 @@ async function explainModelError<T>(envName: string, model: string, family: (id:
   } catch (error) {
     const status = (error as { status?: number }).status;
     if (status !== 404 && status !== 400) throw error;
-    const ids: string[] = [];
-    for await (const item of new OpenAI({ apiKey }).models.list()) ids.push(item.id);
-    const candidates = ids.filter(family).sort().join(", ") || "(tidak ada yang cocok)";
-    throw new Error(`${envName}="${model}" ditolak OpenAI (status ${status}). Model yang tersedia untuk akun ini: ${candidates}`, { cause: error });
+    throw new Error(`${envName}="${model}" ditolak OpenAI (status ${status}). Model yang tersedia untuk akun ini: ${await availableModels(family)}`, { cause: error });
   }
 }
 
