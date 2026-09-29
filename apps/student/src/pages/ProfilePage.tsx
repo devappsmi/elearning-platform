@@ -27,16 +27,25 @@ export function ProfilePage() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setSubmitting(true);
     setError(null);
     setSaved(false);
-    const { data, error: apiError } = await apiClient.PATCH("/me", { body: { name, dailyXpGoal } });
+    // Server menolak nama kosong SETELAH dipangkas (`required` bawaan browser
+    // meloloskan "   "), jadi dipangkas dan dicek di sini supaya murid dapat
+    // pesan yang jelas, bukan "Gagal menyimpan" dari request yang pasti 400.
+    const trimmedName = name.trim();
+    if (trimmedName.length === 0) {
+      setError("Nama tidak boleh kosong.");
+      return;
+    }
+    setSubmitting(true);
+    const { data, error: apiError } = await apiClient.PATCH("/me", { body: { name: trimmedName, dailyXpGoal } });
     setSubmitting(false);
     if (apiError || !data) {
       setError("Gagal menyimpan perubahan.");
       return;
     }
     setMe(data);
+    setName(data.name); // tampilkan nama yang benar-benar tersimpan (sudah terpangkas)
     setSaved(true);
   }
 

@@ -1,17 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-  UploadedFile,
-  UseGuards,
-  UseInterceptors,
-  UsePipes,
-  ValidationPipe,
-  type ValidationPipeOptions,
-} from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { Throttle } from "@nestjs/throttler";
@@ -29,26 +16,16 @@ import { TutorSpeakRequestDto, TutorSpeakResponseDto, TutorTranscribeResponseDto
  * sebagai pengaman biaya. `/reply` sudah dibatasi kuota harian. */
 const PAID_CALL_THROTTLE = { default: { limit: 20, ttl: 60_000 } };
 
-/** Opsi pipe validasi controller ini -- diekspor supaya tes DTO memakai
- * konfigurasi yang SAMA persis dengan yang berjalan di runtime.
- * `forbidNonWhitelisted` sengaja: endpoint baru, tidak ada client lama yang
- * perlu dijaga, dan field tak dikenal lebih baik ditolak daripada diam-diam
- * dibuang. */
-export const TUTOR_VALIDATION_PIPE_OPTIONS: ValidationPipeOptions = { whitelist: true, forbidNonWhitelisted: true, transform: true };
-
 /** AI tutor (Milestone 11, lihat docs/PLAN.md bagian 6).
  *
- * `ValidationPipe` dipasang DI SINI (bukan cuma mengandalkan yang global)
- * karena API ini SAAT INI tidak mendaftarkan `ValidationPipe` global sama
- * sekali (main.ts/app.module.ts) -- tanpa pipe, dekorator class-validator di
- * DTO cuma hiasan dan batas panjang riwayat/teks (pengaman biaya token)
- * tidak pernah ditegakkan. Temuan itu (yang juga menyangkut DTO modul lain)
- * dicatat di docs/PLAN.md, tidak diubah diam-diam di sini. */
+ * Batas biaya di DTO tutor (riwayat 40 giliran, teks 500 karakter, dst.)
+ * ditegakkan oleh `ValidationPipe` GLOBAL (`APP_PIPE` di AppModule, opsi di
+ * common/validation.ts). Sebelumnya pipe ini dipasang lokal di sini karena
+ * API belum punya yang global -- lihat docs/PLAN.md bagian 6e. */
 @ApiTags("Tutor")
 @ApiBearerAuth("access-token")
 @Controller("tutor")
 @UseGuards(JwtStudentAuthGuard)
-@UsePipes(new ValidationPipe(TUTOR_VALIDATION_PIPE_OPTIONS))
 export class TutorController {
   constructor(private readonly tutor: TutorService) {}
 

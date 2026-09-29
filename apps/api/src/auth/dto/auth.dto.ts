@@ -1,4 +1,5 @@
 import { IsEmail, IsString, Matches, MinLength } from "class-validator";
+import { Trim } from "../../common/trim.decorator";
 
 export class ValidateInvitationDto {
   @IsString()
@@ -9,6 +10,7 @@ export class RegisterDto {
   @IsString()
   token!: string;
 
+  @Trim()
   @IsString()
   @MinLength(1)
   name!: string;

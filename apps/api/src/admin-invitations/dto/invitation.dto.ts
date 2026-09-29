@@ -1,6 +1,8 @@
 import { IsEmail, IsIn, IsOptional, IsString, MinLength } from "class-validator";
+import { Trim } from "../../common/trim.decorator";
 
 export class CreateInvitationDto {
+  @Trim()
   @IsString()
   @MinLength(1)
   name!: string;

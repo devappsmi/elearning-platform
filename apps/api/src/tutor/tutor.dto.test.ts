@@ -1,6 +1,6 @@
-import { BadRequestException, ValidationPipe } from "@nestjs/common";
+import { BadRequestException } from "@nestjs/common";
 import { describe, expect, it } from "vitest";
-import { TUTOR_VALIDATION_PIPE_OPTIONS } from "./tutor.controller";
+import { createValidationPipe } from "../common/validation";
 import {
   MAX_HISTORY_TURNS,
   MAX_TURN_CHARS,
@@ -11,12 +11,12 @@ import {
 } from "./dto/tutor-reply.dto";
 import { MAX_SPEAK_CHARS, TutorSpeakRequestDto } from "./dto/tutor-speech.dto";
 
-// Pipe yang SAMA dengan yang dipasang di TutorController. `metatype` diberikan
-// manual: vitest (esbuild) tidak menghasilkan `design:paramtypes`, yang di
-// runtime sungguhan (tsc/nest build) mengisinya otomatis dari tipe parameter.
-// Bahwa pipe ini benar-benar terpasang di route diverifikasi terpisah lewat
-// server nyata (e2e), bukan di sini.
-const pipe = new ValidationPipe(TUTOR_VALIDATION_PIPE_OPTIONS);
+// Pipe yang SAMA dengan yang didaftarkan global (APP_PIPE, common/validation.ts).
+// `metatype` diberikan manual: vitest (esbuild) tidak menghasilkan
+// `design:paramtypes`, yang di runtime sungguhan (tsc/nest build) mengisinya
+// otomatis dari tipe parameter. Bahwa pipe ini benar-benar terpasang di route
+// dijaga oleh common/validation.test.ts + diverifikasi lewat server nyata (e2e).
+const pipe = createValidationPipe();
 
 const validate = <T>(value: unknown, metatype: new () => T): Promise<T> =>
   pipe.transform(value, { type: "body", metatype }) as Promise<T>;

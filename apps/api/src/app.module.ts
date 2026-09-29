@@ -1,8 +1,9 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
-import { APP_GUARD } from "@nestjs/core";
+import { APP_GUARD, APP_PIPE } from "@nestjs/core";
 import { validateEnv } from "./config/env.validation";
+import { createValidationPipe } from "./common/validation";
 import { PrismaModule } from "./prisma/prisma.module";
 import { RedisModule } from "./redis/redis.module";
 import { HealthModule } from "./health/health.module";
@@ -32,7 +33,12 @@ import { TutorModule } from "./tutor/tutor.module";
  * dashboard) + skenario percakapan/kamus/flashcard, dan Milestone 11 --
  * TutorModule (AI tutor). AudioModule tidak punya controller sendiri (audio
  * konten di-generate saat seed, bukan saat request -- lihat catatan di
- * audio.service.ts); konsumen requestnya adalah TutorModule (`/tutor/speak`). */
+ * audio.service.ts); konsumen requestnya adalah TutorModule (`/tutor/speak`).
+ *
+ * `APP_PIPE` di bawah = validasi DTO (class-validator) untuk SELURUH API.
+ * JANGAN dihapus/dipindah tanpa tes penjaganya (common/validation.test.ts):
+ * tanpa pipe ini semua dekorator class-validator di DTO cuma hiasan dan body
+ * request masuk mentah ke service -- lihat docs/PLAN.md bagian 6e. */
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
@@ -58,6 +64,9 @@ import { TutorModule } from "./tutor/tutor.module";
     FlashcardsModule,
     TutorModule,
   ],
-  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
+  providers: [
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_PIPE, useFactory: createValidationPipe },
+  ],
 })
 export class AppModule {}
