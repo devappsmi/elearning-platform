@@ -4,5 +4,8 @@ node_modules
 **/dist
 **/.turbo
 **/coverage
-.env
-apps/*/.env
+# Rahasia tidak boleh masuk konteks build (dan dengan begitu ke layer image): termasuk deploy/.env.
+**/.env
+**/.env.*
+!**/.env.example
+deploy/backup

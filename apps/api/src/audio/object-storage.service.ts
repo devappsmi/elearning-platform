@@ -8,12 +8,16 @@ export class ObjectStorageService {
   private readonly client: S3Client;
   private readonly publicBaseUrl: string;
 
+  /** `publicBaseUrl`: alamat objek yang dilihat BROWSER (tanpa garis miring akhir). Kosong = `${endpoint}/${bucket}`,
+   * yang hanya benar bila endpoint S3 juga terjangkau browser; di balik Docker/reverse proxy endpoint-nya internal
+   * sehingga alamat publik harus diberikan terpisah (env S3_PUBLIC_BASE_URL). */
   constructor(
     private readonly endpoint: string,
     region: string,
     private readonly bucket: string,
     accessKeyId: string,
     secretAccessKey: string,
+    publicBaseUrl?: string,
   ) {
     this.client = new S3Client({
       endpoint,
@@ -23,7 +27,7 @@ export class ObjectStorageService {
       // tidak resolve terhadap server S3-compatible lokal, cuma S3 asli.
       forcePathStyle: true,
     });
-    this.publicBaseUrl = `${endpoint.replace(/\/$/, "")}/${bucket}`;
+    this.publicBaseUrl = (publicBaseUrl || `${endpoint.replace(/\/+$/, "")}/${bucket}`).replace(/\/+$/, "");
   }
 
   /** Bucket diasumsikan public-read (konten pelajaran, bukan data pribadi --

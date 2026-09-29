@@ -22,6 +22,12 @@ export const envSchema = z.object({
   S3_BUCKET: z.string().min(1),
   S3_ACCESS_KEY_ID: z.string().min(1),
   S3_SECRET_ACCESS_KEY: z.string().min(1),
+  // Alamat PUBLIK objek di bucket (yang dibuka browser dan disimpan di AudioAsset.s3Url). Kosong =
+  // `${S3_ENDPOINT}/${S3_BUCKET}`, benar hanya kalau endpoint S3 juga terjangkau browser (dev lokal, S3
+  // publik). Di Docker/belakang reverse proxy endpoint internal (mis. http://storage:8333) TIDAK terjangkau
+  // browser: isi dengan URL publiknya (mis. https://app.contoh.id/media). Nilainya ikut tersimpan di baris
+  // audio, jadi tetapkan dari awal (mengganti belakangan = perbarui s3_url, lihat docs/DEPLOY.md).
+  S3_PUBLIC_BASE_URL: z.preprocess((value) => (value === "" ? undefined : value), z.string().url().optional()),
 
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_CHAT_MODEL: z.string().default("gpt-5.6-terra"),

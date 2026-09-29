@@ -25,7 +25,7 @@ packages/
 
 ```bash
 pnpm install
-docker compose up -d      # postgres + redis + minio
+docker compose up -d      # postgres + redis + penyimpanan S3 (SeaweedFS)
 pnpm db:migrate
 pnpm db:seed              # isi konten Hiragana + badge
 pnpm dev                  # jalankan api + student + admin sekaligus (Turborepo)
@@ -33,3 +33,16 @@ pnpm dev                  # jalankan api + student + admin sekaligus (Turborepo)
 
 Salin `apps/api/.env.example` ke `apps/api/.env` dan isi `OPENAI_API_KEY`
 sebelum menjalankan `apps/api` (dibutuhkan `TutorModule`).
+
+## Menjalankan di server sendiri (Docker Compose)
+
+Stack produksi satu server (murid, admin, API, Postgres, Redis, penyimpanan audio, HTTPS otomatis) ada di
+[`deploy/`](deploy). Panduan lengkap: [`docs/DEPLOY.md`](docs/DEPLOY.md). Ringkasnya:
+
+```bash
+cd deploy
+sh gen-env.sh && nano .env          # rahasia acak + alamat domain/IP
+docker compose up -d --build
+docker compose run --rm tools pnpm run db:seed
+docker compose run --rm -e ADMIN_EMAIL -e ADMIN_PASSWORD tools pnpm run admin:create
+```

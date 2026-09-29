@@ -29,6 +29,7 @@ import { TtsClient } from "./tts-client";
           config.get("S3_BUCKET", { infer: true }),
           config.get("S3_ACCESS_KEY_ID", { infer: true }),
           config.get("S3_SECRET_ACCESS_KEY", { infer: true }),
+          config.get("S3_PUBLIC_BASE_URL", { infer: true }),
         ),
       inject: [ConfigService],
     },

@@ -23,3 +23,6 @@ apps/*/.vite/
 apps/api/dist/
 
 .DS_Store
+
+# Cadangan dan berkas lokal deploy
+deploy/backup/

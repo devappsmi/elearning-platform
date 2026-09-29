@@ -12,6 +12,9 @@
     "test": "vitest run",
     "test:live-openai": "vitest run --config vitest.live.config.ts",
     "prisma": "prisma",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "admin:create": "ts-node prisma/create-admin.ts",
     "generate-openapi": "nest build && node dist/generate-openapi.js"
   },
   "dependencies": {

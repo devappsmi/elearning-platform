@@ -165,6 +165,7 @@ async function seedAudioAssets(unit: DomainUnit): Promise<void> {
     process.env.S3_BUCKET ?? "",
     process.env.S3_ACCESS_KEY_ID ?? "",
     process.env.S3_SECRET_ACCESS_KEY ?? "",
+    process.env.S3_PUBLIC_BASE_URL || undefined,
   );
   const audio = new AudioService(prisma, tts, storage);
 
