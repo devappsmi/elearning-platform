@@ -31,7 +31,8 @@ import {
 } from "@elearning/domain";
 import { AudioService } from "../src/audio/audio.service";
 import { AzureTtsClient } from "../src/audio/azure-tts.client";
-import { ObjectStorageService } from "../src/audio/object-storage.service";
+import { createAudioStorage } from "../src/audio/audio-storage";
+import { resolveStorageOptions } from "../src/audio/storage-options";
 
 const prisma = new PrismaClient();
 
@@ -159,14 +160,8 @@ async function seedAudioAssets(unit: DomainUnit): Promise<void> {
     process.env.AZURE_TTS_VOICE_FEMALE ?? "ja-JP-NanamiNeural",
     process.env.AZURE_TTS_VOICE_MALE ?? "ja-JP-KeitaNeural",
   );
-  const storage = new ObjectStorageService(
-    process.env.S3_ENDPOINT ?? "",
-    process.env.S3_REGION ?? "",
-    process.env.S3_BUCKET ?? "",
-    process.env.S3_ACCESS_KEY_ID ?? "",
-    process.env.S3_SECRET_ACCESS_KEY ?? "",
-    process.env.S3_PUBLIC_BASE_URL || undefined,
-  );
+  // Penyimpanan yang SAMA dengan API (env yang sama): audio yang dibuat seed langsung bisa disajikan API.
+  const storage = createAudioStorage(resolveStorageOptions(process.env));
   const audio = new AudioService(prisma, tts, storage);
 
   const items: { text: string; voice: "female" | "male" }[] = [

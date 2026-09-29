@@ -1,16 +1,17 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import type { AudioStorage } from "./audio-storage";
 
 /** Wrapper S3-compatible tipis (MinIO lokal via docker-compose, LocalStack
  * untuk verifikasi, atau S3 sungguhan di produksi -- semuanya bicara API S3
  * yang sama). Konstruktor menerima NILAI MENTAH (bukan ConfigService NestJS)
  * -- alasan sama seperti AzureTtsClient, lihat komentar di sana. */
-export class ObjectStorageService {
+export class ObjectStorageService implements AudioStorage {
   private readonly client: S3Client;
   private readonly publicBaseUrl: string;
 
   /** `publicBaseUrl`: alamat objek yang dilihat BROWSER (tanpa garis miring akhir). Kosong = `${endpoint}/${bucket}`,
    * yang hanya benar bila endpoint S3 juga terjangkau browser; di balik Docker/reverse proxy endpoint-nya internal
-   * sehingga alamat publik harus diberikan terpisah (env S3_PUBLIC_BASE_URL). */
+   * sehingga alamat publik harus diberikan terpisah (env STORAGE_PUBLIC_BASE_URL). */
   constructor(
     private readonly endpoint: string,
     region: string,

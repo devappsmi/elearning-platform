@@ -41,12 +41,17 @@ FROM build AS tools
 WORKDIR /repo/apps/api
 # Tidak ada panggilan keluar (telemetri/cek versi) dari CLI Prisma di server produksi.
 ENV CHECKPOINT_DISABLE=1 PRISMA_HIDE_UPDATE_MESSAGE=1
+# Titik pasang penyimpanan audio lokal (volume media_data): dibuat milik uid 1001 (pengguna `nestjs` di image runner)
+# supaya volume yang PERTAMA kali dibuat lewat container mana pun tetap bisa ditulis API.
+RUN mkdir -p /data/media && chown 1001:1001 /data/media
 CMD ["pnpm", "run", "db:deploy"]
 
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 RUN groupadd --system --gid 1001 nodejs && useradd --system --uid 1001 --gid nodejs nestjs
+# Penyimpanan audio lokal (volume media_data dipasang di sini): Docker menyalin pemilik direktori ini ke volume baru.
+RUN mkdir -p /data/media && chown nestjs:nodejs /data/media
 
 COPY --from=build --chown=nestjs:nodejs /deploy/api/dist ./dist
 COPY --from=build --chown=nestjs:nodejs /deploy/api/node_modules ./node_modules

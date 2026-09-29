@@ -1,15 +1,18 @@
 import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
+import type { NestExpressApplication } from "@nestjs/platform-express";
 import { ConfigService } from "@nestjs/config";
 import { SwaggerModule } from "@nestjs/swagger";
 import helmet from "helmet";
 import { AppModule } from "./app.module";
 import { buildSwaggerConfig } from "./swagger.config";
 import { parseTrustProxy } from "./common/trust-proxy";
+import { serveLocalMedia } from "./audio/local-media";
+import { resolveStorageOptions, storageEnvFromConfig } from "./audio/storage-options";
 import type { Env } from "./config/env.validation";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const config = app.get(ConfigService<Env, true>);
 
   // Sebelum apa pun: pembatas per-IP membaca `req.ip`, dan di belakang reverse proxy nilainya
@@ -18,6 +21,10 @@ async function bootstrap() {
   if (trustProxy !== false) app.getHttpAdapter().getInstance().set("trust proxy", trustProxy);
 
   app.use(helmet());
+
+  // Penyimpanan audio LOKAL (bawaan tahap uji coba): berkasnya disajikan API sendiri di /media.
+  const storage = resolveStorageOptions(storageEnvFromConfig(config));
+  if (storage.driver === "local") serveLocalMedia(app, storage.localDir);
   app.enableCors({
     origin: [config.get("CORS_ORIGIN_STUDENT", { infer: true }), config.get("CORS_ORIGIN_ADMIN", { infer: true })],
     credentials: true,

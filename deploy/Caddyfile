@@ -6,7 +6,7 @@
 #
 # Di kedua situs, jalur yang sama:
 #   /api/*    -> layanan `api` (awalan /api dibuang), kecuali dokumentasi Swagger yang TIDAK dibuka ke publik
-#   /media/*  -> penyimpanan S3 bawaan, hanya baca (audio pelajaran); hanya dipakai oleh situs murid
+#   /media/*  -> layanan `api`, yang menyajikan berkas audio dari disk (hanya baca); hanya untuk situs murid
 #   lainnya   -> berkas statis aplikasi (SPA; jalur yang tak dikenal jatuh ke index.html)
 # Aplikasi memanggil API lewat alamat RELATIF (/api) di origin-nya sendiri, jadi tidak butuh CORS.
 #
@@ -69,13 +69,12 @@
 	import pengaman
 	import backend
 
-	# handle_path membuang awalan /media DULU, baru `rewrite` menaruh nama bucket di depannya. (Jangan diganti
-	# `uri strip_prefix` + `rewrite` terpisah: urutan direktif Caddy menjalankan `rewrite` lebih dulu.)
-	handle_path /media/* {
+	# Audio pelajaran: API menyajikannya dari disk di /media (jalur dipertahankan, tanpa strip). Hanya baca.
+	@media path /media/*
+	handle @media {
 		@bukanbaca not method GET HEAD
 		respond @bukanbaca 405
-		rewrite * /{$S3_BUCKET}{uri}
-		reverse_proxy storage:8333
+		reverse_proxy api:3001
 	}
 
 	import spa /srv/student

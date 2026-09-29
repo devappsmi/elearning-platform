@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import type { PrismaClient } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { TtsClient } from "./tts-client";
-import { ObjectStorageService } from "./object-storage.service";
+import type { AudioStorage } from "./audio-storage";
 import { hashAudioKey, type AudioVoice } from "./audio-hash.util";
 
 export const OBJECT_STORAGE = Symbol("OBJECT_STORAGE");
@@ -21,7 +21,7 @@ export class AudioService {
   constructor(
     @Inject(PrismaService) private readonly prisma: PrismaClient,
     private readonly tts: TtsClient,
-    @Inject(OBJECT_STORAGE) private readonly storage: ObjectStorageService,
+    @Inject(OBJECT_STORAGE) private readonly storage: AudioStorage,
   ) {}
 
   /** Cache hit -> langsung kembalikan s3Url tersimpan, TIDAK memanggil TTS

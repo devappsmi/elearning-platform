@@ -1,6 +1,6 @@
 #!/bin/sh
 # Membuat deploy/.env dari .env.example dengan rahasia acak (POSTGRES_PASSWORD, JWT_STUDENT_SECRET,
-# JWT_ADMIN_SECRET, S3_SECRET_ACCESS_KEY). Tidak menimpa .env yang sudah ada.
+# JWT_ADMIN_SECRET). Tidak menimpa .env yang sudah ada.
 # Alamat akses (STUDENT_ADDRESS, ADMIN_ADDRESS, PUBLIC_*_URL) tetap harus Anda sunting sendiri.
 set -eu
 cd "$(dirname "$0")"
@@ -18,7 +18,6 @@ sed \
   -e "s|^POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=$(rand)|" \
   -e "s|^JWT_STUDENT_SECRET=.*|JWT_STUDENT_SECRET=$(rand)|" \
   -e "s|^JWT_ADMIN_SECRET=.*|JWT_ADMIN_SECRET=$(rand)|" \
-  -e "s|^S3_SECRET_ACCESS_KEY=.*|S3_SECRET_ACCESS_KEY=$(rand)|" \
   .env.example > .env
 
 echo "deploy/.env dibuat dengan rahasia acak."

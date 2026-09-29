@@ -6,7 +6,8 @@
 #   docker compose run --rm -e ADMIN_EMAIL -e ADMIN_PASSWORD tools pnpm run admin:create
 #
 # Yang menerima lalu lintas dari luar HANYA `edge` (Caddy: port 80/443, dan 8080 untuk mode uji lewat IP).
-# Postgres, Redis, penyimpanan, dan API tidak dipublikasikan ke host.
+# Postgres, Redis, dan API tidak dipublikasikan ke host. Audio disimpan di disk server (volume `media_data`) dan
+# disajikan API di /media lewat Caddy -- tanpa S3 (tahap uji coba; driver S3 masih ada di kode, lihat docs/DEPLOY.md).
 # Butuh Docker Compose v2.20+.
 
 name: elearning
@@ -30,13 +31,17 @@ x-api-environment: &api-environment
   JWT_REFRESH_TTL: ${JWT_REFRESH_TTL:-14d}
   MAIL_FROM: ${MAIL_FROM:-noreply@example.com}
   MAIL_PROVIDER_API_KEY: ${MAIL_PROVIDER_API_KEY:-}
-  S3_ENDPOINT: ${S3_ENDPOINT:-http://storage:8333}
-  S3_REGION: ${S3_REGION:-us-east-1}
-  S3_BUCKET: ${S3_BUCKET:-audio-assets}
-  S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:?isi S3_ACCESS_KEY_ID di deploy/.env}
-  S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:?isi S3_SECRET_ACCESS_KEY di deploy/.env}
-  # Alamat yang dibuka BROWSER untuk audio. Bawaan: lewat situs murid (/media diteruskan Caddy ke penyimpanan).
-  S3_PUBLIC_BASE_URL: ${S3_PUBLIC_BASE_URL:-${PUBLIC_STUDENT_URL}/media}
+  # Penyimpanan audio: DISK LOKAL. Berkas ditulis ke volume media_data (/data/media) dan disajikan API di /media;
+  # Caddy meneruskan /media/* dari situs murid ke API. STORAGE_PUBLIC_BASE_URL = alamat yang dibuka BROWSER.
+  STORAGE_DRIVER: ${STORAGE_DRIVER:-local}
+  STORAGE_LOCAL_DIR: /data/media
+  STORAGE_PUBLIC_BASE_URL: ${STORAGE_PUBLIC_BASE_URL:-${PUBLIC_STUDENT_URL}/media}
+  # Hanya dipakai bila kelak STORAGE_DRIVER=s3 (kosong = tak berpengaruh).
+  S3_ENDPOINT: ${S3_ENDPOINT:-}
+  S3_REGION: ${S3_REGION:-}
+  S3_BUCKET: ${S3_BUCKET:-}
+  S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-}
+  S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-}
   OPENAI_API_KEY: ${OPENAI_API_KEY:-}
   OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-5.6-terra}
   OPENAI_STT_MODEL: ${OPENAI_STT_MODEL:-gpt-transcribe}
@@ -59,6 +64,8 @@ x-tools: &tools
     target: tools
   image: elearning-tools:local
   environment: *api-environment
+  volumes:
+    - media_data:/data/media # seed bisa menghasilkan audio (bila TTS diisi) ke penyimpanan yang sama dengan API
   logging: *logging
 
 services:
@@ -92,58 +99,6 @@ services:
       retries: 20
     logging: *logging
 
-  # Penyimpanan S3-kompatibel BAWAAN untuk audio (SeaweedFS). Bucket dibaca publik tanpa kunci (hanya GET/HEAD
-  # objek; tidak bisa list/tulis/hapus) -- lewat /media di Caddy. Untuk S3 luar (AWS S3, R2, dll.) kosongkan
-  # COMPOSE_PROFILES di .env dan isi S3_* -- lihat docs/DEPLOY.md.
-  storage:
-    image: chrislusf/seaweedfs:4.48
-    profiles: ["builtin-storage"]
-    restart: unless-stopped
-    environment:
-      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:?isi S3_ACCESS_KEY_ID di deploy/.env}
-      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:?isi S3_SECRET_ACCESS_KEY di deploy/.env}
-      S3_BUCKET: ${S3_BUCKET:-audio-assets}
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - |
-        cat > /tmp/s3.json <<JSON
-        {"identities":[
-          {"name":"app","credentials":[{"accessKey":"$${S3_ACCESS_KEY_ID}","secretKey":"$${S3_SECRET_ACCESS_KEY}"}],"actions":["Admin","Read","List","Tagging","Write"]},
-          {"name":"anonymous","actions":["Read:$${S3_BUCKET}"]}
-        ]}
-        JSON
-        exec weed server -dir=/data -ip=storage -master.volumeSizeLimitMB=1024 -volume.max=30 -s3 -s3.port=8333 -s3.config=/tmp/s3.json
-    volumes:
-      - storage_data:/data
-    healthcheck:
-      # Sehat = gerbang S3 hidup DAN volume server sudah terdaftar di master. `/healthz` saja tidak cukup: sesaat
-      # sesudah restart ia sudah 200 padahal volume belum terdaftar, sehingga GET objek sempat 500 ("volume not found").
-      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:8333/healthz && wget -q -O- http://localhost:9333/dir/status | grep -q '\"DataNodes\":\\[{'"]
-      interval: 5s
-      timeout: 3s
-      retries: 30
-    logging: *logging
-
-  # Membuat bucket sekali (aman diulang: bucket yang sudah ada dibiarkan).
-  storage-init:
-    image: chrislusf/seaweedfs:4.48
-    profiles: ["builtin-storage"]
-    restart: "no"
-    depends_on:
-      storage:
-        condition: service_healthy
-    environment:
-      S3_BUCKET: ${S3_BUCKET:-audio-assets}
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - |
-        if echo "s3.bucket.list" | weed shell -master=storage:9333 2>/dev/null | grep -q "$${S3_BUCKET}"; then
-          echo "bucket $${S3_BUCKET} sudah ada"
-        else
-          echo "s3.bucket.create -name $${S3_BUCKET}" | weed shell -master=storage:9333
-        fi
-    logging: *logging
-
   # Migrasi skema database; `api` baru start setelah ini SELESAI dengan sukses.
   migrate:
     <<: *tools
@@ -169,6 +124,8 @@ services:
         condition: service_completed_successfully
     expose:
       - "3001"
+    volumes:
+      - media_data:/data/media # audio hasil TTS: ditulis di sini, disajikan API di /media
     # Pemeriksaan lebih rapat daripada bawaan image (30 dtk) supaya `up` tidak menunggu lama sebelum `edge` mulai.
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/health', (r) => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
@@ -191,7 +148,6 @@ services:
     environment:
       STUDENT_ADDRESS: ${STUDENT_ADDRESS:?isi STUDENT_ADDRESS di deploy/.env}
       ADMIN_ADDRESS: ${ADMIN_ADDRESS:?isi ADMIN_ADDRESS di deploy/.env}
-      S3_BUCKET: ${S3_BUCKET:-audio-assets}
     ports:
       - "80:80"
       - "443:443"
@@ -214,6 +170,6 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  storage_data:
+  media_data:
   caddy_data:
   caddy_config:

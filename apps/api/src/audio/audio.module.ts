@@ -3,7 +3,8 @@ import { ConfigService } from "@nestjs/config";
 import type { Env } from "../config/env.validation";
 import { AudioService, OBJECT_STORAGE } from "./audio.service";
 import { AzureTtsClient } from "./azure-tts.client";
-import { ObjectStorageService } from "./object-storage.service";
+import { createAudioStorage } from "./audio-storage";
+import { resolveStorageOptions, storageEnvFromConfig } from "./storage-options";
 import { TtsClient } from "./tts-client";
 
 @Module({
@@ -23,13 +24,8 @@ import { TtsClient } from "./tts-client";
     {
       provide: OBJECT_STORAGE,
       useFactory: (config: ConfigService<Env, true>) =>
-        new ObjectStorageService(
-          config.get("S3_ENDPOINT", { infer: true }),
-          config.get("S3_REGION", { infer: true }),
-          config.get("S3_BUCKET", { infer: true }),
-          config.get("S3_ACCESS_KEY_ID", { infer: true }),
-          config.get("S3_SECRET_ACCESS_KEY", { infer: true }),
-          config.get("S3_PUBLIC_BASE_URL", { infer: true }),
+        createAudioStorage(
+          resolveStorageOptions(storageEnvFromConfig(config)),
         ),
       inject: [ConfigService],
     },

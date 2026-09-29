@@ -25,7 +25,7 @@ packages/
 
 ```bash
 pnpm install
-docker compose up -d      # postgres + redis + penyimpanan S3 (SeaweedFS)
+docker compose up -d      # postgres + redis (audio disimpan di disk lokal: apps/api/storage)
 pnpm db:migrate
 pnpm db:seed              # isi konten Hiragana + badge
 pnpm dev                  # jalankan api + student + admin sekaligus (Turborepo)

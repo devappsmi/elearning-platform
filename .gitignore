@@ -12,6 +12,9 @@ coverage/
 apps/*/.env
 apps/*/.env.local
 
+# Penyimpanan audio lokal (STORAGE_LOCAL_DIR bawaan pengembangan)
+apps/api/storage/
+
 # Prisma
 apps/api/prisma/migrations/dev.db
 
