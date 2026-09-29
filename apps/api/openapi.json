@@ -1325,6 +1325,175 @@
           "Flashcards"
         ]
       }
+    },
+    "/tutor/scenarios": {
+      "get": {
+        "operationId": "TutorController_scenarios",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TutorCatalogDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Tutor"
+        ]
+      }
+    },
+    "/tutor/quota": {
+      "get": {
+        "operationId": "TutorController_quota",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TutorQuotaDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Tutor"
+        ]
+      }
+    },
+    "/tutor/reply": {
+      "post": {
+        "operationId": "TutorController_reply",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TutorReplyRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TutorReplyResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Tutor"
+        ]
+      }
+    },
+    "/tutor/transcribe": {
+      "post": {
+        "operationId": "TutorController_transcribe",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "file"
+                ],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TutorTranscribeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Tutor"
+        ]
+      }
+    },
+    "/tutor/speak": {
+      "post": {
+        "operationId": "TutorController_speak",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TutorSpeakRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TutorSpeakResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Tutor"
+        ]
+      }
     }
   },
   "info": {
@@ -2941,6 +3110,200 @@
         },
         "required": [
           "message"
+        ]
+      },
+      "TutorScenarioDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description"
+        ]
+      },
+      "TutorCharacterDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "personality": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "personality"
+        ]
+      },
+      "TutorCatalogDto": {
+        "type": "object",
+        "properties": {
+          "scenarios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TutorScenarioDto"
+            }
+          },
+          "characters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TutorCharacterDto"
+            }
+          }
+        },
+        "required": [
+          "scenarios",
+          "characters"
+        ]
+      },
+      "TutorQuotaDto": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "number"
+          },
+          "used": {
+            "type": "number"
+          },
+          "remaining": {
+            "type": "number"
+          },
+          "resetsAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "limit",
+          "used",
+          "remaining",
+          "resetsAt"
+        ]
+      },
+      "TutorTurnDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "role",
+          "text"
+        ]
+      },
+      "TutorReplyRequestDto": {
+        "type": "object",
+        "properties": {
+          "scenarioId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "characterId": {
+            "type": "string"
+          },
+          "history": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TutorTurnDto"
+            }
+          },
+          "vocab": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "roleplay",
+              "help"
+            ]
+          }
+        },
+        "required": [
+          "scenarioId",
+          "history"
+        ]
+      },
+      "TutorReplyResponseDto": {
+        "type": "object",
+        "properties": {
+          "reply": {
+            "type": "string"
+          },
+          "quota": {
+            "$ref": "#/components/schemas/TutorQuotaDto"
+          }
+        },
+        "required": [
+          "reply",
+          "quota"
+        ]
+      },
+      "TutorTranscribeResponseDto": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "TutorSpeakRequestDto": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "characterId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "TutorSpeakResponseDto": {
+        "type": "object",
+        "properties": {
+          "audioUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "audioUrl"
         ]
       }
     }

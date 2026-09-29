@@ -28,6 +28,9 @@ export const envSchema = z.object({
   OPENAI_STT_MODEL: z.string().default("gpt-transcribe"),
   OPENAI_TTS_MODEL: z.string().default("gpt-4o-mini-tts"),
   OPENAI_TTS_VOICE_DEFAULT: z.string().default("nova"),
+  // Kuota balasan AI tutor per murid per hari (Milestone 11) -- versi lama
+  // hardcode 20; sekarang bisa diubah tanpa deploy kode.
+  TUTOR_DAILY_QUOTA: z.coerce.number().int().positive().default(20),
 
   // AZURE_SPEECH_KEY/REGION opsional -- AzureTtsClient (AudioModule, Milestone 8)
   // melempar error yang jelas SAAT DIPANGGIL kalau kosong, bukan gagal di boot;

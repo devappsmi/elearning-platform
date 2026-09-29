@@ -32,11 +32,24 @@ export class AudioService {
    * ekstra pada race itu diterima, mengunci akan berlebihan untuk kasus yang
    * jarang terjadi). */
   async resolveAudioUrl(textJp: string, voice: AudioVoice = "female"): Promise<string> {
-    const textHash = hashAudioKey(textJp, voice);
+    return this.resolveAudioUrlWith(textJp, voice, () => this.tts.synthesize(textJp, voice));
+  }
+
+  /** Varian generik untuk pemanggil yang punya sintesizer + "kunci suara"
+   * sendiri -- TutorModule (Milestone 11) memakai OpenAI TTS dengan voice
+   * per-karakter, bukan Azure `female`/`male` milik `TtsClient` di atas.
+   * Tabel cache (`AudioAsset`), jalur upload S3, dan kunci hash-nya SAMA
+   * dengan `resolveAudioUrl` -- satu jalur cache se-sistem, persis rencana
+   * di docs/PLAN.md bagian 6 -- cuma penyedia audionya yang diinjeksi.
+   * `voiceKey` HARUS memuat semua setelan yang mengubah bunyi audio
+   * (provider/model/voice/instruksi), supaya setelan berbeda tidak saling
+   * menimpa satu entri cache. `synthesize` dipanggil HANYA saat cache miss. */
+  async resolveAudioUrlWith(textJp: string, voiceKey: string, synthesize: () => Promise<Buffer>): Promise<string> {
+    const textHash = hashAudioKey(textJp, voiceKey);
     const existing = await this.prisma.audioAsset.findUnique({ where: { textHash } });
     if (existing) return existing.s3Url;
 
-    const audioBuffer = await this.tts.synthesize(textJp, voice);
+    const audioBuffer = await synthesize();
     const s3Url = await this.storage.upload(`audio/${textHash}.mp3`, audioBuffer, "audio/mpeg");
 
     const asset = await this.prisma.audioAsset.upsert({

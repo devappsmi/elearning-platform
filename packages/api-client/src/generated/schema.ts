@@ -580,6 +580,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/tutor/scenarios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TutorController_scenarios"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tutor/quota": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TutorController_quota"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tutor/reply": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["TutorController_reply"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tutor/transcribe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["TutorController_transcribe"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/tutor/speak": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["TutorController_speak"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1001,6 +1081,54 @@ export interface components {
         };
         FlashcardReviewResponseDto: {
             message: string;
+        };
+        TutorScenarioDto: {
+            id: string;
+            title: string;
+            description: string;
+        };
+        TutorCharacterDto: {
+            id: string;
+            name: string;
+            personality: string;
+        };
+        TutorCatalogDto: {
+            scenarios: components["schemas"]["TutorScenarioDto"][];
+            characters: components["schemas"]["TutorCharacterDto"][];
+        };
+        TutorQuotaDto: {
+            limit: number;
+            used: number;
+            remaining: number;
+            /** Format: date-time */
+            resetsAt: string;
+        };
+        TutorTurnDto: {
+            /** @enum {string} */
+            role: "user" | "assistant";
+            text: string;
+        };
+        TutorReplyRequestDto: {
+            scenarioId: string;
+            characterId?: string;
+            history: components["schemas"]["TutorTurnDto"][];
+            vocab?: string[];
+            /** @enum {string} */
+            mode?: "roleplay" | "help";
+        };
+        TutorReplyResponseDto: {
+            reply: string;
+            quota: components["schemas"]["TutorQuotaDto"];
+        };
+        TutorTranscribeResponseDto: {
+            text: string;
+        };
+        TutorSpeakRequestDto: {
+            text: string;
+            characterId?: string;
+        };
+        TutorSpeakResponseDto: {
+            audioUrl: string;
         };
     };
     responses: never;
@@ -1875,6 +2003,116 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["FlashcardReviewResponseDto"];
+                };
+            };
+        };
+    };
+    TutorController_scenarios: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TutorCatalogDto"];
+                };
+            };
+        };
+    };
+    TutorController_quota: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TutorQuotaDto"];
+                };
+            };
+        };
+    };
+    TutorController_reply: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TutorReplyRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TutorReplyResponseDto"];
+                };
+            };
+        };
+    };
+    TutorController_transcribe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TutorTranscribeResponseDto"];
+                };
+            };
+        };
+    };
+    TutorController_speak: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TutorSpeakRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TutorSpeakResponseDto"];
                 };
             };
         };
