@@ -10,8 +10,7 @@ import { MailService } from "../mail/mail.service";
 import { generateOpaqueToken, hashOpaqueToken } from "../common/opaque-token.util";
 import { addDuration } from "../common/duration.util";
 import type { Env } from "../config/env.validation";
-
-export type InvitationValidationReason = "VALID" | "NOT_FOUND" | "EXPIRED" | "REVOKED" | "ALREADY_ACCEPTED";
+import type { InvitationCheckDto } from "./dto/invitation-check.dto";
 
 const LOGIN_FAIL_LIMIT = 5;
 const LOGIN_LOCK_SECONDS = 15 * 60;
@@ -27,13 +26,28 @@ export class AuthService {
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
-  async validateInvitation(token: string): Promise<{ reason: InvitationValidationReason; invitationId?: string }> {
-    const invitation = await this.prisma.invitation.findUnique({ where: { tokenHash: hashOpaqueToken(token) } });
+  /** Untuk halaman /invite/:token. Detail undangan (nama, email, kelas,
+   * lembaga) HANYA dikembalikan saat VALID -- status lain cuma `reason`,
+   * supaya token yang sudah tak berlaku tidak membocorkan apa pun. */
+  async validateInvitation(token: string): Promise<InvitationCheckDto> {
+    const invitation = await this.prisma.invitation.findUnique({
+      where: { tokenHash: hashOpaqueToken(token) },
+      select: { id: true, name: true, email: true, status: true, expiresAt: true, class: { select: { name: true } } },
+    });
     if (!invitation) return { reason: "NOT_FOUND" };
     if (invitation.status === "REVOKED") return { reason: "REVOKED" };
     if (invitation.status === "ACCEPTED") return { reason: "ALREADY_ACCEPTED" };
     if (invitation.status === "EXPIRED" || invitation.expiresAt < new Date()) return { reason: "EXPIRED" };
-    return { reason: "VALID", invitationId: invitation.id };
+
+    const institution = await this.prisma.institution.findFirst({ select: { name: true } });
+    return {
+      reason: "VALID",
+      invitationId: invitation.id,
+      name: invitation.name,
+      email: invitation.email,
+      className: invitation.class.name,
+      institutionName: institution?.name ?? null,
+    };
   }
 
   /** AUTH-02: registrasi via undangan -- classId/email diambil dari
@@ -161,7 +175,7 @@ export class AuthService {
     }
 
     const passwordHash = await argon2.hash(newPassword, { type: argon2.argon2id });
-    await this.prisma.$transaction([
+    const [user] = await this.prisma.$transaction([
       this.prisma.user.update({ where: { id: record.userId }, data: { passwordHash } }),
       this.prisma.passwordResetToken.update({ where: { id: record.id }, data: { usedAt: new Date() } }),
       // Ganti password -> paksa re-login di semua device (revoke semua refresh token aktif).
@@ -170,6 +184,12 @@ export class AuthService {
         data: { revokedAt: new Date() },
       }),
     ]);
+
+    // Murid yang lupa password biasanya sudah salah-ketik berkali-kali dan TERKUNCI
+    // (5x gagal -> 15 menit). Tautan reset membuktikan dia menguasai emailnya, jadi
+    // kunci + hitungan gagalnya dicabut di sini -- kalau tidak, password barunya
+    // ditolak sampai kunci habis dan reset terasa "tidak berhasil".
+    await this.redis.del(`login_lock:${user.email}`, `login_fail:${user.email}`);
   }
 
   async requestInvitationResend(token: string): Promise<void> {

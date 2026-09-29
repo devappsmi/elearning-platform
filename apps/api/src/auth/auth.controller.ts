@@ -1,8 +1,10 @@
 import { Body, Controller, HttpCode, HttpStatus, Param, Post } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { Throttle } from "@nestjs/throttler";
+import { MessageResponseDto } from "../common/dto/message-response.dto";
 import { TokenPairDto } from "../common/dto/token-pair.dto";
 import { AuthService } from "./auth.service";
+import { InvitationCheckDto } from "./dto/invitation-check.dto";
 import {
   ForgotPasswordDto,
   LoginDto,
@@ -19,7 +21,7 @@ export class AuthController {
 
   @Post("invitations/validate")
   @HttpCode(HttpStatus.OK)
-  validateInvitation(@Body() dto: ValidateInvitationDto) {
+  validateInvitation(@Body() dto: ValidateInvitationDto): Promise<InvitationCheckDto> {
     return this.auth.validateInvitation(dto.token);
   }
 
@@ -42,14 +44,14 @@ export class AuthController {
 
   @Post("forgot")
   @HttpCode(HttpStatus.OK)
-  async forgot(@Body() dto: ForgotPasswordDto) {
+  async forgot(@Body() dto: ForgotPasswordDto): Promise<MessageResponseDto> {
     await this.auth.forgotPassword(dto.email);
     return { message: "Kalau email terdaftar, link reset sudah dikirim." };
   }
 
   @Post("reset")
   @HttpCode(HttpStatus.OK)
-  async reset(@Body() dto: ResetPasswordDto) {
+  async reset(@Body() dto: ResetPasswordDto): Promise<MessageResponseDto> {
     await this.auth.resetPassword(dto.token, dto.password);
     return { message: "Password berhasil diubah." };
   }
@@ -60,7 +62,7 @@ export class AuthController {
   @Post("invitations/:token/request-resend")
   @HttpCode(HttpStatus.OK)
   @Throttle({ default: { limit: 3, ttl: 3_600_000 } })
-  async requestResend(@Param("token") token: string) {
+  async requestResend(@Param("token") token: string): Promise<MessageResponseDto> {
     await this.auth.requestInvitationResend(token);
     return { message: "Permintaan sudah diteruskan ke admin." };
   }

@@ -15,6 +15,7 @@ export class UsersService {
         email: true,
         avatarUrl: true,
         classId: true,
+        class: { select: { name: true } },
         dailyXpGoal: true,
         status: true,
         createdAt: true,
@@ -22,7 +23,9 @@ export class UsersService {
       },
     });
     if (!user) throw new NotFoundException("User tidak ditemukan");
-    return user;
+    // Ratakan relasi jadi `className` -- objek `class` mentah tidak ikut ke respons.
+    const { class: klass, ...rest } = user;
+    return { ...rest, className: klass.name };
   }
 
   /** Field DIPILIH satu per satu -- JANGAN `data: dto`. Tanpa pemilihan ini

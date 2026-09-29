@@ -31,7 +31,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationCheckDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -148,7 +155,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -172,7 +186,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -195,7 +216,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1529,6 +1557,40 @@
           "token"
         ]
       },
+      "InvitationCheckDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": [
+              "VALID",
+              "NOT_FOUND",
+              "EXPIRED",
+              "REVOKED",
+              "ALREADY_ACCEPTED"
+            ]
+          },
+          "invitationId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "className": {
+            "type": "string"
+          },
+          "institutionName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
       "RegisterDto": {
         "type": "object",
         "properties": {
@@ -1542,7 +1604,7 @@
           "password": {
             "type": "string",
             "minLength": 8,
-            "pattern": "/^(?=.*[A-Za-z])(?=.*\\d).+$/"
+            "pattern": "PASSWORD_LETTER_AND_DIGIT"
           }
         },
         "required": [
@@ -1605,6 +1667,17 @@
           "email"
         ]
       },
+      "MessageResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
       "ResetPasswordDto": {
         "type": "object",
         "properties": {
@@ -1614,7 +1687,7 @@
           "password": {
             "type": "string",
             "minLength": 8,
-            "pattern": "/^(?=.*[A-Za-z])(?=.*\\d).+$/"
+            "pattern": "PASSWORD_LETTER_AND_DIGIT"
           }
         },
         "required": [
@@ -1710,6 +1783,9 @@
           "classId": {
             "type": "string"
           },
+          "className": {
+            "type": "string"
+          },
           "dailyXpGoal": {
             "type": "number"
           },
@@ -1732,6 +1808,7 @@
           "email",
           "avatarUrl",
           "classId",
+          "className",
           "dailyXpGoal",
           "status",
           "createdAt",

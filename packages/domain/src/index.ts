@@ -3,6 +3,9 @@
  * packages/domain/src/. Lihat README/plan untuk pemetaan lengkap
  * source -> destination. */
 
+// auth: kebijakan password AUTH-02 (dipakai bersama server + form murid)
+export * from './auth/passwordPolicy';
+
 // content: skema zod + tipe konten (Unit/Lesson/Exercise/Vocab/Sentence)
 export * from './content/types';
 

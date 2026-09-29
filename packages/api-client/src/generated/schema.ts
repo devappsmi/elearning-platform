@@ -667,6 +667,15 @@ export interface components {
         ValidateInvitationDto: {
             token: string;
         };
+        InvitationCheckDto: {
+            /** @enum {string} */
+            reason: "VALID" | "NOT_FOUND" | "EXPIRED" | "REVOKED" | "ALREADY_ACCEPTED";
+            invitationId?: string;
+            name?: string;
+            email?: string;
+            className?: string;
+            institutionName?: string | null;
+        };
         RegisterDto: {
             token: string;
             name: string;
@@ -687,6 +696,9 @@ export interface components {
         ForgotPasswordDto: {
             /** Format: email */
             email: string;
+        };
+        MessageResponseDto: {
+            message: string;
         };
         ResetPasswordDto: {
             token: string;
@@ -718,6 +730,7 @@ export interface components {
             email: string;
             avatarUrl: string | null;
             classId: string;
+            className: string;
             dailyXpGoal: number;
             status: string;
             /** Format: date-time */
@@ -1173,7 +1186,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["InvitationCheckDto"];
+                };
             };
         };
     };
@@ -1263,7 +1278,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["MessageResponseDto"];
+                };
             };
         };
     };
@@ -1284,7 +1301,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["MessageResponseDto"];
+                };
             };
         };
     };
@@ -1303,7 +1322,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["MessageResponseDto"];
+                };
             };
         };
     };

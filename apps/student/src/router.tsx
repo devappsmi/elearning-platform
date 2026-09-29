@@ -5,7 +5,10 @@ import { HomePage } from "./pages/HomePage";
 import { LessonPage } from "./pages/LessonPage";
 import { LessonResultPage } from "./pages/LessonResultPage";
 import { LoginPage } from "./pages/LoginPage";
-import { StubPage } from "./pages/StubPage";
+import { AcceptInvitationPage } from "./pages/AcceptInvitationPage";
+import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage";
+import { WelcomePage } from "./pages/WelcomePage";
 import { KamusPage } from "./pages/KamusPage";
 import { LeaderboardPage } from "./pages/LeaderboardPage";
 import { ProfilePage } from "./pages/ProfilePage";
@@ -15,28 +18,28 @@ import { ConversationResultPage } from "./pages/ConversationResultPage";
 import { FlashcardsPage } from "./pages/FlashcardsPage";
 
 /**
- * Route skeleton -- SEMUA rute murid sekarang sungguhan KECUALI /welcome,
- * /invite/:token, /forgot-password, /reset-password/:token (alur onboarding
- * terpisah, di luar scope Fase 1 ini). Inti alur belajar (7c),
- * Kamus/Leaderboard/Profil (7f), Percakapan (7g), dan sekarang Flashcard
- * (7h) sudah sungguhan -- lihat docs/PLAN.md.
+ * SEMUA rute murid sungguhan (tidak ada lagi StubPage): alur belajar (7c),
+ * Kamus/Leaderboard/Profil (7f), Percakapan (7g), Flashcard (7h), dan halaman
+ * masuk-ke-produk -- undangan/registrasi, lupa + reset password, onboarding
+ * (7i). Lihat docs/PLAN.md.
  *
  * Public routes (no AuthGuard): /invite/:token, /login, /forgot-password,
- * /reset-password/:token. Everything else is wrapped in AuthGuard + the
- * shared AppShell-based RootLayout.
+ * /reset-password/:token. /welcome (onboarding) butuh login tapi TANPA
+ * RootLayout -- layar penuh 3 langkah, bukan halaman di dalam shell navigasi.
+ * Sisanya dibungkus AuthGuard + RootLayout berbasis AppShell.
  */
 export const router = createBrowserRouter([
-  { path: "/invite/:token", element: <StubPage title="Terima Undangan" /> },
+  { path: "/invite/:token", element: <AcceptInvitationPage /> },
   { path: "/login", element: <LoginPage /> },
-  { path: "/forgot-password", element: <StubPage title="Lupa Password" /> },
-  { path: "/reset-password/:token", element: <StubPage title="Reset Password" /> },
+  { path: "/forgot-password", element: <ForgotPasswordPage /> },
+  { path: "/reset-password/:token", element: <ResetPasswordPage /> },
   {
     element: <AuthGuard />,
     children: [
+      { path: "/welcome", element: <WelcomePage /> },
       {
         element: <RootLayout />,
         children: [
-          { path: "/welcome", element: <StubPage title="Selamat Datang" /> },
           { path: "/", element: <HomePage /> },
           { path: "/learn/:lessonId", element: <LessonPage /> },
           { path: "/learn/:lessonId/result", element: <LessonResultPage /> },

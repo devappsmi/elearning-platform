@@ -12,7 +12,7 @@ import type { UpdateMeDto } from "./dto/update-me.dto";
 
 function fakePrisma() {
   const update = vi.fn().mockResolvedValue({});
-  const findUnique = vi.fn().mockResolvedValue({ id: "u1", name: "Budi", dailyXpGoal: 30 });
+  const findUnique = vi.fn().mockResolvedValue({ id: "u1", name: "Budi", dailyXpGoal: 30, class: { name: "Kelas Hiragana Pagi" } });
   return { prisma: { user: { update, findUnique } } as unknown as PrismaService, update, findUnique };
 }
 
@@ -63,5 +63,33 @@ describe("UsersService.update", () => {
     const result = await new UsersService(prisma).update("u1", { name: "Budi" });
 
     expect(result).toMatchObject({ id: "u1", name: "Budi" });
+  });
+});
+
+describe("UsersService.findByIdOrThrow", () => {
+  it("meratakan relasi kelas jadi `className` (AC AUTH-04) dan tidak membawa objek `class` mentah", async () => {
+    const { prisma } = fakePrisma();
+
+    const me = await new UsersService(prisma).findByIdOrThrow("u1");
+
+    expect(me).toMatchObject({ id: "u1", className: "Kelas Hiragana Pagi" });
+    expect(me).not.toHaveProperty("class");
+  });
+
+  it("tidak pernah memilih passwordHash", async () => {
+    const { prisma, findUnique } = fakePrisma();
+
+    await new UsersService(prisma).findByIdOrThrow("u1");
+
+    const select = findUnique.mock.calls[0]![0].select as Record<string, unknown>;
+    expect(select).not.toHaveProperty("passwordHash");
+    expect(select).toHaveProperty("class");
+  });
+
+  it("user tidak ada -> 404", async () => {
+    const { prisma, findUnique } = fakePrisma();
+    findUnique.mockResolvedValue(null);
+
+    await expect(new UsersService(prisma).findByIdOrThrow("hilang")).rejects.toThrow("User tidak ditemukan");
   });
 });

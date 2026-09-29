@@ -1,4 +1,5 @@
 import { BadRequestException } from "@nestjs/common";
+import { passwordPolicyViolation } from "@elearning/domain";
 import { describe, expect, it } from "vitest";
 import { createValidationPipe } from "./validation";
 import { AdminLoginDto, AdminRefreshDto } from "../admin-auth/dto/admin-auth.dto";
@@ -102,6 +103,24 @@ describe("auth DTO", () => {
 
     it("token wajib", async () => {
       expect(await rejected(validate(RegisterDto, { name: "Budi", password: "Abcdef12" }))).toContain("token");
+    });
+
+    // Server (DTO) dan klien (form murid) memakai aturan yang sama dari
+    // @elearning/domain. Tes ini mengunci KESEPAKATANNYA pada tabel contoh,
+    // termasuk kasus tepi (emoji = 1 karakter, "huruf" = ASCII) -- kalau salah
+    // satu sisi berubah sendiri, klien bisa meloloskan password yang ditolak
+    // server (atau sebaliknya).
+    it.each([
+      "a", "abcde12", "abcdefgh", "12345678", "abcdefg1", "Password1", "kata sandi 2", "  abc1  ",
+      "パスワード12345", "パスワード12345a", "😀😀😀😀a1", "😀😀😀😀😀😀a1", "A1bcdefghijklmnop", "00000000", "ABCDEFGH",
+    ])("server dan aturan klien sepakat untuk password %j", async (password) => {
+      const clientAccepts = passwordPolicyViolation(password) === null;
+      const serverAccepts = await validate(RegisterDto, { ...registerBody, password }).then(
+        () => true,
+        () => false,
+      );
+
+      expect(serverAccepts).toBe(clientAccepts);
     });
   });
 

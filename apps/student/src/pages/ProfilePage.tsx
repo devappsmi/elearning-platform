@@ -3,13 +3,7 @@ import type { FormEvent } from "react";
 import { Button } from "@elearning/ui";
 import { apiClient } from "../auth/api-client";
 import { useAuth } from "../auth/AuthContext";
-
-const XP_GOAL_OPTIONS = [10, 30, 50] as const;
-type XpGoal = (typeof XP_GOAL_OPTIONS)[number];
-
-function isXpGoal(value: number): value is XpGoal {
-  return (XP_GOAL_OPTIONS as readonly number[]).includes(value);
-}
+import { XP_GOAL_OPTIONS, isXpGoal, type XpGoal } from "../lib/xp-goal";
 
 /** Profil (GAM-01 "murid bisa ubah target XP harian" + info akun dasar) --
  * GET /me sudah divalidasi AuthGuard sebelum halaman ini bisa dibuka sama
@@ -57,6 +51,12 @@ export function ProfilePage() {
           <div className="flex justify-between">
             <dt className="text-gray-500">Email</dt>
             <dd className="text-gray-900">{me.email}</dd>
+          </div>
+          <div className="flex justify-between">
+            <dt className="text-gray-500">Kelas</dt>
+            <dd className="text-gray-900" data-testid="profile-class">
+              {me.className}
+            </dd>
           </div>
           <div className="flex justify-between">
             <dt className="text-gray-500">Bergabung</dt>

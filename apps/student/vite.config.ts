@@ -39,4 +39,12 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@elearning/domain"],
   },
+  build: {
+    // Build PRODUKSI tidak lewat jalur `optimizeDeps` di atas, dan plugin commonjs bawaan Vite
+    // hanya memproses `node_modules` -- padahal @elearning/domain di-LINK (path aslinya
+    // packages/domain/dist, di luar node_modules). Tanpa baris ini Rollup menganggap dist CJS
+    // itu tak punya export dan `vite build` gagal: "LessonSession" is not exported by ...
+    // (sempat tidak ketahuan sejak halaman belajar dibuat; dijaga src/build.test.ts).
+    commonjsOptions: { include: [/node_modules/, /packages[\\/]domain[\\/]dist/] },
+  },
 });
