@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
+    "test:live-openai": "vitest run --config vitest.live.config.ts",
     "prisma": "prisma",
     "generate-openapi": "nest build && node dist/generate-openapi.js"
   },
