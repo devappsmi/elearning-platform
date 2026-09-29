@@ -1,5 +1,6 @@
 import { PASSWORD_LETTER_AND_DIGIT, PASSWORD_MIN_LENGTH } from "@elearning/domain";
 import { IsEmail, IsString, Matches, MinLength } from "class-validator";
+import { NormalizeEmail } from "../../common/normalize-email.decorator";
 import { Trim } from "../../common/trim.decorator";
 
 export class ValidateInvitationDto {
@@ -25,6 +26,7 @@ export class RegisterDto {
 }
 
 export class LoginDto {
+  @NormalizeEmail()
   @IsEmail()
   email!: string;
 
@@ -38,6 +40,7 @@ export class RefreshDto {
 }
 
 export class ForgotPasswordDto {
+  @NormalizeEmail()
   @IsEmail()
   email!: string;
 }

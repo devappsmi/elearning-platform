@@ -43,6 +43,9 @@ export const envSchema = z.object({
 
   CORS_ORIGIN_STUDENT: z.string().url(),
   CORS_ORIGIN_ADMIN: z.string().url(),
+
+  // Proxy tepercaya di depan API (lihat common/trust-proxy.ts). Opsional: kosong = tanpa proxy.
+  TRUST_PROXY: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

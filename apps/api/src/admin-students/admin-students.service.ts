@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { dateKey, XpService } from "@elearning/domain";
 import { PrismaService } from "../prisma/prisma.service";
+import { FORGOT_EMAIL_LIMIT } from "../auth/auth.const";
 import { AuthService } from "../auth/auth.service";
 import { AdminClassesService } from "../admin-classes/admin-classes.service";
 import { GamificationService } from "../gamification/gamification.service";
@@ -72,7 +73,16 @@ export class AdminStudentsService {
    * yang sengaja tidak pernah membocorkan status "email terdaftar atau tidak". */
   async triggerPasswordReset(id: string): Promise<void> {
     const user = await this.assertExists(id);
-    await this.auth.forgotPassword(user.email);
+    const outcome = await this.auth.requestPasswordReset(user.email);
+    // Endpoint publik sengaja diam saat kena batas per-email (anti-enumerasi); di sini pemanggilnya
+    // admin yang sudah terautentikan dan barisnya pasti ada, jadi jawab JUJUR -- "terkirim" padahal
+    // tidak akan menyesatkan admin.
+    if (outcome === "THROTTLED") {
+      throw new HttpException(
+        `Reset password untuk murid ini sudah diminta terlalu sering (maksimal ${FORGOT_EMAIL_LIMIT} kali per jam). Coba lagi nanti.`,
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
   }
 
   /** ADM-31: statistik untuk halaman detail murid -- level/XP/streak, progres

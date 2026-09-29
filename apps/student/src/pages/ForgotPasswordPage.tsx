@@ -57,7 +57,10 @@ export function ForgotPasswordPage() {
           Kalau <span className="font-medium">{email.trim()}</span> terdaftar, kami sudah mengirim tautan untuk mengatur ulang
           password. Tautannya berlaku 1 jam.
         </p>
-        <p className="text-sm text-gray-500">Tidak ada email masuk? Periksa juga folder spam.</p>
+        <p className="text-sm text-gray-500">
+          Tidak ada email masuk? Periksa juga folder spam. Demi keamanan, permintaan tautan untuk satu email dibatasi setiap
+          jam, jadi pakai tautan dari email terbaru.
+        </p>
         <Button variant="secondary" onClick={() => setSent(false)}>
           Kirim ke email lain
         </Button>

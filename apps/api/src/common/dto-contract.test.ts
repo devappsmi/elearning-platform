@@ -447,3 +447,44 @@ describe("SearchDictionaryQueryDto (query string)", () => {
     expect(await rejected(validate(SearchDictionaryQueryDto, { q: "a", limit: "5" }, "query"))).toContain("limit");
   });
 });
+
+// ------------------------------------------------------- normalisasi email ----
+
+// Semua DTO request yang menerima email (docs/PLAN.md bagian 6f). Email disimpan, dicari, dan
+// dipakai sebagai kunci Redis dalam huruf kecil; sebelum ini "Budi@X.com" dan "budi@x.com" dianggap
+// dua alamat berbeda (login gagal, reset tak terkirim, lockout bisa dilewati). Kelengkapan daftar ini
+// dijaga penjaga statis controller-input-guard.test.ts (@IsEmail wajib berpasangan @NormalizeEmail).
+describe("normalisasi email di DTO request", () => {
+  type EmailDto = { email: string };
+  const cases: ReadonlyArray<readonly [string, new () => EmailDto, Record<string, unknown>]> = [
+    ["LoginDto", LoginDto, { password: "x" }],
+    ["ForgotPasswordDto", ForgotPasswordDto, {}],
+    ["AdminLoginDto", AdminLoginDto, { password: "x" }],
+    ["CreateInvitationDto", CreateInvitationDto, { name: "Budi", classId: "kelas-1" }],
+  ];
+
+  it.each(cases)("%s: spasi tepi dibuang dan semua huruf jadi kecil SEBELUM divalidasi", async (_name, dto, rest) => {
+    const result = await validate(dto, { ...rest, email: "  Budi.Santoso+Kelas1@Example.COM  " });
+
+    expect(result.email).toBe("budi.santoso+kelas1@example.com");
+  });
+
+  it.each(cases)("%s: email tetap DIVALIDASI setelah dinormalkan (bentuk salah ditolak)", async (_name, dto, rest) => {
+    for (const email of ["bukan-email", "   ", "", "a@", "@example.com", "Bukan Email"]) {
+      expect(await rejected(validate(dto, { ...rest, email })), `email ${JSON.stringify(email)}`).toContain("email");
+    }
+  });
+
+  it.each(cases)("%s: email yang bukan string ditolak apa adanya (tidak dipaksa menjadi string)", async (_name, dto, rest) => {
+    for (const email of [123, null, ["a@example.com"], { value: "a@example.com" }]) {
+      expect(await rejected(validate(dto, { ...rest, email })), `email ${JSON.stringify(email)}`).toContain("email");
+    }
+  });
+
+  it("dua ejaan huruf yang berbeda menghasilkan email yang SAMA persis (dasar kunci lockout dan kuota per email)", async () => {
+    const a = await validate(LoginDto, { email: "Budi@Example.com", password: "x" });
+    const b = await validate(LoginDto, { email: " BUDI@example.COM ", password: "x" });
+
+    expect(a.email).toBe(b.email);
+  });
+});

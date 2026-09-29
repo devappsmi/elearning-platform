@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { Button } from "@elearning/ui";
 import { apiClient } from "../auth/api-client";
 import { useAuth } from "../auth/AuthContext";
+import { NETWORK_ERROR_TEXT, failureText, readFailure } from "../auth/api-errors";
 import { XP_GOAL_OPTIONS, isXpGoal, type XpGoal } from "../lib/xp-goal";
 
 /** Profil (GAM-01 "murid bisa ubah target XP harian" + info akun dasar) --
@@ -32,15 +33,22 @@ export function ProfilePage() {
       return;
     }
     setSubmitting(true);
-    const { data, error: apiError } = await apiClient.PATCH("/me", { body: { name: trimmedName, dailyXpGoal } });
-    setSubmitting(false);
-    if (apiError || !data) {
-      setError("Gagal menyimpan perubahan.");
-      return;
+    try {
+      const { data, error: apiError, response } = await apiClient.PATCH("/me", { body: { name: trimmedName, dailyXpGoal } });
+      if (!data) {
+        setError(failureText(readFailure(response, apiError), "Gagal menyimpan perubahan."));
+        return;
+      }
+      setMe(data);
+      setName(data.name); // tampilkan nama yang benar-benar tersimpan (sudah terpangkas)
+      setSaved(true);
+    } catch {
+      // Gangguan jaringan melempar (bukan `{ error }`) -- tanpa ini tombol macet di "Menyimpan..."
+      // dan murid tidak diberi tahu apa pun.
+      setError(NETWORK_ERROR_TEXT);
+    } finally {
+      setSubmitting(false);
     }
-    setMe(data);
-    setName(data.name); // tampilkan nama yang benar-benar tersimpan (sudah terpangkas)
-    setSaved(true);
   }
 
   return (
@@ -104,8 +112,16 @@ export function ProfilePage() {
             {submitting ? "Menyimpan..." : "Simpan Perubahan"}
           </Button>
         </div>
-        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
-        {saved && <p className="mt-2 text-sm text-green-700">Perubahan tersimpan.</p>}
+        {error && (
+          <p role="alert" className="mt-2 text-sm text-red-600">
+            {error}
+          </p>
+        )}
+        {saved && (
+          <p role="status" className="mt-2 text-sm text-green-700">
+            Perubahan tersimpan.
+          </p>
+        )}
       </form>
     </div>
   );

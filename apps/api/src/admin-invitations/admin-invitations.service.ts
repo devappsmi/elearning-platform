@@ -6,6 +6,7 @@ import { MailService } from "../mail/mail.service";
 import { AdminClassesService } from "../admin-classes/admin-classes.service";
 import { generateOpaqueToken } from "../common/opaque-token.util";
 import { addDuration } from "../common/duration.util";
+import { normalizeEmail } from "../common/email.util";
 import type { Env } from "../config/env.validation";
 import { parseInvitationCsv } from "./invitation-csv.util";
 import type { ListInvitationsQueryDto } from "./dto/invitation.dto";
@@ -62,9 +63,12 @@ export class AdminInvitationsService {
   ) {}
 
   async createSingle(dto: { name: string; email: string; classId: string }): Promise<InvitationDto> {
+    // Email disimpan dan dicocokkan dalam huruf kecil (common/email.util.ts) -- tanpa itu
+    // "Budi@X.com" dan "budi@X.com" lolos sebagai dua undangan/akun berbeda.
+    const email = normalizeEmail(dto.email);
     const klass = await this.classes.assertActiveClass(dto.classId);
-    await this.assertEmailInvitable(dto.email);
-    return this.createInvitationRow(dto.name, dto.email, klass.id, klass.name);
+    await this.assertEmailInvitable(email);
+    return this.createInvitationRow(dto.name, email, klass.id, klass.name);
   }
 
   /** AUTH-01 AB "Satu email hanya bisa punya satu undangan aktif": ditolak di
@@ -115,17 +119,17 @@ export class AdminInvitationsService {
         if (!row.className) throw new Error("Kolom 'kelas' kosong");
         if (!isEmail(row.email)) throw new Error(`Format email tidak valid: '${row.email}'`);
 
-        const emailKey = row.email.trim().toLowerCase();
-        if (seenInThisFile.has(emailKey)) throw new Error("Duplikat di dalam file CSV ini");
-        seenInThisFile.add(emailKey);
+        const email = normalizeEmail(row.email);
+        if (seenInThisFile.has(email)) throw new Error("Duplikat di dalam file CSV ini");
+        seenInThisFile.add(email);
 
         const klass = classByName.get(row.className.trim().toLowerCase());
         if (!klass) throw new Error(`Kelas tidak ditemukan: '${row.className}'`);
         if (klass.status === "ARCHIVED") throw new Error(`Kelas '${row.className}' sudah diarsipkan`);
 
-        await this.assertEmailInvitable(row.email);
-        await this.createInvitationRow(row.name, row.email, klass.id, klass.name);
-        results.push({ row: row.rowNumber, email: row.email, status: "sent" });
+        await this.assertEmailInvitable(email);
+        await this.createInvitationRow(row.name, email, klass.id, klass.name);
+        results.push({ row: row.rowNumber, email, status: "sent" });
       } catch (err) {
         results.push({ row: row.rowNumber, email: row.email || "(kosong)", status: "failed", reason: err instanceof Error ? err.message : String(err) });
       }

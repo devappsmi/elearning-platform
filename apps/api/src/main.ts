@@ -5,11 +5,17 @@ import { SwaggerModule } from "@nestjs/swagger";
 import helmet from "helmet";
 import { AppModule } from "./app.module";
 import { buildSwaggerConfig } from "./swagger.config";
+import { parseTrustProxy } from "./common/trust-proxy";
 import type { Env } from "./config/env.validation";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService<Env, true>);
+
+  // Sebelum apa pun: pembatas per-IP membaca `req.ip`, dan di belakang reverse proxy nilainya
+  // hanya benar kalau jumlah proxy tepercaya diberi tahu (common/trust-proxy.ts).
+  const trustProxy = parseTrustProxy(config.get("TRUST_PROXY", { infer: true }));
+  if (trustProxy !== false) app.getHttpAdapter().getInstance().set("trust proxy", trustProxy);
 
   app.use(helmet());
   app.enableCors({

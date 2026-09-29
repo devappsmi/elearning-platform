@@ -66,6 +66,9 @@ describe("ForgotPasswordPage", () => {
     const status = screen.getByRole("status").textContent ?? "";
     expect(status).toContain("Kalau budi@example.com terdaftar");
     expect(status).toContain("berlaku 1 jam");
+    // Batas per-email (3/jam) disembunyikan angkanya tetapi tidak dirahasiakan keberadaannya: pesan yang
+    // sama untuk semua alamat, jadi tidak membocorkan apa pun, dan menjelaskan kenapa email ke-4 tak datang.
+    expect(document.body.textContent).toContain("dibatasi setiap jam");
     expect(screen.queryByLabelText("Email")).toBeNull();
     expect(screen.getByRole("link", { name: "Kembali ke halaman masuk" }).getAttribute("href")).toBe("/login");
   });

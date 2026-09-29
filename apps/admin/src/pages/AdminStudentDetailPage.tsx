@@ -100,10 +100,14 @@ export function AdminStudentDetailPage() {
     setActionBusy(true);
     setActionError(null);
     setResetMessage(null);
-    const { data, error: apiError } = await apiClient.POST("/admin/students/{id}/reset-password", { params: { path: { id } } });
+    const { data, error: apiError, response } = await apiClient.POST("/admin/students/{id}/reset-password", { params: { path: { id } } });
+    const status = response.status; // dibaca SEBELUM penyempitan tipe di bawah (openapi-fetch: cabang error tanpa tipe = `never`)
     setActionBusy(false);
     if (apiError || !data) {
-      setActionError("Gagal mengirim email reset password.");
+      // 429 = batas per-email (server menjawab jujur untuk admin, tidak seperti endpoint publik yang
+      // sengaja diam) -- teksnya sudah Indonesia dan menyebut batasnya, jadi diteruskan apa adanya.
+      const serverMessage = (apiError as { message?: unknown } | undefined)?.message;
+      setActionError(status === 429 && typeof serverMessage === "string" ? serverMessage : "Gagal mengirim email reset password.");
       return;
     }
     setResetMessage(data.message);

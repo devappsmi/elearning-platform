@@ -14,7 +14,10 @@ import { describe, expect, it } from "vitest";
 //   2. setiap properti DTO-nya punya minimal satu dekorator class-validator
 //      (`whitelist` + `forbidNonWhitelisted` akan menolak field tanpa dekorator);
 //   3. properti `@ValidateNested` bertipe class DTO juga dan punya `@Type`
-//      (tanpa itu class-transformer tidak membuat instance dan validasi bersarang gagal).
+//      (tanpa itu class-transformer tidak membuat instance dan validasi bersarang gagal);
+//   4. properti `@IsEmail` juga punya `@NormalizeEmail` -- email disimpan/dicocokkan dalam
+//      huruf kecil (common/email.util.ts, docs/PLAN.md bagian 6f); DTO baru yang lupa
+//      membuat "Budi@X.com" dan "budi@x.com" kembali menjadi dua alamat berbeda.
 // Kalau tes ini gagal untuk endpoint BARU: buat DTO class + dekoratornya, jangan
 // dilonggarkan. Dekorator diperiksa lewat NAMA (semua ekspor class-validator).
 
@@ -58,6 +61,9 @@ export function auditControllerInputs(program: ts.Program, controllerFiles: read
       if (!names.some((name) => name !== undefined && VALIDATOR_DECORATORS.has(name))) {
         violations.push(`${trail}: ${className}.${property} tidak punya dekorator class-validator (field ini akan ditolak pipe)`);
         continue;
+      }
+      if (names.includes("IsEmail") && !names.includes("NormalizeEmail")) {
+        violations.push(`${trail}: ${className}.${property} pakai @IsEmail tanpa @NormalizeEmail (email harus dinormalkan huruf kecil)`);
       }
       if (!names.includes("ValidateNested")) continue;
 
@@ -135,6 +141,8 @@ function fixtureProgram(body: string): { program: ts.Program; controllers: strin
     declare function Query(...args: unknown[]): ParameterDecorator;
     declare function IsString(): PropertyDecorator;
     declare function IsOptional(): PropertyDecorator;
+    declare function IsEmail(): PropertyDecorator;
+    declare function NormalizeEmail(): PropertyDecorator;
     declare function ValidateNested(options?: unknown): PropertyDecorator;
     declare function Type(fn: () => unknown): PropertyDecorator;
     ${body}
@@ -240,6 +248,27 @@ describe("auditControllerInputs (self-test: penjaga ini sendiri harus terbukti m
       @Controller("x") class C { @Post() a(@Body() dto: Outer) {} }`;
 
     expect(audit(source).join("\n")).toContain("bukan class DTO");
+  });
+
+  it("@IsEmail berpasangan dengan @NormalizeEmail -> lolos", () => {
+    expect(audit(`class D { @NormalizeEmail() @IsEmail() email!: string; } @Controller("x") class C { @Post() a(@Body() d: D) {} }`)).toEqual([]);
+  });
+
+  it("@IsEmail tanpa @NormalizeEmail -> dilaporkan dengan nama properti", () => {
+    const violations = audit(`class D { @IsEmail() email!: string; } @Controller("x") class C { @Post() a(@Body() d: D) {} }`);
+
+    expect(violations).toHaveLength(1);
+    expect(violations[0]).toContain("D.email");
+    expect(violations[0]).toContain("@NormalizeEmail");
+  });
+
+  it("@IsEmail tanpa @NormalizeEmail di DTO bersarang juga dilaporkan", () => {
+    const source = `
+      class Item { @IsEmail() email!: string; }
+      class Outer { @ValidateNested() @Type(() => Item) items!: Item[]; }
+      @Controller("x") class C { @Post() a(@Body() dto: Outer) {} }`;
+
+    expect(audit(source).join("\n")).toContain("Item.email");
   });
 
   it("properti static dan parameter non-Body/Query diabaikan", () => {

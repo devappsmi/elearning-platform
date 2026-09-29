@@ -3,6 +3,7 @@ import { ApiTags } from "@nestjs/swagger";
 import { Throttle } from "@nestjs/throttler";
 import { MessageResponseDto } from "../common/dto/message-response.dto";
 import { TokenPairDto } from "../common/dto/token-pair.dto";
+import { FORGOT_IP_LIMIT, FORGOT_IP_WINDOW_MS } from "./auth.const";
 import { AuthService } from "./auth.service";
 import { InvitationCheckDto } from "./dto/invitation-check.dto";
 import {
@@ -42,8 +43,12 @@ export class AuthController {
     return this.auth.refresh(dto.refreshToken);
   }
 
+  // Endpoint TANPA login yang memicu email ke alamat pilihan pemanggil -- batas per-IP jauh
+  // lebih ketat dari default global (100/menit); batas per-email ada di AuthService.
+  // Alasan angka dan catatannya: auth.const.ts.
   @Post("forgot")
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: FORGOT_IP_LIMIT, ttl: FORGOT_IP_WINDOW_MS } })
   async forgot(@Body() dto: ForgotPasswordDto): Promise<MessageResponseDto> {
     await this.auth.forgotPassword(dto.email);
     return { message: "Kalau email terdaftar, link reset sudah dikirim." };
