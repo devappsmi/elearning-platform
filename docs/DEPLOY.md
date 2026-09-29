@@ -244,7 +244,8 @@ docker compose start storage api edge
 
 ## Yang sudah dan belum diverifikasi
 
-**Sudah** (sandbox Linux, Docker 29.3.1 / Compose v5.1.1, mode HTTP `:80`/`:8080`): build ketiga image dari nol;
+**Sudah** (sandbox Linux, Docker 29.3.1 / Compose v5.1.1, mode HTTP `:80`/`:8080`): urutan "Langkah cepat" (bagian 2) dijalankan ulang persis
+dari **clone bersih GitHub** dengan build tanpa cache (build ±105 detik, `up -d` ±15 detik, 18/18 pemeriksaan browser); build ketiga image dari nol;
 `up`; migrasi otomatis; seed (104 kosakata, 56 kalimat, 7 lesson, 128 latihan, 7 badge, 1 skenario); pembuatan admin
 (termasuk kasus gagal dan pemulihan kata sandi + pencabutan sesi); **18 pemeriksaan di browser sungguhan lewat Caddy**
 (login admin, buat kelas, undang murid, tautan dari log, registrasi, onboarding, Beranda, deep-link + reload, login
