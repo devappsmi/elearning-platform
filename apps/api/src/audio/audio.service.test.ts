@@ -16,7 +16,7 @@ function fakePrisma(existing: { s3Url: string } | null) {
 }
 
 function fakeTts(): TtsClient {
-  return { synthesize: vi.fn().mockResolvedValue(Buffer.from("fake-mp3-bytes")) };
+  return { configured: true, synthesize: vi.fn().mockResolvedValue(Buffer.from("fake-mp3-bytes")) };
 }
 
 function fakeStorage(): ObjectStorageService {
@@ -120,3 +120,58 @@ describe("AudioService.resolveAudioUrlWith (jalur TutorModule)", () => {
     expect(prisma.audioAsset.upsert).not.toHaveBeenCalled();
   });
 });
+
+describe("AudioService -- opsi refresh (ganti suara/penyedia)", () => {
+  it("refresh melewati cache: TIDAK membaca baris lama, menyintesis ulang, menimpa berkas di kunci yang sama, dan memperbarui alamat barisnya", async () => {
+    const prisma = fakePrisma({ s3Url: "http://fake-s3/audio/lama.mp3" });
+    const tts = fakeTts();
+    const storage = fakeStorage();
+    const service = new AudioService(prisma, tts, storage);
+
+    const url = await service.resolveAudioUrl("あ", "female", { refresh: true });
+
+    expect(prisma.audioAsset.findUnique).not.toHaveBeenCalled();
+    expect(tts.synthesize).toHaveBeenCalledWith("あ", "female");
+    expect(storage.upload).toHaveBeenCalledWith(`audio/${hashAudioKey("あ", "female")}.mp3`, Buffer.from("fake-mp3-bytes"), "audio/mpeg");
+    expect(prisma.audioAsset.upsert).toHaveBeenCalledWith({
+      where: { textHash: hashAudioKey("あ", "female") },
+      update: { s3Url: "http://fake-s3/audio/abc.mp3" },
+      create: { textHash: hashAudioKey("あ", "female"), textJp: "あ", s3Url: "http://fake-s3/audio/abc.mp3" },
+    });
+    expect(url).toBe("http://fake-s3/audio/abc.mp3");
+  });
+
+  it("tanpa refresh, upsert TIDAK menimpa baris yang sudah ada (update kosong, aman untuk dua panggilan yang berlomba)", async () => {
+    const prisma = fakePrisma(null);
+    const service = new AudioService(prisma, fakeTts(), fakeStorage());
+
+    await service.resolveAudioUrl("あ", "female");
+
+    // toEqual, bukan toMatchObject: `{}` cocok dengan objek apa pun sebagai subset, sehingga tidak akan menangkap `{ s3Url }`.
+    const call = vi.mocked(prisma.audioAsset.upsert).mock.calls[0]![0] as { update: unknown };
+    expect(call.update).toEqual({});
+  });
+
+  it("refresh: kegagalan sintesis tidak menyentuh penyimpanan maupun baris (audio lama tetap dipakai)", async () => {
+    const prisma = fakePrisma({ s3Url: "http://fake-s3/audio/lama.mp3" });
+    const storage = fakeStorage();
+    const tts: TtsClient = { configured: true, synthesize: vi.fn().mockRejectedValue(new Error("kuota habis")) };
+    const service = new AudioService(prisma, tts, storage);
+
+    await expect(service.resolveAudioUrl("あ", "female", { refresh: true })).rejects.toThrow("kuota habis");
+
+    expect(storage.upload).not.toHaveBeenCalled();
+    expect(prisma.audioAsset.upsert).not.toHaveBeenCalled();
+  });
+
+  it("refresh juga tersedia di jalur generik (resolveAudioUrlWith)", async () => {
+    const prisma = fakePrisma({ s3Url: "http://fake-s3/audio/lama.mp3" });
+    const synthesize = vi.fn().mockResolvedValue(Buffer.from("baru"));
+    const service = new AudioService(prisma, fakeTts(), fakeStorage());
+
+    await service.resolveAudioUrlWith("こんにちは", "openai:m:nova:abc", synthesize, { refresh: true });
+
+    expect(synthesize).toHaveBeenCalledTimes(1);
+  });
+});
+

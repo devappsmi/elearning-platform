@@ -48,8 +48,16 @@ x-api-environment: &api-environment
   OPENAI_TTS_MODEL: ${OPENAI_TTS_MODEL:-gpt-4o-mini-tts}
   OPENAI_TTS_VOICE_DEFAULT: ${OPENAI_TTS_VOICE_DEFAULT:-nova}
   TUTOR_DAILY_QUOTA: ${TUTOR_DAILY_QUOTA:-20}
+  # Audio PELAJARAN (dibuat sekali lewat `db:seed`). TTS_PROVIDER: auto (bawaan; Azure bila AZURE_* terisi, kalau tidak
+  # OpenAI bila OPENAI_API_KEY terisi) | openai | azure | none. Suara/arahan OpenAI kosong = bawaan di kode.
+  TTS_PROVIDER: ${TTS_PROVIDER:-auto}
+  OPENAI_LESSON_TTS_VOICE_FEMALE: ${OPENAI_LESSON_TTS_VOICE_FEMALE:-}
+  OPENAI_LESSON_TTS_VOICE_MALE: ${OPENAI_LESSON_TTS_VOICE_MALE:-}
+  OPENAI_LESSON_TTS_INSTRUCTIONS: ${OPENAI_LESSON_TTS_INSTRUCTIONS:-}
   AZURE_SPEECH_KEY: ${AZURE_SPEECH_KEY:-}
   AZURE_SPEECH_REGION: ${AZURE_SPEECH_REGION:-}
+  AZURE_TTS_VOICE_FEMALE: ${AZURE_TTS_VOICE_FEMALE:-}
+  AZURE_TTS_VOICE_MALE: ${AZURE_TTS_VOICE_MALE:-}
   # Alamat publik kedua aplikasi: dipakai untuk membentuk tautan undangan/reset password dan untuk CORS.
   CORS_ORIGIN_STUDENT: ${PUBLIC_STUDENT_URL:?isi PUBLIC_STUDENT_URL di deploy/.env}
   CORS_ORIGIN_ADMIN: ${PUBLIC_ADMIN_URL:?isi PUBLIC_ADMIN_URL di deploy/.env}

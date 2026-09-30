@@ -30,9 +30,11 @@ import {
   type Unit as DomainUnit,
 } from "@elearning/domain";
 import { AudioService } from "../src/audio/audio.service";
-import { AzureTtsClient } from "../src/audio/azure-tts.client";
 import { createAudioStorage } from "../src/audio/audio-storage";
+import { lessonAudioItems, seedLessonAudio } from "../src/audio/lesson-audio-seed";
 import { resolveStorageOptions } from "../src/audio/storage-options";
+import { createTtsClient } from "../src/audio/tts-factory";
+import { describeTtsOptions, resolveTtsOptions, ttsUnavailableReason, type TtsOptions } from "../src/audio/tts-options";
 
 const prisma = new PrismaClient();
 
@@ -137,51 +139,58 @@ async function seedHiraganaUnit(unit: DomainUnit): Promise<void> {
 
 /** Milestone 8: pre-generate audio SAAT SEED (bukan on-demand saat
  * `GET /lessons/:id` -- lihat catatan NFR "API p95 < 300ms" di
- * audio.service.ts). Best-effort dan gagal-aman: kalau AZURE_SPEECH_KEY/
- * REGION belum diisi (mis. environment dev/sandbox tanpa kredensial), seed
- * TETAP jalan seperti biasa -- cuma audio yang tidak tersedia (placeholder
- * "" di ContentService, lihat content.mapper.ts), bukan seluruh migrasi
- * konten gagal karena satu kredensial belum ada. Berhenti di kegagalan
- * PERTAMA (bukan retry semua item) -- kegagalan TTS/S3 di sini nyaris
- * selalu sistemik (kredensial salah/storage tidak terjangkau), mengulang
- * 160 kali untuk error yang sama cuma nge-spam log, bukan menolong. */
-async function seedAudioAssets(unit: DomainUnit): Promise<void> {
-  if (!process.env.AZURE_SPEECH_KEY || !process.env.AZURE_SPEECH_REGION) {
+ * audio.service.ts). Penyedia TTS dipilih lewat TTS_PROVIDER (lihat
+ * src/audio/tts-options.ts): Azure atau OpenAI. Best-effort dan gagal-aman:
+ * kalau belum ada kredensial TTS (mis. environment dev/sandbox), seed TETAP
+ * jalan seperti biasa -- cuma audio yang tidak tersedia (placeholder "" di
+ * ContentService, lihat content.mapper.ts), bukan seluruh migrasi konten
+ * gagal karena satu kredensial belum ada. Berhenti di kegagalan PERTAMA
+ * (lihat seedLessonAudio). SEED_AUDIO_REGENERATE=1: buat ulang SEMUA audio
+ * pelajaran walau sudah ada (ganti suara/penyedia). Mengembalikan ringkasan
+ * status untuk baris "Seed selesai". */
+async function seedAudioAssets(unit: DomainUnit, ttsOptions: TtsOptions): Promise<string> {
+  const tts = createTtsClient(ttsOptions);
+  if (!tts.configured) {
+    const reason = ttsUnavailableReason(ttsOptions) ?? "penyedia TTS belum siap";
     console.warn(
-      "Seed audio DILEWATI: AZURE_SPEECH_KEY/AZURE_SPEECH_REGION belum diisi di .env -- " +
-        "audio lesson akan kosong sampai kredensial TTS tersedia (lihat docs/PLAN.md, Milestone 8).",
+      ttsOptions.provider === "none" && ttsOptions.reason === "disabled"
+        ? `Seed audio DILEWATI: ${reason}.`
+        : `Seed audio DILEWATI: ${reason}. Isi OPENAI_API_KEY (bisa kunci yang sama dengan AI tutor) ATAU AZURE_SPEECH_KEY + ` +
+            "AZURE_SPEECH_REGION di .env, lalu jalankan ulang db:seed -- pelajaran tetap berjalan, hanya tanpa audio " +
+            "(lihat docs/DEPLOY.md, bagian 6a).",
     );
-    return;
+    return "dilewati";
   }
 
-  const tts = new AzureTtsClient(
-    process.env.AZURE_SPEECH_KEY,
-    process.env.AZURE_SPEECH_REGION,
-    process.env.AZURE_TTS_VOICE_FEMALE ?? "ja-JP-NanamiNeural",
-    process.env.AZURE_TTS_VOICE_MALE ?? "ja-JP-KeitaNeural",
-  );
   // Penyimpanan yang SAMA dengan API (env yang sama): audio yang dibuat seed langsung bisa disajikan API.
   const storage = createAudioStorage(resolveStorageOptions(process.env));
   const audio = new AudioService(prisma, tts, storage);
+  const refresh = /^(1|true|yes)$/i.test(process.env.SEED_AUDIO_REGENERATE?.trim() ?? "");
+  const items = lessonAudioItems(unit);
 
-  const items: { text: string; voice: "female" | "male" }[] = [
-    ...unit.vocab.map((v) => ({ text: v.surface, voice: "female" as const })),
-    ...unit.sentences.map((s) => ({ text: s.surface, voice: s.voice === "male" ? ("male" as const) : ("female" as const) })),
-  ];
+  console.log(
+    `Seed audio: ${items.length} teks, penyedia ${describeTtsOptions(ttsOptions)}` +
+      `${refresh ? " -- MEMBUAT ULANG semua audio (SEED_AUDIO_REGENERATE)" : ""}. Memanggil TTS satu per satu; bisa beberapa menit.`,
+  );
+  const result = await seedLessonAudio(audio, items, {
+    refresh,
+    onProgress: (ready, total) => {
+      if (ready % 20 === 0 && ready < total) console.log(`  audio ${ready}/${total}`);
+    },
+  });
 
-  let generated = 0;
-  for (const item of items) {
-    try {
-      await audio.resolveAudioUrl(item.text, item.voice);
-      generated++;
-    } catch (err) {
-      console.warn(
-        `Seed audio berhenti di '${item.text}' (${generated}/${items.length} berhasil sebelumnya): ${err instanceof Error ? err.message : String(err)}`,
-      );
-      return;
-    }
+  if (result.failure) {
+    console.warn(
+      `Seed audio berhenti di '${result.failure.text}' (${result.ready}/${result.total} berhasil sebelumnya): ${result.failure.message}`,
+    );
+    return `sebagian ${result.ready}/${result.total}`;
   }
-  console.log(`Seed audio selesai: ${generated}/${items.length} teks (cache hit tidak memanggil TTS ulang).`);
+  console.log(
+    refresh
+      ? `Seed audio selesai: ${result.ready}/${result.total} teks dibuat ulang.`
+      : `Seed audio selesai: ${result.ready}/${result.total} teks (cache hit tidak memanggil TTS ulang).`,
+  );
+  return `lengkap ${result.ready}/${result.total}`;
 }
 
 async function seedStaticBadges(): Promise<void> {
@@ -237,10 +246,20 @@ async function seedExampleScenario(): Promise<void> {
 }
 
 async function main(): Promise<void> {
+  // Nama penyedia TTS yang salah = galat konfigurasi: gagal SEKARANG dengan satu baris yang jelas, sebelum menyentuh
+  // database (bukan setengah jalan dan bukan tumpukan jejak).
+  let ttsOptions: TtsOptions;
+  try {
+    ttsOptions = resolveTtsOptions(process.env);
+  } catch (error) {
+    console.error(`GAGAL: ${error instanceof Error ? error.message : String(error)}`);
+    process.exitCode = 1;
+    return;
+  }
   const unit = loadHiraganaUnit();
   await seedHiraganaUnit(unit);
   await seedStaticBadges();
-  await seedAudioAssets(unit);
+  const audioStatus = await seedAudioAssets(unit, ttsOptions);
   await seedExampleScenario();
 
   const [vocabCount, sentenceCount, lessonCount, exerciseCount, badgeCount, scenarioCount] = await Promise.all([
@@ -252,7 +271,7 @@ async function main(): Promise<void> {
     prisma.scenario.count(),
   ]);
   console.log(
-    `Seed selesai: unit=${unit.id} vocab=${vocabCount} sentence=${sentenceCount} lesson=${lessonCount} exercise=${exerciseCount} badge=${badgeCount} scenario=${scenarioCount}`,
+    `Seed selesai: unit=${unit.id} vocab=${vocabCount} sentence=${sentenceCount} lesson=${lessonCount} exercise=${exerciseCount} badge=${badgeCount} scenario=${scenarioCount} audio=${audioStatus}`,
   );
 }
 

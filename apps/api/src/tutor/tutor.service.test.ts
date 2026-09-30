@@ -108,7 +108,7 @@ function memoryAudio() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any as ObjectStorageService;
   // TtsClient (Azure) milik AudioModule TIDAK boleh tersentuh oleh tutor.
-  const azure: TtsClient = { synthesize: vi.fn().mockRejectedValue(new Error("Azure TtsClient tidak boleh dipakai tutor")) };
+  const azure: TtsClient = { configured: true, synthesize: vi.fn().mockRejectedValue(new Error("Azure TtsClient tidak boleh dipakai tutor")) };
   return { service: new AudioService(prisma, azure, storage), prisma, storage, azure, rows };
 }
 

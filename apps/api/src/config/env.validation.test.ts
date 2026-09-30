@@ -61,3 +61,47 @@ describe("validateEnv -- penyimpanan audio", () => {
     expect(validateEnv({ ...BASE, ...S3 }).STORAGE_DRIVER).toBe("local");
   });
 });
+
+describe("validateEnv -- penyedia TTS audio pelajaran", () => {
+  it("tanpa satu pun variabel TTS: boot berhasil, TTS_PROVIDER=auto, model OpenAI bawaan tidak berubah", () => {
+    const env = validateEnv(BASE);
+
+    expect(env.TTS_PROVIDER).toBe("auto");
+    expect(env.OPENAI_TTS_MODEL).toBe("gpt-4o-mini-tts");
+    expect(env.AZURE_TTS_VOICE_FEMALE).toBe("ja-JP-NanamiNeural");
+    expect(env.AZURE_TTS_VOICE_MALE).toBe("ja-JP-KeitaNeural");
+    expect(env.OPENAI_LESSON_TTS_VOICE_FEMALE).toBeUndefined(); // bawaan ada di resolver, supaya seed (process.env) sama
+  });
+
+  it.each(["auto", "azure", "openai", "none"])("TTS_PROVIDER=%s diterima", (value) => {
+    expect(validateEnv({ ...BASE, TTS_PROVIDER: value }).TTS_PROVIDER).toBe(value);
+  });
+
+  it("string kosong atau spasi (baris `TTS_PROVIDER=` di .env atau compose) = auto, bukan galat", () => {
+    expect(validateEnv({ ...BASE, TTS_PROVIDER: "" }).TTS_PROVIDER).toBe("auto");
+    expect(validateEnv({ ...BASE, TTS_PROVIDER: "  " }).TTS_PROVIDER).toBe("auto");
+  });
+
+  it("huruf besar dan spasi dinormalkan (sama dengan aturan resolver yang dipakai seed)", () => {
+    expect(validateEnv({ ...BASE, TTS_PROVIDER: " OpenAI " }).TTS_PROVIDER).toBe("openai");
+  });
+
+  it("nama tak dikenal (salah ketik) -> gagal saat boot dengan nama variabelnya, bukan diam-diam auto", () => {
+    expect(() => validateEnv({ ...BASE, TTS_PROVIDER: "opnai" })).toThrow(/Env tidak valid.*TTS_PROVIDER/s);
+  });
+
+  it("OPENAI_LESSON_TTS_* diteruskan apa adanya; kredensial TTS kosong TIDAK menggagalkan boot (galat baru saat dipakai)", () => {
+    const env = validateEnv({
+      ...BASE,
+      TTS_PROVIDER: "openai",
+      OPENAI_LESSON_TTS_VOICE_FEMALE: "coral",
+      OPENAI_LESSON_TTS_VOICE_MALE: "echo",
+      OPENAI_LESSON_TTS_INSTRUCTIONS: "Speak slowly.",
+    });
+
+    expect(env.OPENAI_API_KEY).toBeUndefined();
+    expect(env.AZURE_SPEECH_KEY).toBeUndefined();
+    expect(env).toMatchObject({ OPENAI_LESSON_TTS_VOICE_FEMALE: "coral", OPENAI_LESSON_TTS_VOICE_MALE: "echo", OPENAI_LESSON_TTS_INSTRUCTIONS: "Speak slowly." });
+  });
+});
+

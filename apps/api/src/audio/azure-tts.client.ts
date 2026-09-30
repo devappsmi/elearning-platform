@@ -12,6 +12,8 @@ import type { AudioVoice } from "./audio-hash.util";
  * ini langsung dari `process.env`. AudioModule menyediakan wiring NestJS-nya
  * lewat factory (lihat audio.module.ts). */
 export class AzureTtsClient extends TtsClient {
+  readonly configured: boolean;
+
   constructor(
     private readonly speechKey: string | undefined,
     private readonly speechRegion: string | undefined,
@@ -19,13 +21,14 @@ export class AzureTtsClient extends TtsClient {
     private readonly voiceMale: string,
   ) {
     super();
+    this.configured = Boolean(speechKey && speechRegion);
   }
 
   async synthesize(textJp: string, voice: AudioVoice): Promise<Buffer> {
     if (!this.speechKey || !this.speechRegion) {
       throw new Error(
-        "AZURE_SPEECH_KEY/AZURE_SPEECH_REGION belum dikonfigurasi -- audio TTS tidak bisa digenerate. " +
-          "Lihat apps/api/.env.example. (Provider TTS materi belum final per docs/PLAN.md -- Azure dipilih sebagai rekomendasi plan.)",
+        "AZURE_SPEECH_KEY/AZURE_SPEECH_REGION belum diisi -- audio TTS pelajaran (TTS_PROVIDER=azure) tidak bisa digenerate. " +
+          "Isi keduanya, atau pakai OpenAI (isi OPENAI_API_KEY dan TTS_PROVIDER=openai). Lihat apps/api/.env.example.",
       );
     }
 

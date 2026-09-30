@@ -7,6 +7,11 @@ import { hashAudioKey, type AudioVoice } from "./audio-hash.util";
 
 export const OBJECT_STORAGE = Symbol("OBJECT_STORAGE");
 
+export interface ResolveAudioOptions {
+  /** Abaikan cache dan buat audionya ulang (lihat `resolveAudioUrlWith`). */
+  refresh?: boolean;
+}
+
 /** PRD §9.4: pipeline cache audio-by-hash. Dipakai dari dua tempat dengan
  * cara konstruksi berbeda -- lewat NestJS DI di dalam app (AudioModule), dan
  * dikonstruksi langsung (bukan lewat Nest) dari `seed.ts` untuk pre-generate
@@ -31,8 +36,8 @@ export class AudioService {
    * untuk teks baru yang sama kebetulan race; pemborosan satu panggilan TTS
    * ekstra pada race itu diterima, mengunci akan berlebihan untuk kasus yang
    * jarang terjadi). */
-  async resolveAudioUrl(textJp: string, voice: AudioVoice = "female"): Promise<string> {
-    return this.resolveAudioUrlWith(textJp, voice, () => this.tts.synthesize(textJp, voice));
+  async resolveAudioUrl(textJp: string, voice: AudioVoice = "female", options: ResolveAudioOptions = {}): Promise<string> {
+    return this.resolveAudioUrlWith(textJp, voice, () => this.tts.synthesize(textJp, voice), options);
   }
 
   /** Varian generik untuk pemanggil yang punya sintesizer + "kunci suara"
@@ -43,18 +48,31 @@ export class AudioService {
    * di docs/PLAN.md bagian 6 -- cuma penyedia audionya yang diinjeksi.
    * `voiceKey` HARUS memuat semua setelan yang mengubah bunyi audio
    * (provider/model/voice/instruksi), supaya setelan berbeda tidak saling
-   * menimpa satu entri cache. `synthesize` dipanggil HANYA saat cache miss. */
-  async resolveAudioUrlWith(textJp: string, voiceKey: string, synthesize: () => Promise<Buffer>): Promise<string> {
+   * menimpa satu entri cache. `synthesize` dipanggil HANYA saat cache miss --
+   * kecuali `options.refresh`: lewati cache dan buat ulang (dipakai seed saat
+   * suara/penyedia TTS diganti). Berkasnya ditimpa di kunci yang SAMA (URL
+   * tidak berubah) dan barisnya baru diperbarui SESUDAH berkas baru tersimpan,
+   * jadi kegagalan di tengah jalan tidak pernah meninggalkan audio yang hilang:
+   * teks yang belum sempat dibuat ulang tetap memakai audio lamanya. */
+  async resolveAudioUrlWith(
+    textJp: string,
+    voiceKey: string,
+    synthesize: () => Promise<Buffer>,
+    options: ResolveAudioOptions = {},
+  ): Promise<string> {
     const textHash = hashAudioKey(textJp, voiceKey);
-    const existing = await this.prisma.audioAsset.findUnique({ where: { textHash } });
-    if (existing) return existing.s3Url;
+    if (!options.refresh) {
+      const existing = await this.prisma.audioAsset.findUnique({ where: { textHash } });
+      if (existing) return existing.s3Url;
+    }
 
     const audioBuffer = await synthesize();
     const s3Url = await this.storage.upload(`audio/${textHash}.mp3`, audioBuffer, "audio/mpeg");
 
     const asset = await this.prisma.audioAsset.upsert({
       where: { textHash },
-      update: {},
+      // Refresh: alamat publik bisa saja sudah berubah (STORAGE_PUBLIC_BASE_URL) -- ikut diperbarui.
+      update: options.refresh ? { s3Url } : {},
       create: { textHash, textJp, s3Url },
     });
     return asset.s3Url;

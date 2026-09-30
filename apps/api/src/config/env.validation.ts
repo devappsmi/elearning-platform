@@ -1,5 +1,11 @@
 import { z } from "zod";
 import { resolveStorageOptions } from "../audio/storage-options";
+import {
+  DEFAULT_AZURE_VOICE_FEMALE,
+  DEFAULT_AZURE_VOICE_MALE,
+  DEFAULT_OPENAI_TTS_MODEL,
+  TTS_PROVIDER_CHOICES,
+} from "../audio/tts-options";
 
 /** Validated once at boot (see main.ts) -- fails fast with a clear message
  * instead of a random crash the first time a missing env var is read. */
@@ -37,20 +43,30 @@ export const envSchema = z.object({
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_CHAT_MODEL: z.string().default("gpt-5.6-terra"),
   OPENAI_STT_MODEL: z.string().default("gpt-transcribe"),
-  OPENAI_TTS_MODEL: z.string().default("gpt-4o-mini-tts"),
+  OPENAI_TTS_MODEL: z.string().default(DEFAULT_OPENAI_TTS_MODEL),
   OPENAI_TTS_VOICE_DEFAULT: z.string().default("nova"),
   // Kuota balasan AI tutor per murid per hari (Milestone 11) -- versi lama
   // hardcode 20; sekarang bisa diubah tanpa deploy kode.
   TUTOR_DAILY_QUOTA: z.coerce.number().int().positive().default(20),
 
-  // AZURE_SPEECH_KEY/REGION opsional -- AzureTtsClient (AudioModule, Milestone 8)
-  // melempar error yang jelas SAAT DIPANGGIL kalau kosong, bukan gagal di boot;
-  // biar server & seed tetap bisa jalan di environment tanpa kredensial TTS
-  // (audio jadi placeholder kosong sampai kredensial tersedia).
+  // TTS untuk audio PELAJARAN (AudioModule, Milestone 8) -- terpisah dari TTS milik AI tutor. Penyedia:
+  // `auto` (bawaan) = Azure bila AZURE_SPEECH_KEY+REGION terisi, kalau tidak OpenAI bila OPENAI_API_KEY terisi, kalau
+  // tidak ada satu pun audio dimatikan; atau paksa `azure` / `openai` / `none`. Aturan lengkap: audio/tts-options.ts.
+  // Nama yang salah gagal di boot; kredensial yang kosong TIDAK -- klien TTS melempar galat yang jelas SAAT DIPANGGIL,
+  // supaya server & seed tetap bisa jalan tanpa kredensial TTS (audio jadi placeholder kosong sampai tersedia).
+  TTS_PROVIDER: z.preprocess(
+    (value) => (typeof value === "string" ? value.trim().toLowerCase() || undefined : value),
+    z.enum(TTS_PROVIDER_CHOICES).default("auto"),
+  ),
   AZURE_SPEECH_KEY: z.string().optional(),
   AZURE_SPEECH_REGION: z.string().optional(),
-  AZURE_TTS_VOICE_FEMALE: z.string().default("ja-JP-NanamiNeural"),
-  AZURE_TTS_VOICE_MALE: z.string().default("ja-JP-KeitaNeural"),
+  AZURE_TTS_VOICE_FEMALE: z.string().default(DEFAULT_AZURE_VOICE_FEMALE),
+  AZURE_TTS_VOICE_MALE: z.string().default(DEFAULT_AZURE_VOICE_MALE),
+  // Suara/arahan OpenAI untuk audio pelajaran (model = OPENAI_TTS_MODEL, kunci = OPENAI_API_KEY). Bawaan ada di
+  // audio/tts-options.ts -- sengaja bukan `.default()` di sini supaya seed (yang membaca process.env langsung) sama.
+  OPENAI_LESSON_TTS_VOICE_FEMALE: z.string().optional(),
+  OPENAI_LESSON_TTS_VOICE_MALE: z.string().optional(),
+  OPENAI_LESSON_TTS_INSTRUCTIONS: z.string().optional(),
 
   CORS_ORIGIN_STUDENT: z.string().url(),
   CORS_ORIGIN_ADMIN: z.string().url(),

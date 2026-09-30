@@ -110,23 +110,73 @@ Undangan berlaku sesuai aturan aplikasi; tautan yang kedaluwarsa bisa dikirim ul
 (tautan baru muncul di log lagi). Layar "Lupa password" murid menjawab sama untuk semua alamat (anti-enumerasi),
 jadi murid yang lupa password menghubungi admin, yang mengambil tautannya dari log.
 
-## 6. Fitur opsional: AI tutor (OpenAI) dan audio pelajaran (Azure)
+## 6. Fitur opsional: AI tutor dan audio pelajaran
 
 Semuanya boleh dikosongkan; hanya fitur terkait yang nonaktif.
 
-- **AI tutor**: isi `OPENAI_API_KEY` di `.env`, lalu `docker compose up -d` (API dibuat ulang). Endpoint `/tutor/*`
+- **AI tutor** (OpenAI): isi `OPENAI_API_KEY` di `.env`, lalu `docker compose up -d` (API dibuat ulang). Endpoint `/tutor/*`
   sudah ada, tetapi **belum ada layar tutor di aplikasi murid** (Fase 2). Nama model bawaan
   (`gpt-5.6-terra`, `gpt-transcribe`, `gpt-4o-mini-tts`) belum terbukti ada. Dari server Anda (jaringan bebas)
-  bisa langsung dicek — 11 tes, biaya sen:
+  bisa langsung dicek — 15 tes, biaya sen:
   ```bash
   docker compose run --rm tools pnpm run test:live-openai
   ```
   Kalau ada nama model yang ditolak, pesan gagalnya mencantumkan model yang tersedia untuk akun Anda; ubah
   `OPENAI_*_MODEL` di `.env`. Rincian ada di `docs/PLAN.md` bagian 6.
-- **Audio pelajaran**: isi `AZURE_SPEECH_KEY` dan `AZURE_SPEECH_REGION`, lalu `docker compose up -d` dan ulangi
-  `docker compose run --rm tools pnpm run db:seed` (menghasilkan audio untuk seluruh kosakata/kalimat dan
-  menyimpannya di volume `media_data`). Tanpa ini pelajaran berjalan tanpa audio.
+- **Audio pelajaran** (suara kosakata/kalimat): lihat 6a. **Tidak wajib Azure** — kunci OpenAI yang sama dengan AI tutor cukup.
 - Perubahan `.env` selalu diikuti `docker compose up -d`; hanya layanan yang variabelnya berubah yang dibuat ulang.
+
+### 6a. Audio pelajaran (tanpa Azure)
+
+Audio pelajaran dibuat **sekali**, saat `db:seed` (bukan saat murid membuka pelajaran), lalu disimpan sebagai berkas
+(bagian 7). Penyedia suaranya dipilih lewat `TTS_PROVIDER` di `.env`:
+
+| `TTS_PROVIDER` | Yang diisi | Keterangan |
+|---|---|---|
+| `auto` (bawaan) | — | Azure bila `AZURE_SPEECH_KEY` **dan** `AZURE_SPEECH_REGION` terisi; kalau tidak, OpenAI bila `OPENAI_API_KEY` terisi; kalau tidak ada satu pun, pelajaran berjalan tanpa audio |
+| `openai` | `OPENAI_API_KEY` | Kunci yang **sama** dengan AI tutor — tanpa akun Azure. Model = `OPENAI_TTS_MODEL` (bawaan `gpt-4o-mini-tts`); suara `OPENAI_LESSON_TTS_VOICE_FEMALE` / `_MALE` (bawaan `nova` / `onyx`); arahan gaya bicara `OPENAI_LESSON_TTS_INSTRUCTIONS` (bawaan: bahasa Jepang baku, tempo pelan, dibaca apa adanya) |
+| `azure` | `AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION` | Rekomendasi plan (satu vendor dengan Pronunciation Assessment Fase 2); suara `ja-JP-NanamiNeural` / `ja-JP-KeitaNeural` |
+| `none` | — | Matikan pembuatan audio pelajaran |
+
+Nama `TTS_PROVIDER` yang salah menggagalkan boot API dan seed dengan pesan yang menyebut pilihannya; kredensial yang
+kosong **tidak** (server tetap jalan, seed melewati audio dengan peringatan).
+
+**Langkah dengan OpenAI** (belum punya Azure):
+
+```bash
+# 1. Isi OPENAI_API_KEY di deploy/.env (kunci baru -- jangan ditempel di chat/issue/commit), lalu:
+docker compose up -d
+
+# 2. DENGARKAN dulu: 9 contoh suara pendek (biaya kecil), tidak menyentuh database
+docker compose run --rm tools pnpm run tts:sample
+#    mencetak tautan .../media/samples/tts-openai-<sidik>-01-female.mp3 dst.; buka di browser
+
+# 3. Cocok? Buat semua audio (160 teks, satu per satu -- perkiraan beberapa menit; kemajuan tercetak tiap 20 teks)
+docker compose run --rm tools pnpm run db:seed
+```
+
+Baris `Seed selesai: …` di akhir keluaran seed memuat `audio=lengkap 160/160` (atau `dilewati` / `sebagian n/160`,
+alasannya tercetak di peringatan sebelumnya). Seed yang berhenti di tengah (kunci ditolak, kuota habis) aman diulang: yang sudah jadi
+tidak dibuat ulang.
+
+**Langkah 2 bukan formalitas.** Kualitas suara Jepang OpenAI untuk huruf kana tunggal belum pernah didengar (sandbox
+pengembangan tidak bisa memanggil OpenAI); tes otomatis (`test:live-openai`) hanya membuktikan OpenAI menerima
+model/suara/arahan yang dikonfigurasi dan mengembalikan MP3. Dengarkan terutama: `は` harus "ha" (bukan "wa" seperti
+partikel), `を` harus "o", `愛` "ai", `今日` "kyou", dan `あ` dibaca sebagai bahasa Jepang. Kurang cocok? Ganti
+`OPENAI_LESSON_TTS_VOICE_FEMALE` / `_MALE` (mis. `coral`, `shimmer`, `echo`, `onyx`), `docker compose up -d`, lalu
+jalankan `tts:sample` lagi — nama berkas contoh memuat sidik setelan, jadi browser tidak menyajikan contoh lama dari
+cache. Tidak ada yang cocok: pakai Azure (`TTS_PROVIDER=azure`) atau `none`.
+
+**Mengganti suara/penyedia setelah audio dibuat.** Audio yang sudah ada dianggap cache, jadi `db:seed` biasa tidak
+membuatnya ulang. Untuk membuat ulang semuanya dengan setelan sekarang:
+
+```bash
+docker compose run --rm -e SEED_AUDIO_REGENERATE=1 tools pnpm run db:seed
+```
+
+Berkas ditimpa di alamat yang sama, dan baris database baru diperbarui setelah berkas barunya tersimpan — bila gagal di
+tengah jalan (kuota, kunci), teks yang belum sempat dibuat ulang tetap memakai audio lamanya. Browser murid bisa masih
+menyimpan audio lama sampai 1 hari (cache).
 
 ## 7. Penyimpanan audio
 
@@ -223,6 +273,9 @@ docker compose start api edge
 - **Halaman Pengaturan admin masih kerangka** (modul backend-nya belum ada); nama lembaga hanya bisa diatur lewat
   `INSTITUTION_NAME` pada `admin:create`.
 - **AI tutor belum punya layar** di aplikasi murid (Fase 2).
+- **Kualitas suara Jepang dari OpenAI untuk huruf kana tunggal belum pernah didengar** (sandbox pengembangan tidak bisa
+  memanggil OpenAI) — dengarkan dulu dengan `tts:sample` (bagian 6a). Lama seed dengan OpenAI sungguhan juga belum diukur
+  (160 panggilan berurutan; di sandbox, terhadap server tiruan, selesai dalam 6 detik).
 - Zona waktu "hari" (kuota, streak, leaderboard) mengikuti `TZ` di `.env` (bawaan `Asia/Jakarta`).
 
 ## 11. Pemecahan masalah
@@ -236,7 +289,10 @@ docker compose start api edge
 | `edge` tidak mau start | `docker compose logs edge` — cek `STUDENT_ADDRESS`/`ADMIN_ADDRESS` (harus nama host atau `:80`/`:8080`) |
 | Browser: sertifikat tidak valid / tidak bisa HTTPS | DNS belum mengarah ke server, port 80/443 tertutup, atau batas Let's Encrypt terlampaui. Lihat `docker compose logs edge`. Volume `caddy_data` jangan dihapus |
 | `502` di `/api/...` | API belum sehat atau mati: `docker compose ps`, `docker compose logs api` |
-| `/media/...` 404 | Berkas belum ada (audio baru dibuat bila `AZURE_SPEECH_KEY` diisi lalu seed diulang) atau `STORAGE_PUBLIC_BASE_URL` tidak sama dengan alamat yang dibuka browser |
+| `/media/...` 404 | Berkas belum ada (audio baru dibuat bila penyedia TTS diisi lalu seed diulang, bagian 6a) atau `STORAGE_PUBLIC_BASE_URL` tidak sama dengan alamat yang dibuka browser |
+| Seed: `Seed audio DILEWATI` | Belum ada penyedia TTS yang siap: isi `OPENAI_API_KEY` (atau `AZURE_SPEECH_KEY` + `AZURE_SPEECH_REGION`), atau `TTS_PROVIDER=none` bila memang tanpa audio |
+| Seed: `Seed audio berhenti di '…'` | Alasannya tercetak (mis. `401` = kunci salah, `429` = kuota habis, `404` = `OPENAI_TTS_MODEL` tidak ada untuk akun Anda). Perbaiki lalu ulangi `db:seed` |
+| `tts:sample`: `GAGAL: …` | Sama dengan di atas; kode keluar 1 |
 | Log API: `EACCES` saat menulis audio | Volume `media_data` terlanjur dimiliki root. Perbaiki: `docker run --rm -v elearning_media_data:/data alpine chmod -R a+rwX /data` |
 | Tautan undangan tidak sampai ke murid | Email belum terkirim — ambil dari log (bagian 5) |
 | Semua orang terkena "terlalu banyak percobaan" | `TRUST_PROXY` salah/di belakang proxy lain — lihat bagian 9 |
@@ -252,6 +308,8 @@ docker compose start api edge
 | `apps/api/prisma/create-admin.ts` · `src/bootstrap/` | Pembuatan admin pertama / pemulihan kata sandi admin |
 | `deploy/backup.sh` | Cadangan database + volume audio |
 | `apps/api/src/audio/` | Penyimpanan audio: `local-storage.service.ts` (disk, bawaan), `object-storage.service.ts` (S3, untuk nanti), `local-media.ts` (penyajian `/media`), `storage-options.ts` (aturan env) |
+| `apps/api/src/audio/tts-options.ts` · `tts-factory.ts` | Pemilihan penyedia TTS audio pelajaran (`TTS_PROVIDER`: auto/azure/openai/none) dan pembuat kliennya; `openai-tts.client.ts`, `azure-tts.client.ts` = kedua penyedia |
+| `apps/api/prisma/seed.ts` · `tts-sample.ts` | `db:seed` (konten + audio; `SEED_AUDIO_REGENERATE=1` = buat ulang audio) dan `tts:sample` (contoh suara, tanpa database); logikanya di `src/audio/lesson-audio-seed.ts` dan `tts-sample.ts` |
 | `docker-compose.yml` (root) | Hanya untuk **pengembangan lokal** (Postgres + Redis; port terbuka ke host). Audio dev ditulis ke `apps/api/storage` |
 
 ## Yang sudah dan belum diverifikasi
@@ -275,6 +333,16 @@ docker compose start api edge
 - Pembatas per-IP dengan `TRUST_PROXY=1` (header palsu tak berpengaruh), header cache/keamanan, Swagger 404, dan cek live
   OpenAI yang berjalan di container `tools`.
 - Urutan "Langkah cepat" (bagian 2) dijalankan ulang persis dari **clone bersih GitHub** dengan build tanpa cache.
+- **Audio pelajaran tanpa Azure (penyedia OpenAI)**, di stack compose sungguhan dengan server OpenAI **TIRUAN** di jaringan
+  compose (membuktikan kabel kita, bukan OpenAI-nya): tanpa kredensial, seed melewati audio (`audio=dilewati`) dan
+  `GET /lessons/l1` tetap termuat dengan 160 audio kosong; `TTS_PROVIDER` salah ketik → seed gagal satu baris SEBELUM
+  menyentuh database dan API gagal boot dengan nama variabelnya; `tts:sample` → 9 tautan, kesembilannya 200 `audio/mpeg`
+  lewat Caddy, tanpa menyentuh database (server tiruan menerima suara `nova` untuk perempuan dan `onyx` untuk laki-laki,
+  model, arahan gaya, dan format mp3 sesuai konfigurasi); `db:seed` dengan hanya `OPENAI_API_KEY` (mode auto) → 160 berkas
+  + 160 baris, dan `GET /lessons/l1` mengembalikan 160 alamat audio yang semuanya `…/media/audio/sha256(teks|suara).mp3`;
+  seed ulang = 0 panggilan (cache); `SEED_AUDIO_REGENERATE=1` → 160 berkas ditimpa tanpa mengubah satu alamat pun; OpenAI
+  menolak setelah 10 permintaan → seed berhenti di kegagalan pertama (11 panggilan, bukan 160), 10 berkas baru + 150 berkas
+  lama utuh + 160 baris tetap, potongan kunci di pesan galat tersamarkan; setelah pulih, pembuatan ulang lengkap.
 
 **Belum** (tidak bisa dari sandbox): penerbitan **sertifikat Let's Encrypt** dan akses lewat domain sungguhan; perilaku di
 server lain/arsitektur arm64; langkah `apt-get install openssl` di Dockerfile (mirror Debian diblokir di sandbox — image

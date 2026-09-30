@@ -1,5 +1,7 @@
 import OpenAI from "openai";
 import { afterAll, describe, expect, it } from "vitest";
+import { createTtsClient } from "../audio/tts-factory";
+import { resolveTtsOptions } from "../audio/tts-options";
 import { envSchema } from "../config/env.validation";
 import { OpenAiTutorLlmClient } from "./tutor-llm.client";
 import { buildTutorInstructions, flattenHistory } from "./tutor-prompt";
@@ -16,10 +18,15 @@ import { TUTOR_CHARACTERS, findTutorCharacter, findTutorScenario } from "./tutor
 //
 // Jalankan (butuh OPENAI_API_KEY di environment; jaringan harus boleh ke api.openai.com):
 //   pnpm --filter api run test:live-openai
-// Biaya: beberapa panggilan singkat (3 sintesis suara pendek, 1 transkripsi, ~4 balasan chat) -- sen.
+// Biaya: beberapa panggilan singkat (~7 sintesis suara pendek, 2 transkripsi, ~4 balasan chat) -- sen.
 // Model/voice mengikuti env yang sama dengan API (OPENAI_CHAT_MODEL, OPENAI_STT_MODEL, OPENAI_TTS_MODEL,
-// OPENAI_TTS_VOICE_DEFAULT), jadi yang diuji = yang akan dipakai server. OPENAI_BASE_URL (bawaan SDK)
-// dihormati -- dipakai untuk memvalidasi harness ini terhadap server tiruan lokal.
+// OPENAI_TTS_VOICE_DEFAULT, OPENAI_LESSON_TTS_VOICE_FEMALE/MALE/INSTRUCTIONS), jadi yang diuji = yang akan dipakai
+// server. OPENAI_BASE_URL (bawaan SDK) dihormati -- dipakai untuk memvalidasi harness ini terhadap server tiruan lokal.
+//
+// Bagian "audio PELAJARAN" menguji penyedia TTS_PROVIDER=openai untuk audio kosakata/kalimat (seed) -- alternatif
+// Azure. Yang dibuktikan hanya bahwa OpenAI menerima model/suara/arahan yang dikonfigurasi dan mengembalikan MP3
+// (plus satu putaran-balik transkripsi). KUALITAS suara Jepangnya tidak bisa diuji otomatis: dengarkan sendiri
+// dengan `pnpm run tts:sample`.
 //
 // Hasilnya sebagian HEURISTIK (bahasa balasan, panjang, kemiripan transkrip) -- balasan model dicetak supaya
 // bisa dibaca manusia; kegagalan heuristik = temuan untuk ditinjau, bukan otomatis bug kode.
@@ -165,6 +172,51 @@ describe("OpenAI sungguhan -- suara (TTS) dan transkripsi (STT)", () => {
     expect(transcript.length).toBeGreaterThan(0);
     expect(transcript).toMatch(/(はじめまして|初めまして)/);
     expect(transcript).toMatch(/(よろしく|宜しく)/);
+  });
+});
+
+describe("OpenAI sungguhan -- audio PELAJARAN (OpenAiTtsClient, TTS_PROVIDER=openai)", () => {
+  // Setelan yang sama dengan seed/API: model = OPENAI_TTS_MODEL, suara = OPENAI_LESSON_TTS_VOICE_*, arahan gaya =
+  // OPENAI_LESSON_TTS_INSTRUCTIONS (bawaan di audio/tts-options.ts).
+  const options = resolveTtsOptions({ ...process.env, TTS_PROVIDER: "openai" });
+  if (options.provider !== "openai") throw new Error("resolveTtsOptions(TTS_PROVIDER=openai) tidak menghasilkan penyedia openai");
+  const lesson = createTtsClient(options);
+
+  /** OpenAiTtsClient membungkus galat SDK jadi Error biasa (status hilang, tetapi pesannya memuat "...: 404 ..."):
+   * untuk 400/404 sertakan model TTS yang SUNGGUH tersedia, supaya OPENAI_TTS_MODEL yang salah mudah dibetulkan. */
+  const synthesize = async (text: string, voice: "female" | "male"): Promise<Buffer> => {
+    try {
+      return await lesson.synthesize(text, voice);
+    } catch (error) {
+      if (!/: (400|404) /.test((error as Error).message)) throw error;
+      throw new Error(`${(error as Error).message}\nModel TTS yang tersedia untuk akun ini: ${await availableModels(TTS_FAMILY)}`, { cause: error });
+    }
+  };
+
+  it.each([
+    ["あ", "female"],
+    ["は", "female"],
+    ["今日", "male"],
+  ] as const)("'%s' (suara %s): model, suara, dan arahan gaya bawaan diterima, keluaran MP3 valid", async (text, voice) => {
+    const voiceName = voice === "male" ? options.voiceMale : options.voiceFemale;
+
+    const audio = await synthesize(text, voice);
+
+    note(`[tts-pelajaran ${options.model} ${voice}=${voiceName}] '${text}': ${audio.length} byte, mp3=${isMp3(audio)}`);
+    expect(audio.length, "audio terlalu kecil -- kemungkinan bukan audio sungguhan").toBeGreaterThan(1_000);
+    expect(isMp3(audio), "keluaran bukan MP3 (tak ada kepala ID3 / sinkron frame)").toBe(true);
+  });
+
+  it("putaran penuh: 'ありがとう' hasil TTS ditranskripsi kembali sebagai kata yang sama", async () => {
+    const stt = new OpenAiSpeechToTextClient(apiKey, models.OPENAI_STT_MODEL);
+    const audio = await synthesize("ありがとう", "female");
+
+    const transcript = await explainModelError("OPENAI_STT_MODEL", models.OPENAI_STT_MODEL, STT_FAMILY, () =>
+      stt.transcribe({ audio, filename: "pelajaran.mp3", mimetype: "audio/mpeg" }),
+    );
+
+    note(`[tts-pelajaran -> stt ${models.OPENAI_STT_MODEL}] asli: ありがとう | transkrip: ${transcript}`);
+    expect(transcript).toMatch(/(ありがとう|有難う|有り難う)/);
   });
 });
 
