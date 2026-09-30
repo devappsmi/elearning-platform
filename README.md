@@ -40,12 +40,13 @@ Audio pelajaran dibuat saat `pnpm db:seed` bila ada penyedia TTS: cukup `OPENAI_
 
 ## Menjalankan di server sendiri (Docker Compose)
 
-Stack produksi satu server (murid, admin, API, Postgres, Redis, penyimpanan audio, HTTPS otomatis) ada di
-[`deploy/`](deploy). Panduan lengkap: [`docs/DEPLOY.md`](docs/DEPLOY.md). Ringkasnya:
+Stack produksi satu server (murid, admin, API, Redis, penyimpanan audio, HTTPS otomatis) ada di
+[`deploy/`](deploy); databasenya memakai **Postgres yang sudah ada di server Anda** (`DATABASE_URL`; Postgres bawaan hanya
+untuk uji cepat: `sh gen-env.sh --builtin-db`). Panduan lengkap: [`docs/DEPLOY.md`](docs/DEPLOY.md). Ringkasnya:
 
 ```bash
 cd deploy
-sh gen-env.sh && nano .env          # rahasia acak + alamat domain/IP
+sh gen-env.sh && nano .env          # rahasia acak + alamat domain/IP + DATABASE_URL (Postgres Anda, bagian 2a panduan)
 docker compose up -d --build
 docker compose run --rm tools pnpm run db:seed
 docker compose run --rm -e ADMIN_EMAIL -e ADMIN_PASSWORD tools pnpm run admin:create

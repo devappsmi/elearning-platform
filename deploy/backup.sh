@@ -1,5 +1,6 @@
 #!/bin/sh
-# Cadangan: dump database (format kustom pg_dump) + berkas audio (volume media_data) -> deploy/backup/<waktu>/.
+# Cadangan: dump database (format kustom pg_dump, hanya schema aplikasi) + berkas audio (volume media_data)
+# -> deploy/backup/<waktu>/. Database = yang ditunjuk DATABASE_URL di .env (Postgres sendiri ATAU bawaan).
 # Jalankan dari server, di direktori mana pun. Pemulihan: docs/DEPLOY.md, bagian "Cadangan dan pemulihan".
 # Isinya data pribadi (email, hash kata sandi): simpan di tempat yang aman, jangan di-commit.
 set -eu
@@ -9,7 +10,15 @@ umask 077
 DIR="backup/$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$DIR"
 
-docker compose exec -T postgres pg_dump -U elearning -d elearning -Fc > "$DIR/database.dump"
+# pg_dump dijalankan di container `pgclient` dengan DATABASE_URL yang sama dengan API (lihat pgurl.sh). Server Postgres
+# yang lebih baru daripada klien bawaan (17) menolaknya: setel PG_CLIENT_IMAGE di .env (mis. postgres:18-alpine).
+if ! docker compose run --rm -T --no-deps pgclient /pg-dump.sh > "$DIR/database.dump"; then
+  rm -f "$DIR/database.dump"
+  rmdir "$DIR" 2>/dev/null || true
+  echo "GAGAL: pg_dump tidak berhasil (lihat pesan di atas). Cadangan audio TIDAK dibuat." >&2
+  exit 1
+fi
+[ -s "$DIR/database.dump" ] || { echo "GAGAL: database.dump kosong." >&2; exit 1; }
 echo "database  -> $DIR/database.dump"
 
 # Audio (volume media_data). Salinan langsung dari volume yang sedang dipakai cukup di sini: berkasnya ditulis atomik

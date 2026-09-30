@@ -1,7 +1,8 @@
 # Deploy di server sendiri (Docker Compose)
 
 Panduan menjalankan **seluruh platform** (aplikasi murid, aplikasi admin, API, database, cache, penyimpanan audio,
-HTTPS) di satu server dengan Docker Compose. Semua berkas ada di folder [`deploy/`](../deploy). Langkah inti dan
+HTTPS) di satu server dengan Docker Compose. Semua berkas ada di folder [`deploy/`](../deploy). **Databasenya memakai
+Postgres yang sudah ada di server Anda** (bagian 2a); container Postgres bawaan hanya untuk uji cepat. Langkah inti dan
 perintah operasional di bawah sudah dijalankan sungguhan di sandbox; apa yang belum (mis. sertifikat Let's Encrypt)
 dan batasnya ada di "Yang sudah dan belum diverifikasi" di akhir.
 
@@ -16,12 +17,14 @@ dan batasnya ada di "Yang sudah dan belum diverifikasi" di akhir.
              ┌──────▼────────┐      audio pelajaran ditulis dan disajikan dari
              │ api (NestJS)  │────▶ volume Docker `media_data` (disk server, tanpa S3)
              └───┬───────┬───┘
-            ┌────▼───┐ ┌─▼─────┐
-            │postgres│ │ redis │      migrate = sekali jalan tiap `up` (skema database)
-            └────────┘ └───────┘      tools   = perintah manual (seed, buat admin, cek OpenAI)
+                 │       └───▶ redis (container)   migrate = sekali jalan tiap `up` (skema database)
+                 ▼                                  tools   = perintah manual (seed, buat admin, cek database/OpenAI)
+      Postgres ANDA (server sendiri)
+      atau container `postgres` bawaan (opsional, uji cepat)
 ```
 
-Hanya `edge` yang membuka port ke luar. Postgres, Redis, dan API tidak bisa dijangkau dari internet.
+Hanya `edge` yang membuka port ke luar. Redis dan API tidak bisa dijangkau dari internet; Postgres milik Anda dijangkau
+API lewat jaringan Anda sendiri (bagian 2a).
 Aplikasi web memanggil API lewat alamat relatif `/api` di origin-nya sendiri, jadi tidak ada CORS dan image yang
 sama berlaku untuk domain/IP mana pun.
 
@@ -34,6 +37,7 @@ sama berlaku untuk domain/IP mana pun.
 | Akses internet dari server | Saat build (npm, Docker Hub, paket Debian) dan saat jalan (Let's Encrypt; OpenAI/Azure bila dipakai) |
 | Port 80 dan 443 terbuka | Mode domain (HTTPS). Mode uji lewat IP: port 80 dan 8080 |
 | Dua nama host (mode domain) | mis. `belajar.contoh.id` (murid) dan `admin.belajar.contoh.id` (admin), keduanya record **A** ke IP server |
+| Server Postgres | Yang **sudah ada** (bawaan panduan ini): alamat, nama database, pengguna + kata sandi, dan bisa dijangkau dari server ini — lihat 2a. Tanpa itu, untuk uji cepat: Postgres bawaan stack (`sh gen-env.sh --builtin-db`) |
 | `git` | Untuk mengambil kode |
 
 ## 2. Langkah cepat (mode domain, HTTPS otomatis)
@@ -45,13 +49,14 @@ cd elearning-platform
 git checkout claude/dazzling-feynman-m7w7t6
 cd deploy
 
-# 2. Buat .env dengan rahasia acak, lalu isi alamat akses
-sh gen-env.sh
-nano .env          # ubah STUDENT_ADDRESS, ADMIN_ADDRESS, PUBLIC_STUDENT_URL, PUBLIC_ADMIN_URL
+# 2. Buat .env dengan rahasia acak, lalu isi alamat akses DAN alamat database Anda (bagian 2a)
+sh gen-env.sh      # (Postgres bawaan stack untuk uji cepat: sh gen-env.sh --builtin-db)
+nano .env          # ubah STUDENT_ADDRESS, ADMIN_ADDRESS, PUBLIC_STUDENT_URL, PUBLIC_ADMIN_URL, dan DATABASE_URL
 
 # 3. Bangun dan jalankan (pertama kali beberapa menit: mengunduh image dan membangun 3 image)
 docker compose up -d --build
 docker compose ps                 # semua "healthy"/"Up"; migrate "Exited (0)" itu normal (sekali jalan)
+docker compose logs migrate       # laporan database: server, TLS, keadaan schema, migrasi yang diterapkan
 
 # 4. Isi konten pelajaran (Hiragana, badge, skenario) — aman diulang
 docker compose run --rm tools pnpm run db:seed
@@ -67,8 +72,75 @@ Kata sandi admin minimal 8 karakter dan harus mengandung huruf dan angka (aturan
 `INSTITUTION_NAME` opsional; ia tampil di halaman undangan murid ("Selamat datang di …"). Repo privat: clone dengan
 token atau deploy key.
 
+**Langkah 3 berhenti di `service "migrate" didn't complete successfully`?** Itu hampir selalu pengaturan database:
+`docker compose logs migrate` menjelaskan penyebabnya (`GAGAL: …` beserta tindakannya). Perbaiki `.env` atau hak di server
+database, lalu ulangi `docker compose up -d` — API dan `edge` baru menyala setelah database benar.
+
 Buka `https://admin.belajar.contoh.id`, masuk, buat kelas, lalu undang murid (bagian 5). Sertifikat HTTPS diurus
 Caddy sendiri saat pertama diakses — lihat "Pemecahan masalah" bila gagal.
+
+### 2a. Database: Postgres yang sudah ada
+
+Bawaan panduan ini: aplikasi memakai **Postgres yang sudah ada di server Anda** lewat `DATABASE_URL` di `.env`; stack
+**tidak** membuat container Postgres. (Untuk uji cepat tanpa server database: "Postgres bawaan" di akhir bagian ini.)
+
+**Yang perlu disiapkan (oleh Anda atau pengelola database)**
+1. Alamat server dan port, nama database, nama pengguna, dan kata sandi.
+2. Database **kosong dan khusus** aplikasi ini, dengan pengguna sebagai **pemilik database**. Aplikasi membuat sendiri
+   24 tabel dan beberapa tipe enum lewat migrasi. Tidak perlu superuser dan tidak butuh ekstensi apa pun:
+   ```sql
+   CREATE ROLE elearning_app LOGIN PASSWORD '...';
+   CREATE DATABASE elearning OWNER elearning_app;
+   ```
+3. Server bisa dijangkau dari server aplikasi: firewall, `listen_addresses` di `postgresql.conf`, dan `pg_hba.conf` yang
+   mengizinkan alamat server aplikasi.
+
+**Mengisi `DATABASE_URL`** di `deploy/.env`:
+```
+DATABASE_URL=postgresql://elearning_app:KATA_SANDI@db.contoh.id:5432/elearning
+```
+- **Karakter khusus di nama pengguna/kata sandi harus di-encode**: `@`→`%40` `:`→`%3A` `/`→`%2F` `?`→`%3F` `#`→`%23`
+  `%`→`%25` `$`→`%24` spasi→`%20` (kata sandi `Pa@ss:w/rd#1%` ditulis `Pa%40ss%3Aw%2Frd%231%25`). Tanpa encode Prisma
+  hanya menjawab "invalid port number in database URL" — `db:check` menjelaskannya. Paling mudah: kata sandi huruf/angka saja.
+- **Host**: di dalam container, `localhost` adalah container itu sendiri, **bukan** mesin server. Server database lain →
+  pakai nama/IP-nya. Postgres di mesin yang **sama** dengan Docker → `host.docker.internal` (sudah dipetakan ke mesin host
+  oleh stack ini), dan Postgres harus mendengarkan di alamat yang bisa dicapai container (bukan hanya `127.0.0.1`) dengan
+  `pg_hba.conf` yang mengizinkan jaringan Docker. *(Diuji dengan Postgres yang berjalan sebagai container terpisah; Postgres
+  native di mesin host tidak bisa dicoba dari sandbox.)*
+- **TLS**: server yang mewajibkan TLS (umum di Postgres terkelola) → tambahkan `?sslmode=require`. Diuji terhadap server yang
+  hanya menerima koneksi TLS dengan sertifikat self-signed: tanpa parameter dan `sslmode=require` sama-sama berhasil,
+  `sslmode=disable` ditolak server, dan server mengonfirmasi koneksi API memakai TLSv1.3. Dalam mode ini koneksi
+  terenkripsi tetapi **sertifikat server tidak diverifikasi**. Tanpa parameter, Prisma memakai TLS bila tersedia dan
+  diam-diam jatuh ke koneksi tanpa enkripsi bila tidak — untuk server di luar jaringan tepercaya pakai `sslmode=require`.
+- **Database sudah berisi tabel aplikasi lain**: Prisma menolak memigrasi schema `public` yang tidak kosong (P3005). Pilih
+  database khusus (disarankan) atau schema khusus dengan `?schema=elearning`; beberapa parameter digabung dengan `&`:
+  `...:5432/elearning?schema=elearning&sslmode=require`. Schema dibuat otomatis oleh migrasi bila pengguna berhak `CREATE`
+  pada database (atau pengelola membuatnya: `CREATE SCHEMA elearning AUTHORIZATION elearning_app;`). Diuji: tabel aplikasi
+  lain di `public` tidak tersentuh dan semua tabel aplikasi ini ada di schema itu.
+
+**Yang dilakukan aplikasi pada database Anda** (satu pengguna dipakai untuk semuanya)
+- `migrate` (otomatis tiap `docker compose up`): `prisma migrate deploy` — membuat/mengubah **hanya** tabel dan tipe milik
+  aplikasi ini (sekarang 3 migrasi) plus tabel `_prisma_migrations` di schema-nya. Hak `CREATE` pada schema itu diperlukan
+  selama ada migrasi.
+- `db:seed`: menambah/memperbarui baris konten pelajaran (upsert, aman diulang). `admin:create`: satu baris admin (+ lembaga).
+- API: membaca/menulis tabel aplikasi lewat pengguna yang sama.
+
+**Memeriksa koneksi dan kesiapan** (tidak mengubah apa pun; juga berjalan otomatis di awal `db:deploy`, jadi `migrate` mencetaknya):
+```bash
+docker compose run --rm tools pnpm run db:check
+# Database : PostgreSQL 17.11 ... di db.contoh.id:5432/elearning (schema "public", pengguna "elearning_app")
+# TLS      : ya
+# Schema   : kosong -- siap dimigrasi
+```
+Bila ada yang salah, ia berhenti dengan `GAGAL: …` dan tindakannya: contoh `GANTI-…` belum diganti, kata sandi belum di-encode,
+`localhost` di dalam container, server tak terjangkau, kata sandi/pengguna ditolak, database tidak ada, schema sudah berisi
+tabel lain (P3005) atau riwayat migrasi aplikasi Prisma lain, dan pengguna tanpa hak membuat tabel (dengan perintah `GRANT`
+yang tepat). Kata sandi tidak pernah dicetak.
+
+**Postgres bawaan (uji cepat, tanpa server database sendiri)**: `sh gen-env.sh --builtin-db` (atau di `.env`: `DATABASE_URL=`
+kosong dan `COMPOSE_PROFILES=builtin-db`). Container `postgres` dibuat dengan data di volume `postgres_data`;
+`docker compose down -v` menghapusnya. Pindah dari bawaan ke server sendiri: `sh backup.sh` lalu pulihkan ke database baru
+(bagian 8, "Cadangan dan pemulihan").
 
 ## 3. Mode uji tanpa domain (HTTP lewat IP)
 
@@ -92,6 +164,7 @@ docker compose ps                                  # api "healthy", edge "Up"
 curl https://belajar.contoh.id/api/health          # {"status":"ok"}
 curl -I https://belajar.contoh.id/api/api-docs     # 404: dokumentasi Swagger sengaja tidak dibuka ke publik
 docker compose logs -f api                         # log API; Ctrl+C untuk keluar
+docker compose logs migrate                        # laporan database dan migrasi yang diterapkan
 ```
 
 ## 5. Email: tautan undangan dan reset password (PENTING)
@@ -207,40 +280,62 @@ docker compose exec postgres psql -U elearning -d elearning \
 
 | Keperluan | Perintah (di folder `deploy/`) |
 |---|---|
-| Status / log | `docker compose ps` · `docker compose logs -f api` (atau `edge`, `postgres`, …). Log otomatis dirotasi (3 × 10 MB per layanan) |
+| Status / log | `docker compose ps` · `docker compose logs -f api` (atau `edge`, `migrate`, `postgres` bila memakai yang bawaan, …). Log otomatis dirotasi (3 × 10 MB per layanan) |
 | Restart satu layanan | `docker compose restart api` |
 | Hentikan / nyalakan semua | `docker compose stop` · `docker compose start` — data aman. Layanan bawaan `restart: unless-stopped` menyala lagi sendiri setelah server reboot |
 | Update ke versi baru | `git pull` lalu `docker compose up -d --build`. Migrasi database berjalan otomatis (layanan `migrate`) dan API baru start setelahnya |
 | Jalankan seed ulang (konten baru) | `docker compose run --rm tools pnpm run db:seed` |
 | Lupa kata sandi admin / admin tambahan | Jalankan lagi `admin:create` dengan email yang sama: kata sandi diganti, akun diaktifkan lagi, semua sesi lamanya dicabut. Email baru = akun admin baru (peran OWNER) |
 | Migrasi manual | `docker compose run --rm tools pnpm run db:deploy` |
+| Periksa database | `docker compose run --rm tools pnpm run db:check` (bagian 2a) |
 
-> **Awas**: `docker compose down -v` menghapus **semua data** (database, Redis, audio, sertifikat). Tanpa `-v`,
-> `docker compose down` aman.
+> **Awas**: `docker compose down -v` menghapus volume: Redis, audio, sertifikat HTTPS — dan database **hanya bila memakai
+> Postgres bawaan**. Database milik Anda tidak tersentuh (diuji). Tanpa `-v`, `docker compose down` aman. Pakai `docker compose`
+> polos tanpa `--profile`: `COMPOSE_PROFILES` dari `.env` yang menentukan apakah `postgres` bawaan ikut dihapus.
 
 ### Cadangan dan pemulihan
 
 ```bash
 sh backup.sh            # -> backup/<waktu>/database.dump + media.tgz (berkas audio dari volume media_data)
 ```
+`database.dump` = cadangan **schema aplikasi ini saja** (format kustom `pg_dump`) dari database yang ditunjuk `DATABASE_URL` —
+Postgres milik Anda maupun bawaan; tabel aplikasi lain di database yang sama tidak ikut. `pg_dump` berjalan di container
+`pgclient` (image `postgres:17-alpine`) dengan `DATABASE_URL` yang sama dengan API; parameter khusus Prisma di URL (`schema`,
+`sslaccept`, `sslcert`, `connection_limit`, …) dibuang otomatis dan `sslmode` diteruskan. **Versi klien harus sama atau lebih
+baru dari server**: server Postgres 18 → `PG_CLIENT_IMAGE=postgres:18-alpine` di `.env`. Postgres milik Anda biasanya sudah
+punya cadangan dari pengelolanya; ini cadangan tambahan yang bisa dipulihkan tanpa mereka.
 Isinya data pribadi (email, hash kata sandi): simpan di luar server juga, jangan di-commit (`backup/` diabaikan git).
 Jadwalkan dengan cron, mis. `0 2 * * * cd /path/ke/deploy && sh backup.sh`. Redis (pembatas laju, kunci login, kuota
 tutor, leaderboard mingguan) tersimpan di volume dan tidak ikut cadangan — hanya berisi data sementara.
 
-Pemulihan (menimpa penuh; hentikan penulis dulu):
+Pemulihan **tidak pernah menimpa**: targetnya harus schema yang kosong atau belum ada (`pg_restore` tanpa `--clean`; ke
+schema yang sudah berisi ia berhenti dengan `already exists` dan tidak mengubah apa pun — diuji). Hentikan API dulu:
 ```bash
 docker compose stop api edge
-docker compose exec -T postgres psql -U elearning -d postgres -c "drop database elearning" -c "create database elearning"
-docker compose exec -T postgres pg_restore -U elearning -d elearning --no-owner < backup/<waktu>/database.dump
-# audio (volume media_data):
+
+# 1. Kosongkan schema aplikasi -- MENGHAPUS semua data aplikasi ini. Hanya untuk database/schema KHUSUS aplikasi ini
+#    (jangan untuk `public` yang dipakai aplikasi lain). Dijalankan sebagai pemilik database; kalau bukan, minta pengelola
+#    database menjalankan DROP SCHEMA "<schema>" CASCADE; CREATE SCHEMA "<schema>" AUTHORIZATION "<pengguna>";
+docker compose run --rm -T --no-deps -e PGOPTIONS='-c client_min_messages=warning' pgclient \
+  -c '. /pgurl.sh; printf "DROP SCHEMA :\"schema\" CASCADE;\nCREATE SCHEMA :\"schema\";\n" | psql -v schema="$SCHEMA" -v ON_ERROR_STOP=1 -q "$PGURL"'
+
+# 2. Pulihkan database
+docker compose run --rm -T --no-deps -v "$PWD/backup/<waktu>":/backup:ro pgclient /pg-restore.sh /backup/database.dump
+
+# 3. Pulihkan audio (volume media_data):
 docker run --rm -v elearning_media_data:/data alpine sh -c 'rm -rf /data/* /data/.[!.]*'
 docker run --rm -v elearning_media_data:/data -v "$PWD/backup/<waktu>":/backup alpine sh -c 'cd /data && tar xzf /backup/media.tgz'
 docker compose start api edge
 ```
+Ke database **baru/kosong** (mis. pindah dari Postgres bawaan ke server sendiri): lewati langkah 1 — `pg-restore.sh` membuat
+schema bila belum ada. Untuk pindah, arahkan `DATABASE_URL` ke database baru itu (`docker compose run … -e DATABASE_URL=…`
+atau ubah `.env`) saat menjalankan langkah 2.
 
 ### Mengganti rahasia
 - `JWT_STUDENT_SECRET` / `JWT_ADMIN_SECRET`: ganti di `.env` lalu `docker compose up -d` — semua orang harus masuk ulang.
-- `POSTGRES_PASSWORD`: variabel ini hanya dipakai saat database **pertama kali dibuat**. Mengubahnya di `.env` tidak
+- **Kata sandi database milik Anda**: ganti di server database (`ALTER ROLE elearning_app PASSWORD '...'`), samakan
+  `DATABASE_URL` di `.env` (ter-encode, bagian 2a), lalu `docker compose up -d`.
+- `POSTGRES_PASSWORD` (hanya Postgres **bawaan**): dipakai saat database **pertama kali dibuat**. Mengubahnya di `.env` tidak
   mengganti kata sandi yang sudah ada — jalankan dulu
   `docker compose exec postgres psql -U elearning -d elearning -c "alter user elearning password 'BARU'"`
   lalu samakan `.env` dan `docker compose up -d`. Pakai huruf/angka saja (masuk ke URL database).
@@ -250,8 +345,11 @@ docker compose start api edge
 - Firewall: hanya buka 80 dan 443 (mode domain). Port 8080 ikut dipublikasikan Docker tetapi tidak dipakai di mode
   domain — tutup di firewall/penyedia VPS. (Port yang dipublikasikan Docker melewati `ufw`; jangan mengandalkan `ufw`
   saja.)
-- `.env` berisi semua rahasia: izin 600 (dibuat begitu oleh `gen-env.sh`), jangan di-commit, tidak masuk image
-  (dikecualikan di `.dockerignore`).
+- `.env` berisi semua rahasia (termasuk kata sandi database di `DATABASE_URL`): izin 600 (dibuat begitu oleh `gen-env.sh`),
+  jangan di-commit, tidak masuk image (dikecualikan di `.dockerignore`). `db:check` tidak pernah mencetak kata sandi.
+- **Database**: pakai pengguna khusus aplikasi ini (pemilik database/schema-nya saja, bukan superuser), batasi `pg_hba.conf`
+  ke alamat server aplikasi, dan untuk server di luar jaringan tepercaya wajibkan TLS (`?sslmode=require`; sertifikat server
+  tidak diverifikasi dalam mode itu — bagian 2a).
 - `TRUST_PROXY=1` sudah diset di compose: API membaca IP klien sungguhan dari Caddy sehingga pembatas per-IP
   (login, lupa password, permintaan undangan ulang) bekerja per orang. Caddy menimpa `X-Forwarded-For` dari klien
   (diuji: header palsu tidak mengelabui pembatas). **Kalau server berada di belakang CDN/proxy lain (mis.
@@ -273,6 +371,12 @@ docker compose start api edge
 - **Halaman Pengaturan admin masih kerangka** (modul backend-nya belum ada); nama lembaga hanya bisa diatur lewat
   `INSTITUTION_NAME` pada `admin:create`.
 - **AI tutor belum punya layar** di aplikasi murid (Fase 2).
+- **Migrasi berjalan otomatis** tiap `docker compose up` terhadap database Anda: perubahan skema dari versi kode baru langsung
+  diterapkan. Untuk database yang dikelola tim lain, coba versi baru di salinan dulu. Satu pengguna database dipakai untuk
+  migrasi dan API (hak `CREATE` diperlukan selama ada migrasi baru).
+- **Hanya Postgres yang bisa memakai server sendiri**; Redis tetap container bawaan.
+- **`backup.sh` hanya meneruskan `sslmode`** ke `pg_dump` (opsi sertifikat Prisma seperti `sslcert` dibuang, artinya beda di
+  libpq dan berkasnya tak ada di container): server yang menuntut sertifikat klien perlu cadangan dari sisi server database.
 - **Kualitas suara Jepang dari OpenAI untuk huruf kana tunggal belum pernah didengar** (sandbox pengembangan tidak bisa
   memanggil OpenAI) — dengarkan dulu dengan `tts:sample` (bagian 6a). Lama seed dengan OpenAI sungguhan juga belum diukur
   (160 panggilan berurutan; di sandbox, terhadap server tiruan, selesai dalam 6 detik).
@@ -283,6 +387,16 @@ docker compose start api edge
 | Gejala | Penyebab / tindakan |
 |---|---|
 | `required variable … is missing a value` | Ada yang belum diisi di `deploy/.env` (pesannya menyebut nama variabelnya) |
+| `up` berhenti: `service "migrate" didn't complete successfully` | Pengaturan database: `docker compose logs migrate` menjelaskan penyebab dan tindakannya (baris berikut). Perbaiki lalu ulangi `docker compose up -d` |
+| `GAGAL: DATABASE_URL masih berisi contoh` / `kosong` | Isi `DATABASE_URL` di `.env` (bagian 2a), atau `sh gen-env.sh --builtin-db` untuk Postgres bawaan |
+| `DATABASE_URL tidak bisa dibaca` · Prisma `invalid port number` | Kata sandi berkarakter khusus belum di-encode (`@`→`%40`, `/`→`%2F`, `#`→`%23`, …; bagian 2a) |
+| `Server tidak terjangkau` | Host/port salah, firewall, `listen_addresses`, atau `pg_hba.conf`. Dari container, `localhost` bukan server: pakai `host.docker.internal` atau alamat server |
+| `kata sandi ditolak` | Pengguna/kata sandi salah, atau `pg_hba.conf` menolak alamat ini; kata sandi berkarakter khusus harus di-encode |
+| `Database … tidak ada` | Buat dulu (`CREATE DATABASE …`) atau perbaiki nama database di `DATABASE_URL` |
+| `schema "public" sudah berisi N tabel/objek lain … (P3005)` | Database berisi tabel aplikasi lain: pakai database khusus, atau schema khusus `?schema=elearning` (bagian 2a) |
+| `pengguna … tidak berhak membuat tabel` | Pengguna bukan pemilik database: jalankan `GRANT` yang tercetak, atau jadikan ia pemilik database |
+| `riwayat migrasi … milik aplikasi Prisma LAIN` | Schema itu dipakai aplikasi Prisma lain: pakai database atau schema khusus |
+| `backup.sh`: `pg_dump … server version mismatch` | Server lebih baru dari klien bawaan (17): `PG_CLIENT_IMAGE=postgres:<versi-server>-alpine` di `.env` |
 | `bind: address already in use` (port 80/443) | Ada web server lain di server (nginx/apache): hentikan atau ubah pemetaan port `edge` |
 | Build gagal di `apt-get` / `npm` | Server tidak bisa menjangkau mirror Debian / registry npm: periksa DNS dan firewall keluar |
 | `api` restart terus | `docker compose logs api` — biasanya env tidak valid (pesannya menyebut variabelnya) atau database belum siap |
@@ -306,7 +420,8 @@ docker compose start api edge
 | `deploy/Caddyfile` · `deploy/edge.Dockerfile` | Reverse proxy/HTTPS + build kedua aplikasi web (`VITE_API_URL=/api`); `/media` diteruskan ke API |
 | `apps/api/Dockerfile` | Target `runner` (server API) dan `tools` (migrasi, seed, admin, cek OpenAI) |
 | `apps/api/prisma/create-admin.ts` · `src/bootstrap/` | Pembuatan admin pertama / pemulihan kata sandi admin |
-| `deploy/backup.sh` | Cadangan database + volume audio |
+| `deploy/backup.sh` · `pgclient` (compose) · `pgurl.sh` · `pg-dump.sh` · `pg-restore.sh` | Cadangan database + volume audio; klien Postgres sekali-jalan yang memakai `DATABASE_URL` yang sama dengan API (parameter khusus Prisma dibuang) |
+| `apps/api/prisma/db-check.ts` · `src/bootstrap/db-check.ts` | `db:check`: pemeriksaan database sebelum migrasi (jalan otomatis di awal `db:deploy`) dengan pesan yang menjelaskan penyebab dan tindakan |
 | `apps/api/src/audio/` | Penyimpanan audio: `local-storage.service.ts` (disk, bawaan), `object-storage.service.ts` (S3, untuk nanti), `local-media.ts` (penyajian `/media`), `storage-options.ts` (aturan env) |
 | `apps/api/src/audio/tts-options.ts` · `tts-factory.ts` | Pemilihan penyedia TTS audio pelajaran (`TTS_PROVIDER`: auto/azure/openai/none) dan pembuat kliennya; `openai-tts.client.ts`, `azure-tts.client.ts` = kedua penyedia |
 | `apps/api/prisma/seed.ts` · `tts-sample.ts` | `db:seed` (konten + audio; `SEED_AUDIO_REGENERATE=1` = buat ulang audio) dan `tts:sample` (contoh suara, tanpa database); logikanya di `src/audio/lesson-audio-seed.ts` dan `tts-sample.ts` |
@@ -333,6 +448,23 @@ docker compose start api edge
 - Pembatas per-IP dengan `TRUST_PROXY=1` (header palsu tak berpengaruh), header cache/keamanan, Swagger 404, dan cek live
   OpenAI yang berjalan di container `tools`.
 - Urutan "Langkah cepat" (bagian 2) dijalankan ulang persis dari **clone bersih GitHub** dengan build tanpa cache.
+- **Database sendiri (Postgres yang sudah ada)**, di stack compose sungguhan dengan Postgres 17 TERPISAH (container di luar
+  proyek compose, dicapai lewat `host.docker.internal`; pengguna BUKAN superuser, hanya pemilik database): stack berjalan
+  tanpa container `postgres` (hanya `api`, `edge`, `migrate`, `redis`); migrasi, seed (104/56/7), admin, dan alur aplikasi
+  lewat Caddy (admin → kelas → undangan → murid → `GET /lessons/l1` berisi 104 kosakata + 56 kalimat) semuanya di database
+  luar; kata sandi berkarakter khusus (`@ : / # %`) ter-encode di `.env` bekerja; `down`/`up` dan `down -v` tidak menyentuh
+  database luar. **Database bersama** yang `public`-nya berisi tabel lain: `db:check` melaporkan P3005 dengan jalan keluar,
+  dan dengan `?schema=elearning` seluruh aplikasi berjalan di schema itu sementara tabel aplikasi lain utuh. **Server
+  hanya-TLS** (self-signed): `sslmode=require` bekerja penuh dan server mengonfirmasi koneksi API memakai TLSv1.3. Mode
+  kegagalan yang dijelaskan `db:check` (semuanya diuji terhadap kalimat galat Prisma yang sungguh keluar): contoh `GANTI`,
+  kata sandi tak ter-encode, `localhost`, kata sandi salah, database tak ada, port salah, schema berisi tabel lain,
+  pengguna tanpa hak `CREATE` (dengan `GRANT` yang tepat), riwayat migrasi aplikasi Prisma lain; `up` dengan `DATABASE_URL` yang
+  belum diisi berhenti di `migrate` dan menahan API/edge sampai benar; kata sandi tak pernah tercetak; `db:deploy` berhenti di
+  pemeriksaan tanpa menjalankan migrasi. **Cadangan/pemulihan** (`backup.sh`, `pgclient`): dump hanya schema aplikasi (juga
+  lewat TLS + `?schema=`; tabel aplikasi lain tak ikut), pulihan ke database baru sama dengan sumber, pemulihan di tempat
+  (schema dikosongkan lalu dipulihkan) mengembalikan data dan API sehat, pemulihan ke schema berisi ditolak tanpa menimpa, dan
+  `backup.sh` yang gagal tidak meninggalkan dump kosong. **Postgres bawaan** (`gen-env.sh --builtin-db`): jalur lama utuh
+  (seed, alur aplikasi, cadangan, pemulihan, `down -v`).
 - **Audio pelajaran tanpa Azure (penyedia OpenAI)**, di stack compose sungguhan dengan server OpenAI **TIRUAN** di jaringan
   compose (membuktikan kabel kita, bukan OpenAI-nya): tanpa kredensial, seed melewati audio (`audio=dilewati`) dan
   `GET /lessons/l1` tetap termuat dengan 160 audio kosong; `TTS_PROVIDER` salah ketik → seed gagal satu baris SEBELUM
@@ -348,4 +480,5 @@ docker compose start api edge
 server lain/arsitektur arm64; langkah `apt-get install openssl` di Dockerfile (mirror Debian diblokir di sandbox — image
 diuji dengan image Node penuh yang sudah berisi OpenSSL, jadi ukuran image sungguhan akan lebih kecil dari yang terlihat
 di sana); **driver S3** hanya diuji dengan server S3 tiruan (unit test) dan validasi env, tidak dengan S3 sungguhan pada
-konfigurasi ini; panggilan OpenAI/Azure sungguhan; beban dengan banyak pengguna.
+konfigurasi ini; panggilan OpenAI/Azure sungguhan; beban dengan banyak pengguna; Postgres **native di mesin host** dan Postgres terkelola
+sungguhan (RDS, Supabase, Neon, dll.), versi Postgres selain 17, dan pooler (PgBouncer) — tidak bisa dicoba dari sandbox.
