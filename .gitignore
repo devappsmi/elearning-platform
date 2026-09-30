@@ -29,3 +29,6 @@ apps/api/dist/
 
 # Cadangan dan berkas lokal deploy
 deploy/backup/
+
+# Pengaturan Claude Code milik pengguna/mesin ini (izin lokal) -- bukan bagian repo
+.claude/settings.local.json
