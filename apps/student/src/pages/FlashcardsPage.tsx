@@ -134,7 +134,7 @@ export function FlashcardsPage() {
           data-testid="flashcard"
           className="overflow-hidden rounded-[2rem] border border-white bg-white shadow-card motion-safe:animate-pop-in"
         >
-          <div className="bg-gradient-to-br from-violet-600 via-fuchsia-600 to-pink-600 px-6 py-10 text-center text-white">
+          <div className="bg-gradient-to-br from-primary-600 via-secondary-600 to-tertiary-600 px-6 py-10 text-center text-white">
             <p className="text-6xl font-black leading-tight md:text-7xl">{card.surface}</p>
             <p className="mt-3 text-lg font-bold text-white">
               {card.reading} &middot; {card.romaji}

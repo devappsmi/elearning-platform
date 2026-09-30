@@ -1,13 +1,13 @@
 import type { HTMLAttributes } from "react";
 
-export type ProgressTone = "violet" | "emerald" | "amber" | "sky" | "pink";
+export type ProgressTone = "brand" | "emerald" | "amber" | "sky" | "pink";
 export type ProgressSize = "sm" | "md" | "lg";
 
 const FILL: Record<ProgressTone, string> = {
-  violet: "from-indigo-500 via-violet-500 to-fuchsia-500",
+  brand: "from-primary-500 via-secondary-500 to-tertiary-500",
   emerald: "from-emerald-400 to-teal-500",
   amber: "from-amber-300 to-orange-500",
-  sky: "from-sky-400 to-indigo-500",
+  sky: "from-sky-400 to-primary-500",
   pink: "from-pink-400 to-rose-500",
 };
 
@@ -29,7 +29,7 @@ export function ProgressBar({
   value,
   max = 100,
   label,
-  tone = "violet",
+  tone = "brand",
   size = "md",
   onDark = false,
   className,

@@ -17,39 +17,34 @@ type PathLesson = components["schemas"]["PathLessonView"];
  * tersedia dengan tepi "timbul"; `pulse`: warna denyut pada pelajaran yang sedang dikerjakan. Ditulis utuh untuk Tailwind. */
 const THEMES = [
   {
-    banner: "from-indigo-600 via-violet-600 to-purple-600",
-    node: "from-violet-500 to-indigo-600",
-    edge: "shadow-[0_6px_0_0_#3730a3]",
-    pulse: "shadow-[0_0_0_0_rgb(99_102_241_/_0.55)]",
-    tag: "text-violet-700",
+    banner: "from-primary-600 via-secondary-600 to-tertiary-600",
+    node: "from-secondary-500 to-primary-600",
+    edge: "shadow-[0_6px_0_0_theme(colors.primary.800)]",
+    pulse: "shadow-[0_0_0_0_theme(colors.primary.500/55%)]",
   },
   {
     banner: "from-fuchsia-600 via-pink-600 to-rose-600",
     node: "from-pink-500 to-rose-600",
     edge: "shadow-[0_6px_0_0_#9f1239]",
     pulse: "shadow-[0_0_0_0_rgb(244_63_94_/_0.55)]",
-    tag: "text-pink-700",
   },
   {
     banner: "from-teal-700 via-emerald-700 to-green-700",
     node: "from-teal-500 to-emerald-600",
     edge: "shadow-[0_6px_0_0_#065f46]",
     pulse: "shadow-[0_0_0_0_rgb(16_185_129_/_0.55)]",
-    tag: "text-emerald-700",
   },
   {
-    banner: "from-sky-700 via-blue-700 to-indigo-700",
+    banner: "from-sky-700 via-blue-700 to-primary-700",
     node: "from-sky-500 to-blue-600",
     edge: "shadow-[0_6px_0_0_#1e40af]",
     pulse: "shadow-[0_0_0_0_rgb(59_130_246_/_0.55)]",
-    tag: "text-sky-700",
   },
   {
     banner: "from-amber-700 via-orange-700 to-red-700",
     node: "from-orange-500 to-red-600",
     edge: "shadow-[0_6px_0_0_#991b1b]",
     pulse: "shadow-[0_0_0_0_rgb(249_115_22_/_0.55)]",
-    tag: "text-orange-700",
   },
 ] as const;
 
@@ -101,7 +96,7 @@ export function HomePage() {
 
   return (
     <div className="space-y-8">
-      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-6 text-white shadow-glow md:p-8">
+      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary-600 via-secondary-600 to-tertiary-600 p-6 text-white shadow-glow md:p-8">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 select-none overflow-hidden">
           <span className="absolute -right-4 -top-12 text-[11rem] font-black leading-none text-white/10 md:text-[14rem]">
             あ
@@ -174,7 +169,7 @@ export function HomePage() {
       {path.levels.map((level) => (
         <section key={level.id} className="space-y-4">
           <h2 className="flex items-center gap-2 text-xl font-black text-slate-900 md:text-2xl">
-            <span aria-hidden="true" className="h-6 w-1.5 rounded-full bg-gradient-to-b from-violet-500 to-fuchsia-500" />
+            <span aria-hidden="true" className="h-6 w-1.5 rounded-full bg-gradient-to-b from-secondary-500 to-tertiary-500" />
             {level.name}
           </h2>
           {level.units.map((unit) => {
@@ -237,7 +232,7 @@ function UnitPath({ unit, number, themeIndex, continueLessonId }: UnitPathProps)
         />
       </div>
 
-      <div className="relative bg-[radial-gradient(circle_at_1px_1px,rgb(139_92_246_/_0.13)_1px,transparent_0)] [background-size:22px_22px]">
+      <div className="relative bg-[radial-gradient(circle_at_1px_1px,theme(colors.secondary.500/13%)_1px,transparent_0)] [background-size:22px_22px]">
         <div aria-hidden="true" className="pointer-events-none hidden select-none lg:block">
           <span className="absolute left-[9%] top-[14%] text-4xl opacity-80 motion-safe:animate-float-slow">{scenery[0]}</span>
           <span className="absolute right-[10%] top-[42%] text-5xl opacity-80 motion-safe:animate-float">{scenery[1]}</span>
@@ -291,7 +286,7 @@ function LessonNode({ lesson, index, themeIndex, current }: LessonNodeProps) {
           <>
             <span
               aria-hidden="true"
-              className="absolute -top-11 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-xl bg-white px-3 py-1 text-xs font-black tracking-wider text-violet-700 shadow-lg ring-1 ring-violet-100 motion-safe:animate-float"
+              className="absolute -top-11 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-xl bg-white px-3 py-1 text-xs font-black tracking-wider text-secondary-700 shadow-lg ring-1 ring-secondary-100 motion-safe:animate-float"
             >
               MULAI
               <span className="absolute -bottom-1 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 rounded-sm bg-white" />
@@ -337,7 +332,7 @@ function LessonNode({ lesson, index, themeIndex, current }: LessonNodeProps) {
     <Link
       to={`/learn/${lesson.id}`}
       style={shift}
-      className={`${shared} rounded-3xl px-2 pb-1 pt-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300`}
+      className={`${shared} rounded-3xl px-2 pb-1 pt-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300`}
     >
       {body}
     </Link>

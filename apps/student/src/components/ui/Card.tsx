@@ -1,13 +1,13 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
-export type CardTone = "plain" | "indigo" | "violet" | "pink" | "amber" | "emerald" | "sky" | "rose";
+export type CardTone = "plain" | "primary" | "secondary" | "pink" | "amber" | "emerald" | "sky" | "rose";
 export type CardPadding = "none" | "sm" | "md" | "lg";
 
 // Kelas ditulis utuh (bukan disusun dari potongan) supaya terbaca oleh pemindai Tailwind.
 const TONES: Record<CardTone, string> = {
   plain: "border-white bg-white",
-  indigo: "border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-white",
-  violet: "border-violet-100 bg-gradient-to-br from-violet-50 via-white to-white",
+  primary: "border-primary-100 bg-gradient-to-br from-primary-50 via-white to-white",
+  secondary: "border-secondary-100 bg-gradient-to-br from-secondary-50 via-white to-white",
   pink: "border-pink-100 bg-gradient-to-br from-pink-50 via-white to-white",
   amber: "border-amber-100 bg-gradient-to-br from-amber-50 via-white to-white",
   emerald: "border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-white",

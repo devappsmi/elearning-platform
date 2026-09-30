@@ -1,4 +1,5 @@
 import preset from "@elearning/config/tailwind";
+import { THEME, withAlpha } from "./theme.ts";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -9,6 +10,12 @@ export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      // Warna merek: primary/secondary/tertiary dari tema aktif (theme.ts -- satu-satunya tempat mengganti warna merek).
+      colors: {
+        primary: THEME.primary,
+        secondary: THEME.secondary,
+        tertiary: THEME.tertiary,
+      },
       // Nunito (dimuat lewat @fontsource-variable di main.tsx) untuk huruf Latin; aksara Jepang jatuh ke
       // font sistem yang bulat/rapi di tiap platform (urutan: Apple, Windows, Android/Linux).
       fontFamily: {
@@ -32,8 +39,8 @@ export default {
       },
       boxShadow: {
         // Bayangan lembut berwarna untuk kartu; "tepi" tombol (efek timbul ala permainan) dibuat per-varian di Button.
-        card: "0 1px 2px rgb(76 29 149 / 0.04), 0 12px 32px -14px rgb(79 70 229 / 0.28)",
-        glow: "0 10px 30px -8px rgb(139 92 246 / 0.55)",
+        card: `0 1px 2px ${withAlpha(THEME.secondary[900], 0.04)}, 0 12px 32px -14px ${withAlpha(THEME.primary[600], 0.28)}`,
+        glow: `0 10px 30px -8px ${withAlpha(THEME.secondary[500], 0.55)}`,
       },
       keyframes: {
         float: {
@@ -69,8 +76,8 @@ export default {
           "100%": { backgroundPosition: "-200% 0" },
         },
         "ring-pulse": {
-          "0%": { boxShadow: "0 0 0 0 rgb(139 92 246 / 0.5)" },
-          "100%": { boxShadow: "0 0 0 18px rgb(139 92 246 / 0)" },
+          "0%": { boxShadow: `0 0 0 0 ${withAlpha(THEME.secondary[500], 0.5)}` },
+          "100%": { boxShadow: `0 0 0 18px ${withAlpha(THEME.secondary[500], 0)}` },
         },
         // Konfeti: tiap keping mengisi --dx (sisi) dan --rot (putaran) lewat style inline.
         confetti: {

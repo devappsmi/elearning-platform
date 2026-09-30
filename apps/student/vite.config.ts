@@ -1,6 +1,14 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import type { Plugin } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
+import { THEME } from "./theme";
+
+/** Warna bilah alamat/status peramban (`<meta name="theme-color">` di index.html) diambil dari tema aktif, bukan ditulis mati. */
+const themeColorMeta: Plugin = {
+  name: "student-theme-color",
+  transformIndexHtml: { order: "pre", handler: (html) => html.replace("%THEME_COLOR%", THEME.primary[700]) },
+};
 
 // PWA is configured for installability only — precache the app shell
 // (HTML/JS/CSS) via the default `generateSW` globbing. Deliberately NO
@@ -10,6 +18,7 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [
     react(),
+    themeColorMeta,
     VitePWA({
       registerType: "autoUpdate",
       strategies: "generateSW",
@@ -18,9 +27,9 @@ export default defineConfig({
         short_name: "BahasaJepang",
         start_url: "/",
         display: "standalone",
-        // Selaras dengan tampilan berwarna aplikasi (ungu): latar layar pembuka dan warna bilah status.
-        background_color: "#f5f3ff",
-        theme_color: "#6d28d9",
+        // Selaras dengan tema warna aplikasi (theme.ts): latar layar pembuka dan warna bilah status.
+        background_color: THEME.secondary[50],
+        theme_color: THEME.primary[700],
       },
     }),
   ],

@@ -15,7 +15,7 @@ type ScenarioSummary = components["schemas"]["ScenarioSummaryDto"];
 // Warna kartu skenario bergantian: semburat kartu, ubin ikon, dan warna pil level.
 const STYLES: { card: CardTone; tile: string; chip: ChipTone }[] = [
   { card: "pink", tile: "from-pink-500 to-rose-600", chip: "pink" },
-  { card: "sky", tile: "from-sky-500 to-indigo-600", chip: "sky" },
+  { card: "sky", tile: "from-sky-500 to-primary-600", chip: "sky" },
   { card: "amber", tile: "from-amber-400 to-orange-500", chip: "amber" },
   { card: "emerald", tile: "from-emerald-500 to-teal-600", chip: "emerald" },
 ];

@@ -36,7 +36,7 @@ const FEATURES = [
  * dan disembunyikan dari pembaca layar (`aria-hidden`) -- murni pemanis. */
 export function AuthCard({ title, children, footer, width = "sm", emoji }: AuthCardProps) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-indigo-700 via-violet-700 to-fuchsia-700">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-primary-700 via-secondary-700 to-tertiary-700">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 select-none">
         <span className="absolute -left-24 top-1/3 h-72 w-72 rounded-full bg-pink-400/30 blur-3xl" />
         <span className="absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-amber-300/25 blur-3xl" />
@@ -74,13 +74,13 @@ export function AuthCard({ title, children, footer, width = "sm", emoji }: AuthC
         <div className="mx-auto w-full">
           <Brand tone="dark" className="mb-6 justify-center lg:hidden" />
           <div
-            className={`mx-auto w-full ${WIDTH[width]} space-y-5 rounded-[2rem] bg-white p-6 shadow-2xl shadow-indigo-950/40 ring-1 ring-white/60 motion-safe:animate-pop-in md:p-8 lg:mx-0 lg:ml-auto`}
+            className={`mx-auto w-full ${WIDTH[width]} space-y-5 rounded-[2rem] bg-white p-6 shadow-2xl shadow-primary-950/40 ring-1 ring-white/60 motion-safe:animate-pop-in md:p-8 lg:mx-0 lg:ml-auto`}
           >
             <div className="space-y-3">
               {emoji && (
                 <span
                   aria-hidden="true"
-                  className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-violet-100 to-fuchsia-100 text-3xl ring-1 ring-violet-200"
+                  className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-secondary-100 to-tertiary-100 text-3xl ring-1 ring-secondary-200"
                 >
                   {emoji}
                 </span>

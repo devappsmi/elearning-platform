@@ -2,12 +2,12 @@ import { useState } from "react";
 
 // Pasangan warna 600-700 (kontras dengan huruf putih); dipilih dari nama supaya satu murid selalu berwarna sama.
 const GRADIENTS = [
-  "from-indigo-600 to-violet-600",
-  "from-fuchsia-600 to-violet-600",
+  "from-primary-600 to-secondary-600",
+  "from-tertiary-600 to-secondary-600",
   "from-pink-600 to-rose-600",
   "from-orange-600 to-rose-600",
   "from-teal-600 to-emerald-700",
-  "from-sky-600 to-indigo-600",
+  "from-sky-600 to-primary-600",
   "from-cyan-700 to-blue-700",
 ];
 
@@ -31,7 +31,7 @@ export function initialsOf(name: string): string {
 function gradientFor(name: string): string {
   let sum = 0;
   for (const ch of name) sum = (sum + (ch.codePointAt(0) ?? 0)) % 9973;
-  return GRADIENTS[sum % GRADIENTS.length] ?? "from-indigo-600 to-violet-600";
+  return GRADIENTS[sum % GRADIENTS.length] ?? "from-primary-600 to-secondary-600";
 }
 
 export interface AvatarProps {

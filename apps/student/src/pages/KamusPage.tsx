@@ -13,7 +13,7 @@ type DictionaryEntry = components["schemas"]["DictionaryEntryDto"];
 const DEBOUNCE_MS = 300;
 
 // Semburat warna kartu hasil bergantian supaya daftar terasa hidup.
-const CARD_TONES: CardTone[] = ["violet", "pink", "sky", "amber", "emerald", "indigo"];
+const CARD_TONES: CardTone[] = ["secondary", "pink", "sky", "amber", "emerald", "primary"];
 
 /** Kamus (SUP-01) -- GET /dictionary?q=, cari via kana/romaji/kanji/arti
  * Indonesia (backend sudah menangani ketiganya lewat OR di beberapa kolom,
@@ -115,7 +115,7 @@ export function KamusPage() {
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-3xl font-black leading-tight text-slate-900">{entry.surface}</p>
-                  <p className="mt-0.5 text-sm font-extrabold text-violet-700">
+                  <p className="mt-0.5 text-sm font-extrabold text-secondary-700">
                     {entry.reading} &middot; {entry.romaji}
                   </p>
                 </div>
@@ -123,7 +123,7 @@ export function KamusPage() {
                   <button
                     type="button"
                     onClick={() => playAudio(entry.audio)}
-                    className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white shadow-[0_3px_0_0_#4c1d95] transition hover:brightness-110 active:translate-y-0.5 active:shadow-none focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300"
+                    className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-secondary-600 to-tertiary-600 text-white shadow-[0_3px_0_0_theme(colors.secondary.900)] transition hover:brightness-110 active:translate-y-0.5 active:shadow-none focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300"
                     aria-label="Putar audio"
                   >
                     <Icon name="speaker" className="h-5 w-5" />
@@ -132,7 +132,7 @@ export function KamusPage() {
               </div>
               {entry.meaning && <p className="mt-3 text-lg font-extrabold text-slate-800">{entry.meaning}</p>}
               {entry.partOfSpeech && (
-                <Chip tone="violet" className="mt-2 px-2.5 py-0.5 text-xs">
+                <Chip tone="secondary" className="mt-2 px-2.5 py-0.5 text-xs">
                   {entry.partOfSpeech}
                 </Chip>
               )}

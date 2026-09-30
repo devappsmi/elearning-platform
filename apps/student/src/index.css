@@ -8,23 +8,23 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Latar berwarna lembut (indigo, sakura, dan mentari) yang diam di tempat saat halaman digulir. */
+  /* Latar berwarna lembut (warna merek dari tema, dan kilau mentari) yang diam di tempat saat halaman digulir. */
   body {
-    @apply bg-violet-50 font-sans text-slate-800 antialiased;
+    @apply bg-secondary-50 font-sans text-slate-800 antialiased;
     background-image:
-      radial-gradient(56rem 38rem at 105% -8%, rgb(244 114 182 / 0.2), transparent 62%),
-      radial-gradient(48rem 38rem at -8% 6%, rgb(99 102 241 / 0.18), transparent 60%),
-      radial-gradient(44rem 34rem at 62% 112%, rgb(251 191 36 / 0.16), transparent 60%);
+      radial-gradient(56rem 38rem at 105% -8%, theme("colors.secondary.400 / 0.2"), transparent 62%),
+      radial-gradient(48rem 38rem at -8% 6%, theme("colors.primary.500 / 0.18"), transparent 60%),
+      radial-gradient(44rem 34rem at 62% 112%, theme("colors.amber.400 / 0.16"), transparent 60%);
     background-attachment: fixed;
   }
 
   ::selection {
-    background: rgb(139 92 246 / 0.28);
+    background: theme("colors.secondary.500 / 0.28");
   }
 
   /* Cincin fokus yang jelas untuk pengguna keyboard; komponen boleh menimpanya. */
   :focus-visible {
-    outline: 3px solid rgb(124 58 237 / 0.6);
+    outline: 3px solid theme("colors.secondary.600 / 0.6");
     outline-offset: 2px;
   }
 

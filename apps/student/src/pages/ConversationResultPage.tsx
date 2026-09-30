@@ -22,10 +22,10 @@ export function ConversationResultPage() {
   if (!result) return <Navigate to="/conversation" replace />;
 
   const tone = result.passed
-    ? "bg-gradient-to-br from-violet-600 via-fuchsia-600 to-pink-600"
+    ? "bg-gradient-to-br from-primary-600 via-secondary-600 to-tertiary-600"
     : result.failed
       ? "bg-gradient-to-br from-orange-700 via-rose-700 to-pink-700"
-      : "bg-gradient-to-br from-sky-600 via-indigo-600 to-violet-600";
+      : "bg-gradient-to-br from-sky-600 via-primary-600 to-secondary-600";
 
   return (
     <div className="mx-auto max-w-md space-y-5 text-center">
@@ -50,17 +50,17 @@ export function ConversationResultPage() {
         )}
       </div>
 
-      <Card tone="violet" padding="sm">
+      <Card tone="secondary" padding="sm">
         <dl className="grid grid-cols-3 gap-2 text-center">
-          <div className="rounded-2xl bg-white/80 p-3 ring-1 ring-violet-100">
+          <div className="rounded-2xl bg-white/80 p-3 ring-1 ring-secondary-100">
             <dt className="text-xs font-extrabold uppercase tracking-wider text-slate-600">Akurasi</dt>
-            <dd className="mt-1 text-2xl font-black text-violet-800">{result.accuracyPercent}%</dd>
+            <dd className="mt-1 text-2xl font-black text-secondary-800">{result.accuracyPercent}%</dd>
           </div>
-          <div className="rounded-2xl bg-white/80 p-3 ring-1 ring-violet-100">
+          <div className="rounded-2xl bg-white/80 p-3 ring-1 ring-secondary-100">
             <dt className="text-xs font-extrabold uppercase tracking-wider text-slate-600">Skor</dt>
-            <dd className="mt-1 text-2xl font-black text-violet-800">{result.score}</dd>
+            <dd className="mt-1 text-2xl font-black text-secondary-800">{result.score}</dd>
           </div>
-          <div className="rounded-2xl bg-white/80 p-3 ring-1 ring-violet-100">
+          <div className="rounded-2xl bg-white/80 p-3 ring-1 ring-secondary-100">
             <dt className="text-xs font-extrabold uppercase tracking-wider text-slate-600">Jawaban salah</dt>
             <dd className="mt-1 text-2xl font-black text-rose-700">{result.mistakeCount}</dd>
           </div>

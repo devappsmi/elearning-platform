@@ -81,7 +81,7 @@ export function LeaderboardPage() {
             <Card padding="none" className="overflow-hidden">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-violet-50 text-left text-xs font-extrabold uppercase tracking-wider text-violet-800">
+                  <tr className="bg-secondary-50 text-left text-xs font-extrabold uppercase tracking-wider text-secondary-800">
                     <th scope="col" className="p-3 pl-5">
                       Peringkat
                     </th>
@@ -97,7 +97,7 @@ export function LeaderboardPage() {
                   {rest.map((entry) => {
                     const mine = entry.userId === me.id;
                     return (
-                      <tr key={entry.userId} className={`border-t border-slate-100 ${mine ? "bg-violet-50" : ""}`}>
+                      <tr key={entry.userId} className={`border-t border-slate-100 ${mine ? "bg-secondary-50" : ""}`}>
                         <td className="p-3 pl-5">
                           <span className="inline-grid h-9 min-w-9 place-items-center rounded-full bg-slate-100 px-2 font-black text-slate-700">
                             {RANK_MEDAL[entry.rank] ?? `#${entry.rank}`}
@@ -108,12 +108,12 @@ export function LeaderboardPage() {
                             <Avatar name={entry.name} size="sm" />
                             <span className="min-w-0 truncate">
                               {entry.name}
-                              {mine && <span className="ml-2 text-xs font-extrabold text-violet-700">(kamu)</span>}
+                              {mine && <span className="ml-2 text-xs font-extrabold text-secondary-700">(kamu)</span>}
                             </span>
                           </span>
                         </td>
                         <td className="p-3 pr-5 text-right">
-                          <span className="rounded-full bg-violet-100 px-3 py-1 font-black text-violet-800">{entry.xp}</span>
+                          <span className="rounded-full bg-secondary-100 px-3 py-1 font-black text-secondary-800">{entry.xp}</span>
                         </td>
                       </tr>
                     );
@@ -136,10 +136,10 @@ function PodiumPlace({ entry, isMe }: { entry: Entry; isMe: boolean }) {
       <span aria-hidden="true" className={entry.rank === 1 ? "text-4xl motion-safe:animate-float" : "text-3xl"}>
         {entry.rank === 1 ? "👑" : RANK_MEDAL[entry.rank]}
       </span>
-      <Avatar name={entry.name} size={place.avatar} className={isMe ? "ring-4 !ring-violet-500" : ""} />
+      <Avatar name={entry.name} size={place.avatar} className={isMe ? "ring-4 !ring-secondary-500" : ""} />
       <p className="mt-2 w-full truncate text-sm font-extrabold text-slate-900 md:text-base">{entry.name}</p>
-      {isMe && <p className="text-xs font-extrabold text-violet-700">(kamu)</p>}
-      <p className="mb-2 mt-1 rounded-full bg-white px-3 py-0.5 text-sm font-black text-violet-800 shadow-sm ring-1 ring-violet-100">
+      {isMe && <p className="text-xs font-extrabold text-secondary-700">(kamu)</p>}
+      <p className="mb-2 mt-1 rounded-full bg-white px-3 py-0.5 text-sm font-black text-secondary-800 shadow-sm ring-1 ring-secondary-100">
         {entry.xp} XP
       </p>
       <div

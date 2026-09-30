@@ -45,8 +45,8 @@ export function LessonResultPage() {
       <div
         className={`relative overflow-hidden rounded-[2rem] p-7 text-white shadow-glow motion-safe:animate-pop-in ${
           result.passed
-            ? "bg-gradient-to-br from-violet-600 via-fuchsia-600 to-pink-600"
-            : "bg-gradient-to-br from-sky-600 via-indigo-600 to-violet-600"
+            ? "bg-gradient-to-br from-primary-600 via-secondary-600 to-tertiary-600"
+            : "bg-gradient-to-br from-sky-600 via-primary-600 to-secondary-600"
         }`}
       >
         <span aria-hidden="true" className="pointer-events-none absolute -right-3 -top-8 select-none text-9xl font-black leading-none text-white/10">
@@ -70,17 +70,17 @@ export function LessonResultPage() {
         {!result.passed && <p className="relative mt-4 text-sm font-bold text-white">Jangan menyerah, coba sekali lagi ya!</p>}
       </div>
 
-      <Card tone="violet" padding="sm" className="space-y-3 text-left text-sm font-bold text-slate-600">
+      <Card tone="secondary" padding="sm" className="space-y-3 text-left text-sm font-bold text-slate-600">
         <div className="flex items-center justify-between gap-3">
           <span>Skor terbaik</span>
           <span className="flex items-center gap-2 font-black text-slate-900">
             {result.bestScore}%
-            <span className="rounded-full bg-violet-600 px-2 py-0.5">
+            <span className="rounded-full bg-secondary-600 px-2 py-0.5">
               <Stars count={result.bestStars} size="h-4 w-4" />
             </span>
           </span>
         </div>
-        <div className="flex items-center justify-between gap-3 border-t border-violet-100 pt-3">
+        <div className="flex items-center justify-between gap-3 border-t border-secondary-100 pt-3">
           <span>Jumlah percobaan</span>
           <span className="font-black text-slate-900">{result.attempts}</span>
         </div>

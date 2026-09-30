@@ -1,11 +1,11 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
-export type ChipTone = "amber" | "violet" | "emerald" | "sky" | "pink" | "rose" | "slate" | "white";
+export type ChipTone = "amber" | "secondary" | "emerald" | "sky" | "pink" | "rose" | "slate" | "white";
 
 // Semua pasangan latar/teks ≥ 4,5:1 (teks 800 di atas latar 100, atau putih di atas 600+).
 const TONES: Record<ChipTone, string> = {
   amber: "bg-amber-100 text-amber-900 ring-amber-200",
-  violet: "bg-violet-100 text-violet-800 ring-violet-200",
+  secondary: "bg-secondary-100 text-secondary-800 ring-secondary-200",
   emerald: "bg-emerald-100 text-emerald-900 ring-emerald-200",
   sky: "bg-sky-100 text-sky-900 ring-sky-200",
   pink: "bg-pink-100 text-pink-900 ring-pink-200",

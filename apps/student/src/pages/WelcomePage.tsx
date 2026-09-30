@@ -87,12 +87,12 @@ export function WelcomePage() {
           <span
             key={i}
             className={`h-2 flex-1 rounded-full transition-colors duration-300 ${
-              i < step ? "bg-gradient-to-r from-indigo-500 to-fuchsia-500" : "bg-slate-200"
+              i < step ? "bg-gradient-to-r from-primary-500 to-tertiary-500" : "bg-slate-200"
             }`}
           />
         ))}
       </div>
-      <p className="text-xs font-extrabold uppercase tracking-wider text-violet-700" data-testid="welcome-progress">
+      <p className="text-xs font-extrabold uppercase tracking-wider text-secondary-700" data-testid="welcome-progress">
         Langkah {step} dari {STEP_COUNT}
       </p>
     </div>
@@ -123,10 +123,10 @@ export function WelcomePage() {
                   className="peer sr-only"
                 />
                 <span
-                  className={`flex items-center gap-4 rounded-2xl border-2 p-4 transition peer-focus-visible:ring-4 peer-focus-visible:ring-violet-300 ${
+                  className={`flex items-center gap-4 rounded-2xl border-2 p-4 transition peer-focus-visible:ring-4 peer-focus-visible:ring-secondary-300 ${
                     selected
-                      ? "border-violet-500 bg-violet-50 shadow-[0_4px_0_0_#c4b5fd]"
-                      : "border-slate-200 bg-white hover:border-violet-300"
+                      ? "border-secondary-500 bg-secondary-50 shadow-[0_4px_0_0_theme(colors.secondary.300)]"
+                      : "border-slate-200 bg-white hover:border-secondary-300"
                   }`}
                 >
                   <span
@@ -144,7 +144,7 @@ export function WelcomePage() {
                   <span
                     aria-hidden="true"
                     className={`grid h-7 w-7 shrink-0 place-items-center rounded-full border-2 transition ${
-                      selected ? "border-violet-600 bg-violet-600 text-white" : "border-slate-300 bg-white text-transparent"
+                      selected ? "border-secondary-600 bg-secondary-600 text-white" : "border-slate-300 bg-white text-transparent"
                     }`}
                   >
                     <Icon name="check" className="h-4 w-4" strokeWidth={3.2} />
@@ -190,12 +190,12 @@ export function WelcomePage() {
                   <li
                     key={level.id}
                     className={`flex items-center gap-4 rounded-2xl border-2 p-4 ${
-                      index === 0 ? "border-violet-500 bg-violet-50 shadow-[0_4px_0_0_#c4b5fd]" : "border-slate-200 bg-white"
+                      index === 0 ? "border-secondary-500 bg-secondary-50 shadow-[0_4px_0_0_theme(colors.secondary.300)]" : "border-slate-200 bg-white"
                     }`}
                   >
                     <span
                       aria-hidden="true"
-                      className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-violet-100 to-fuchsia-100 text-2xl"
+                      className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-secondary-100 to-tertiary-100 text-2xl"
                     >
                       {LEVEL_EMOJI[index % LEVEL_EMOJI.length]}
                     </span>
@@ -203,7 +203,7 @@ export function WelcomePage() {
                       <span className="flex flex-wrap items-center gap-2">
                         <span className="font-extrabold text-slate-900">{level.name}</span>
                         {index === 0 && (
-                          <span className="rounded-full bg-violet-600 px-2.5 py-0.5 text-xs font-extrabold text-white">
+                          <span className="rounded-full bg-secondary-600 px-2.5 py-0.5 text-xs font-extrabold text-white">
                             mulai di sini
                           </span>
                         )}
@@ -233,7 +233,7 @@ export function WelcomePage() {
   return (
     <AuthCard title="Siap mulai!" width="lg" emoji="🚀">
       {progress}
-      <dl className="divide-y divide-violet-100 rounded-2xl border-2 border-violet-100 bg-gradient-to-br from-violet-50 to-fuchsia-50 px-4 text-sm">
+      <dl className="divide-y divide-secondary-100 rounded-2xl border-2 border-secondary-100 bg-gradient-to-br from-secondary-50 to-tertiary-50 px-4 text-sm">
         <div className="flex items-center justify-between gap-4 py-3">
           <dt className="font-bold text-slate-600">Kelas</dt>
           <dd className="font-extrabold text-slate-900">{me.className}</dd>

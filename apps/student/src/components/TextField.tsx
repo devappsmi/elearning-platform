@@ -1,8 +1,8 @@
 import type { InputHTMLAttributes } from "react";
 
-/** Gaya bersama kolom isian (input/select): bulat, tepi jelas, cincin ungu saat fokus. */
+/** Gaya bersama kolom isian (input/select): bulat, tepi jelas, cincin warna tema saat fokus. */
 export const fieldClasses =
-  "w-full rounded-2xl border-2 border-slate-300 bg-slate-50 px-4 py-3 text-base font-semibold text-slate-900 transition placeholder:text-slate-400 hover:border-violet-400 focus:border-violet-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-violet-200";
+  "w-full rounded-2xl border-2 border-slate-300 bg-slate-50 px-4 py-3 text-base font-semibold text-slate-900 transition placeholder:text-slate-400 hover:border-secondary-400 focus:border-secondary-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-secondary-200";
 
 export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "className"> {
   id: string;

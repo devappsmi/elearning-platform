@@ -5,20 +5,20 @@ export type ButtonVariant = "primary" | "success" | "sun" | "secondary" | "dange
 export type ButtonSize = "sm" | "md" | "lg";
 
 /** Tombol "timbul": ada tepi tebal di bawah yang ikut turun saat ditekan (rasa permainan, bukan formulir).
- * Teks putih hanya di atas warna yang kontrasnya ≥ 4,5:1 (indigo/violet/fuchsia/emerald/rose 600-700);
+ * Teks putih hanya di atas warna yang kontrasnya ≥ 4,5:1 (primary/secondary/tertiary/emerald/rose 600-700);
  * varian `sun` (kuning) memakai teks gelap. Saat kursor di atasnya, varian berlatar gelap DIGELAPKAN sedikit
  * (`brightness-95`), bukan diterangkan: diterangkan membuat teks putih di ujung gradien turun di bawah 4,5:1. */
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    "bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 text-white shadow-[0_4px_0_0_#4c1d95,0_12px_22px_-8px_rgb(109_40_217_/_0.55)] hover:brightness-95",
+    "bg-gradient-to-r from-primary-600 via-secondary-600 to-tertiary-600 text-white shadow-[0_4px_0_0_theme(colors.secondary.900),0_12px_22px_-8px_theme(colors.secondary.700/55%)] hover:brightness-95",
   success:
     "bg-gradient-to-r from-emerald-700 to-teal-700 text-white shadow-[0_4px_0_0_#064e3b,0_12px_22px_-8px_rgb(4_120_87_/_0.5)] hover:brightness-95",
   sun: "bg-gradient-to-b from-amber-300 to-amber-400 text-amber-950 shadow-[0_4px_0_0_#b45309,0_12px_22px_-8px_rgb(217_119_6_/_0.55)] hover:brightness-105",
   secondary:
-    "border-2 border-slate-200 bg-white text-slate-700 shadow-[0_4px_0_0_#cbd5e1] hover:border-violet-300 hover:bg-violet-50 hover:text-violet-800",
+    "border-2 border-slate-200 bg-white text-slate-700 shadow-[0_4px_0_0_#cbd5e1] hover:border-secondary-300 hover:bg-secondary-50 hover:text-secondary-800",
   danger:
     "bg-gradient-to-r from-rose-600 to-red-600 text-white shadow-[0_4px_0_0_#881337,0_12px_22px_-8px_rgb(225_29_72_/_0.5)] hover:brightness-95",
-  ghost: "text-violet-700 hover:bg-violet-100",
+  ghost: "text-secondary-700 hover:bg-secondary-100",
 };
 
 const SIZES: Record<ButtonSize, string> = {
@@ -40,7 +40,7 @@ export interface ButtonStyleOptions {
 export function buttonClasses({ variant = "primary", size = "md", block, className }: ButtonStyleOptions = {}): string {
   return [
     "inline-flex select-none items-center justify-center text-center font-extrabold tracking-wide",
-    "transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300 focus-visible:ring-offset-2",
+    "transition duration-150 ease-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300 focus-visible:ring-offset-2",
     variant === "ghost"
       ? "active:scale-95"
       : "active:translate-y-1 active:shadow-none motion-reduce:active:translate-y-0",
@@ -67,4 +67,4 @@ Button.displayName = "Button";
 
 /** Tautan teks biasa (mis. "Lupa password?", "Kembali ke halaman masuk"). */
 export const textLinkClasses =
-  "font-extrabold text-violet-700 underline-offset-4 hover:underline focus-visible:rounded focus-visible:outline-violet-600";
+  "font-extrabold text-secondary-700 underline-offset-4 hover:underline focus-visible:rounded focus-visible:outline-secondary-600";

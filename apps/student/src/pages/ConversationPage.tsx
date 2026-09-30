@@ -156,7 +156,7 @@ export function ConversationPage() {
         <Link
           to="/conversation"
           aria-label="Tutup percakapan"
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-slate-500 transition hover:bg-white hover:text-rose-600 hover:shadow focus-visible:outline-violet-600"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-slate-500 transition hover:bg-white hover:text-rose-600 hover:shadow focus-visible:outline-secondary-600"
         >
           <Icon name="x" className="h-6 w-6" strokeWidth={2.8} />
         </Link>
@@ -239,13 +239,13 @@ function ScenarioIntro({ scenario, onStart }: { scenario: ScenarioDetail; onStar
 }
 
 /** Kepala tiap baris dialog: lencana pembicara. */
-function Speaker({ name, tone = "sky" }: { name: string; tone?: "sky" | "violet" }) {
+function Speaker({ name, tone = "sky" }: { name: string; tone?: "sky" | "secondary" }) {
   return (
     <p className="flex items-center gap-2">
       <span
         aria-hidden="true"
         className={`grid h-8 w-8 place-items-center rounded-full text-sm font-black text-white ${
-          tone === "sky" ? "bg-gradient-to-br from-sky-500 to-indigo-600" : "bg-gradient-to-br from-violet-500 to-fuchsia-600"
+          tone === "sky" ? "bg-gradient-to-br from-sky-500 to-primary-600" : "bg-gradient-to-br from-secondary-500 to-tertiary-600"
         }`}
       >
         {(Array.from(name)[0] ?? "?").toUpperCase()}
@@ -268,7 +268,7 @@ function NarrationLineView({
     <Card data-testid="narration-line" tone="sky" padding="lg" className="space-y-3">
       <Speaker name={line.speaker} />
       <p className="text-3xl font-black leading-snug text-slate-900">{line.jp}</p>
-      <p className="text-base font-extrabold text-violet-700">{line.romaji}</p>
+      <p className="text-base font-extrabold text-secondary-700">{line.romaji}</p>
       <p className="text-base font-semibold text-slate-700">{line.meaning}</p>
       <Button data-testid="next-button" size="lg" onClick={onNext} className="mt-2">
         {isLastLine ? "Selesai" : "Lanjut"}
@@ -301,8 +301,8 @@ function ChoiceLineView({
   const [chosen, setChosen] = useState<number | null>(null);
 
   return (
-    <Card data-testid="choice-line" tone="violet" padding="lg" className="space-y-4">
-      <Speaker name={line.speaker} tone="violet" />
+    <Card data-testid="choice-line" tone="secondary" padding="lg" className="space-y-4">
+      <Speaker name={line.speaker} tone="secondary" />
       <div className="space-y-3">
         {line.options.map((opt, i) => {
           const answered = feedback !== null;
@@ -313,7 +313,7 @@ function ChoiceLineView({
               : "border-rose-500 bg-rose-50 text-rose-900 motion-safe:animate-shake"
             : answered
               ? "border-slate-200 bg-white text-slate-500 opacity-60"
-              : "border-slate-200 bg-white text-slate-800 hover:border-violet-300 hover:bg-violet-50 active:translate-y-0.5 active:border-b-2";
+              : "border-slate-200 bg-white text-slate-800 hover:border-secondary-300 hover:bg-secondary-50 active:translate-y-0.5 active:border-b-2";
           return (
             <button
               key={i}
@@ -325,7 +325,7 @@ function ChoiceLineView({
                 setChosen(i);
                 onAnswer(i);
               }}
-              className={`block w-full rounded-2xl border-2 border-b-4 px-4 py-3.5 text-left text-lg font-extrabold transition duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300 disabled:cursor-not-allowed ${tone}`}
+              className={`block w-full rounded-2xl border-2 border-b-4 px-4 py-3.5 text-left text-lg font-extrabold transition duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300 disabled:cursor-not-allowed ${tone}`}
             >
               {opt.jp}
             </button>

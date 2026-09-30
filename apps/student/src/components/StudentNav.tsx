@@ -5,7 +5,7 @@ import { Brand } from "./ui/Brand";
 import { Icon } from "./ui/icons";
 import type { IconName } from "./ui/icons";
 
-type Hue = "amber" | "pink" | "emerald" | "sky" | "orange" | "violet";
+type Hue = "amber" | "pink" | "emerald" | "sky" | "orange" | "secondary";
 
 interface NavItem {
   to: string;
@@ -25,7 +25,7 @@ const ITEMS: NavItem[] = [
   { to: "/dictionary", label: "Kamus", icon: "book", hue: "emerald" },
   { to: "/flashcards", label: "Flashcard", icon: "cards", hue: "sky" },
   { to: "/leaderboard", label: "Leaderboard", icon: "trophy", hue: "orange" },
-  { to: PROFILE_PATH, label: "Profil", icon: "user", hue: "violet" },
+  { to: PROFILE_PATH, label: "Profil", icon: "user", hue: "secondary" },
 ];
 
 const TAB_ITEMS = ITEMS.filter((item) => item.to !== PROFILE_PATH);
@@ -38,7 +38,7 @@ const HUE: Record<Hue, { idle: string; on: string }> = {
   emerald: { idle: "bg-emerald-300/25 text-emerald-100", on: "from-emerald-200 to-emerald-300 text-emerald-900" },
   sky: { idle: "bg-sky-300/25 text-sky-100", on: "from-sky-200 to-sky-300 text-sky-900" },
   orange: { idle: "bg-orange-300/25 text-orange-100", on: "from-orange-200 to-orange-300 text-orange-900" },
-  violet: { idle: "bg-violet-300/25 text-violet-100", on: "from-violet-200 to-violet-300 text-violet-900" },
+  secondary: { idle: "bg-secondary-300/25 text-secondary-100", on: "from-secondary-200 to-secondary-300 text-secondary-900" },
 };
 
 /** Navigasi murid: sidebar berwarna di layar lebar; di HP bilah atas (merek + keluar) dan tab bawah.
@@ -52,7 +52,7 @@ export function StudentNav() {
   return (
     <>
       {/* Layar lebar: sidebar tetap di kiri. */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 flex-col gap-6 overflow-y-auto bg-gradient-to-b from-indigo-700 via-violet-700 to-fuchsia-700 px-5 py-6 text-white shadow-2xl shadow-indigo-900/30 md:flex">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 flex-col gap-6 overflow-y-auto bg-gradient-to-b from-primary-700 via-secondary-700 to-tertiary-700 px-5 py-6 text-white shadow-2xl shadow-primary-900/30 md:flex">
         <Brand tone="dark" />
         <nav aria-label="Menu utama" className="flex flex-col gap-1.5">
           {ITEMS.map((item) => (
@@ -64,7 +64,7 @@ export function StudentNav() {
                 [
                   "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-[15px] font-extrabold transition duration-150",
                   isActive
-                    ? "bg-white text-indigo-800 shadow-lg shadow-indigo-950/25"
+                    ? "bg-white text-primary-800 shadow-lg shadow-primary-950/25"
                     : "text-white hover:bg-white/15",
                 ].join(" ")
               }
@@ -105,14 +105,14 @@ export function StudentNav() {
       </aside>
 
       {/* HP: bilah atas. */}
-      <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-violet-100 bg-white/90 px-4 backdrop-blur md:hidden">
+      <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-secondary-100 bg-white/90 px-4 backdrop-blur md:hidden">
         <Brand size="sm" />
         <div className="flex items-center gap-1.5">
           <NavLink
             to={PROFILE_PATH}
             aria-label="Profil"
             className={({ isActive }) =>
-              `rounded-full p-0.5 transition ${isActive ? "bg-violet-200 ring-2 ring-violet-500" : "hover:bg-violet-100"}`
+              `rounded-full p-0.5 transition ${isActive ? "bg-secondary-200 ring-2 ring-secondary-500" : "hover:bg-secondary-100"}`
             }
           >
             <Avatar name={me.name} src={me.avatarUrl} size="sm" />
@@ -132,7 +132,7 @@ export function StudentNav() {
       {/* HP: tab bawah. */}
       <nav
         aria-label="Menu utama"
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-violet-100 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-10px_28px_-14px_rgb(79_70_229_/_0.35)] backdrop-blur md:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-secondary-100 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-10px_28px_-14px_theme(colors.primary.600/35%)] backdrop-blur md:hidden"
       >
         <div className="mx-auto grid max-w-lg grid-cols-5 gap-0.5 px-1.5 py-1.5">
           {TAB_ITEMS.map((item) => (
@@ -151,7 +151,7 @@ export function StudentNav() {
                   >
                     <Icon name={item.icon} className="h-5 w-5" />
                   </span>
-                  <span className={`max-w-full truncate ${isActive ? "text-violet-800" : "text-slate-500"}`}>
+                  <span className={`max-w-full truncate ${isActive ? "text-secondary-800" : "text-slate-500"}`}>
                     {item.label}
                   </span>
                 </>

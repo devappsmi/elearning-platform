@@ -60,10 +60,10 @@ export function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <PageHeader title="Profil" subtitle="Kelola akun dan target belajarmu." emoji="🧑‍🎓" tone="violet" />
+      <PageHeader title="Profil" subtitle="Kelola akun dan target belajarmu." emoji="🧑‍🎓" tone="secondary" />
 
       <div className="space-y-6">
-        <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-6 text-white shadow-glow">
+        <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary-600 via-secondary-600 to-tertiary-600 p-6 text-white shadow-glow">
           <span
             aria-hidden="true"
             className="pointer-events-none absolute -right-3 -top-8 select-none text-[9rem] font-black leading-none text-white/10"

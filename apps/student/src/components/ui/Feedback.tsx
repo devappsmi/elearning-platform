@@ -41,7 +41,7 @@ export function Loading({ label = "Memuat..." }: { label?: string }) {
       <span aria-hidden="true" className="text-5xl motion-safe:animate-bounce">
         🌸
       </span>
-      <p role="status" className="text-base font-extrabold text-violet-700">
+      <p role="status" className="text-base font-extrabold text-secondary-700">
         {label}
       </p>
     </div>

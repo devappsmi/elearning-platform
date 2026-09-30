@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 
-export type HeaderTone = "violet" | "pink" | "emerald" | "sky" | "amber" | "rose";
+export type HeaderTone = "secondary" | "pink" | "emerald" | "sky" | "amber" | "rose";
 
 // Ubin ikon berwarna pastel di sisi judul (emoji-nya sendiri sudah berwarna).
 const TILE: Record<HeaderTone, string> = {
-  violet: "from-violet-100 to-fuchsia-100 ring-violet-200",
+  secondary: "from-secondary-100 to-tertiary-100 ring-secondary-200",
   pink: "from-pink-100 to-rose-100 ring-pink-200",
   emerald: "from-emerald-100 to-teal-100 ring-emerald-200",
-  sky: "from-sky-100 to-indigo-100 ring-sky-200",
+  sky: "from-sky-100 to-primary-100 ring-sky-200",
   amber: "from-amber-100 to-orange-100 ring-amber-200",
   rose: "from-rose-100 to-orange-100 ring-rose-200",
 };
@@ -24,7 +24,7 @@ export interface PageHeaderProps {
 }
 
 /** Kepala halaman: ubin emoji + judul tebal + keterangan singkat. */
-export function PageHeader({ title, subtitle, emoji, tone = "violet", aside, as: Heading = "h1" }: PageHeaderProps) {
+export function PageHeader({ title, subtitle, emoji, tone = "secondary", aside, as: Heading = "h1" }: PageHeaderProps) {
   return (
     <header className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-3 motion-safe:animate-slide-up">
       {emoji && (

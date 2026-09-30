@@ -20,7 +20,7 @@ export function Brand({ tone = "light", size = "md", className }: BrandProps) {
       </span>
       <span className="whitespace-nowrap leading-tight">
         <span
-          className={`block font-extrabold uppercase tracking-[0.18em] ${small ? "text-[10px]" : "text-[11px]"} ${dark ? "text-white/80" : "text-violet-700"}`}
+          className={`block font-extrabold uppercase tracking-[0.18em] ${small ? "text-[10px]" : "text-[11px]"} ${dark ? "text-white" : "text-secondary-700"}`}
         >
           Belajar
         </span>

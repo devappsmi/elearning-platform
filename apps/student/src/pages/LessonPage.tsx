@@ -133,7 +133,7 @@ export function LessonPage() {
         <Link
           to="/"
           aria-label="Tutup pelajaran"
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-slate-500 transition hover:bg-white hover:text-rose-600 hover:shadow focus-visible:outline-violet-600"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-slate-500 transition hover:bg-white hover:text-rose-600 hover:shadow focus-visible:outline-secondary-600"
         >
           <Icon name="x" className="h-6 w-6" strokeWidth={2.8} />
         </Link>
@@ -171,7 +171,7 @@ function Prompt({ text, sub, small }: { text: string; sub?: string | null; small
       <p
         className={
           glyph
-            ? "mx-auto grid h-32 w-32 place-items-center rounded-[2rem] bg-gradient-to-br from-violet-100 via-fuchsia-100 to-pink-100 text-7xl font-black text-violet-800 shadow-inner ring-1 ring-violet-200"
+            ? "mx-auto grid h-32 w-32 place-items-center rounded-[2rem] bg-gradient-to-br from-secondary-100 via-tertiary-100 to-pink-100 text-7xl font-black text-secondary-800 shadow-inner ring-1 ring-secondary-200"
             : `font-black leading-snug text-slate-900 ${small ? "text-xl md:text-2xl" : "text-2xl md:text-3xl"}`
         }
       >
@@ -211,7 +211,7 @@ function ChooseExercise({
               ? "border-rose-500 bg-rose-50 text-rose-900 motion-safe:animate-shake"
               : answered
                 ? "border-slate-200 bg-white text-slate-500 opacity-60"
-                : "border-slate-200 bg-white text-slate-800 hover:border-violet-300 hover:bg-violet-50 active:translate-y-0.5 active:border-b-2";
+                : "border-slate-200 bg-white text-slate-800 hover:border-secondary-300 hover:bg-secondary-50 active:translate-y-0.5 active:border-b-2";
           return (
             <button
               key={i}
@@ -223,7 +223,7 @@ function ChooseExercise({
                 setChosen(i);
                 onAnswer(i);
               }}
-              className={`rounded-2xl border-2 border-b-4 px-3 py-4 text-lg font-extrabold transition duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300 disabled:cursor-not-allowed ${tone}`}
+              className={`rounded-2xl border-2 border-b-4 px-3 py-4 text-lg font-extrabold transition duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300 disabled:cursor-not-allowed ${tone}`}
             >
               {opt.text}
               {opt.sub && <span className="block text-xs font-bold opacity-80">{opt.sub}</span>}
@@ -261,7 +261,7 @@ function AssembleExercise({
     <Card data-testid="assemble-exercise" padding="lg" className="space-y-5">
       <Prompt text={current.prompt} sub={current.promptSub} small />
 
-      <div className="flex min-h-16 flex-wrap items-center gap-2 rounded-2xl border-2 border-dashed border-violet-300 bg-violet-50/60 p-3">
+      <div className="flex min-h-16 flex-wrap items-center gap-2 rounded-2xl border-2 border-dashed border-secondary-300 bg-secondary-50/60 p-3">
         {picked.length === 0 && <span className="px-1 text-sm font-bold text-slate-500">Ketuk kata di bawah untuk menyusun jawabanmu</span>}
         {picked.map((i, pos) => (
           <button
@@ -270,7 +270,7 @@ function AssembleExercise({
             data-testid="picked-token"
             disabled={feedback !== null}
             onClick={() => setPicked((p) => p.filter((_, idx) => idx !== pos))}
-            className="rounded-xl border-2 border-b-4 border-violet-300 bg-violet-100 px-4 py-2 text-lg font-extrabold text-violet-900 transition hover:bg-violet-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-xl border-2 border-b-4 border-secondary-300 bg-secondary-100 px-4 py-2 text-lg font-extrabold text-secondary-900 transition hover:bg-secondary-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {bank[i]}
           </button>
@@ -286,7 +286,7 @@ function AssembleExercise({
             data-text={token}
             disabled={feedback !== null}
             onClick={() => setPicked((p) => [...p, i])}
-            className="rounded-xl border-2 border-b-4 border-slate-200 bg-white px-4 py-2 text-lg font-extrabold text-slate-800 transition hover:border-violet-300 hover:bg-violet-50 active:translate-y-0.5 active:border-b-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-xl border-2 border-b-4 border-slate-200 bg-white px-4 py-2 text-lg font-extrabold text-slate-800 transition hover:border-secondary-300 hover:bg-secondary-50 active:translate-y-0.5 active:border-b-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {token}
           </button>
