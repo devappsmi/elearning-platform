@@ -16,6 +16,7 @@
     "db:deploy": "ts-node prisma/db-check.ts && prisma migrate deploy",
     "db:seed": "prisma db seed",
     "admin:create": "ts-node prisma/create-admin.ts",
+    "student:create": "ts-node prisma/create-student.ts",
     "tts:sample": "ts-node prisma/tts-sample.ts",
     "generate-openapi": "nest build && node dist/generate-openapi.js"
   },

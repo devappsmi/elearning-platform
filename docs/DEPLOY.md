@@ -122,7 +122,7 @@ DATABASE_URL=postgresql://elearning_app:KATA_SANDI@db.contoh.id:5432/elearning
 - `migrate` (otomatis tiap `docker compose up`): `prisma migrate deploy` — membuat/mengubah **hanya** tabel dan tipe milik
   aplikasi ini (sekarang 3 migrasi) plus tabel `_prisma_migrations` di schema-nya. Hak `CREATE` pada schema itu diperlukan
   selama ada migrasi.
-- `db:seed`: menambah/memperbarui baris konten pelajaran (upsert, aman diulang). `admin:create`: satu baris admin (+ lembaga).
+- `db:seed`: menambah/memperbarui baris konten pelajaran (upsert, aman diulang). `admin:create`: satu baris admin (+ lembaga). `student:create`: satu murid uji tanpa undangan (bagian 5a).
 - API: membaca/menulis tabel aplikasi lewat pengguna yang sama.
 
 **Memeriksa koneksi dan kesiapan** (tidak mengubah apa pun; juga berjalan otomatis di awal `db:deploy`, jadi `migrate` mencetaknya):
@@ -182,6 +182,39 @@ docker compose logs --no-color api | sed 's/\x1b\[[0-9;]*m//g' | grep "\[STUB\]"
 Undangan berlaku sesuai aturan aplikasi; tautan yang kedaluwarsa bisa dikirim ulang dari halaman Undangan admin
 (tautan baru muncul di log lagi). Layar "Lupa password" murid menjawab sama untuk semua alamat (anti-enumerasi),
 jadi murid yang lupa password menghubungi admin, yang mengambil tautannya dari log.
+
+### 5a. Murid uji tanpa undangan (hanya untuk pengujian)
+
+Murid sungguhan masuk lewat undangan (bagian 5): undangan-lah yang membuktikan pemilik alamat emailnya. Untuk **menguji**
+aplikasi murid tanpa mengurus tautan undangan, buat murid langsung dari server:
+
+```bash
+# 1) Tempel SATU baris ini saja, tekan Enter, lalu ketik kata sandi dua kali (tidak tampil). Jangan tempel bersama baris
+#    lain: baris berikutnya akan terbaca sebagai kata sandi.
+read -rs -p "Kata sandi murid uji: " P1; echo; read -rs -p "Ulangi: " P2; echo; if [ "$P1" = "$P2" ]; then export STUDENT_PASSWORD="$P1"; echo "cocok"; else echo "TIDAK sama, ulangi baris ini"; fi; unset P1 P2
+
+# 2) Setelah muncul "cocok":
+docker compose run --rm -e STUDENT_EMAIL=murid@contoh.id -e STUDENT_PASSWORD -e STUDENT_NAME="Murid Uji" tools pnpm run student:create
+unset STUDENT_PASSWORD
+# Murid murid@contoh.id dibuat, kelas "Kelas Uji" (kelas baru dibuat).
+```
+
+Masuk di **situs murid** dengan email itu; akun murid dan admin tersimpan terpisah, jadi akun admin tidak berlaku di sana.
+Kata sandi minimal 8 karakter dan harus mengandung huruf dan angka (aturan yang sama dengan pendaftaran murid). Yang dibuat
+sama dengan pendaftaran lewat undangan: satu baris murid dengan email baku (huruf kecil) dan hash kata sandi argon2id.
+
+- **Kelas**: murid selalu punya kelas. `CLASS_NAME` kosong → satu-satunya kelas **aktif**; belum ada kelas sama sekali →
+  "Kelas Uji" dibuat; beberapa kelas aktif → berhenti dan meminta `CLASS_NAME` (menebak bisa memasukkan murid uji ke kelas
+  sungguhan). `-e CLASS_NAME="Kelas Pagi"` → kelas aktif bernama itu (huruf besar/kecil diabaikan), dibuat bila belum ada;
+  kelas yang diarsipkan ditolak.
+- **Murid sudah ada** (email sama): kata sandi diganti, akun diaktifkan lagi, semua sesi lamanya dicabut — jadi ini juga jalur
+  "lupa kata sandi" untuk murid uji. Nama dan kelas hanya berubah bila `STUDENT_NAME` / `CLASS_NAME` diisi.
+- **Email yang masih punya undangan PENDING** (belum kedaluwarsa) ditolak, karena undangan itu nanti gagal di batas unik email:
+  cabut dulu di halaman Undangan admin, atau pakai email lain.
+- Setelah 5 kali salah kata sandi, akun terkunci 15 menit (kuncinya di Redis). Untuk membukanya sekarang:
+  `docker compose exec -T redis redis-cli del login_lock:murid@contoh.id login_fail:murid@contoh.id`.
+- **Bukan untuk murid sungguhan**: tidak ada bukti bahwa pemilik email tahu akunnya, dan kata sandinya dipilih operator. Akun
+  uji yang sudah tidak dipakai dinonaktifkan di halaman detail Murid (admin).
 
 ## 6. Fitur opsional: AI tutor dan audio pelajaran
 
@@ -286,6 +319,7 @@ docker compose exec postgres psql -U elearning -d elearning \
 | Update ke versi baru | `git pull` lalu `docker compose up -d --build`. Migrasi database berjalan otomatis (layanan `migrate`) dan API baru start setelahnya |
 | Jalankan seed ulang (konten baru) | `docker compose run --rm tools pnpm run db:seed` |
 | Lupa kata sandi admin / admin tambahan | Jalankan lagi `admin:create` dengan email yang sama: kata sandi diganti, akun diaktifkan lagi, semua sesi lamanya dicabut. Email baru = akun admin baru (peran OWNER) |
+| Murid uji tanpa undangan / lupa kata sandi murid uji | `student:create` (bagian 5a). Email baru = murid baru; email yang sama = kata sandi diganti dan sesi lama dicabut |
 | Migrasi manual | `docker compose run --rm tools pnpm run db:deploy` |
 | Periksa database | `docker compose run --rm tools pnpm run db:check` (bagian 2a) |
 
@@ -419,7 +453,8 @@ atau ubah `.env`) saat menjalankan langkah 2.
 | `deploy/.env.example` · `deploy/gen-env.sh` | Semua variabel + pembuat rahasia acak |
 | `deploy/Caddyfile` · `deploy/edge.Dockerfile` | Reverse proxy/HTTPS + build kedua aplikasi web (`VITE_API_URL=/api`); `/media` diteruskan ke API |
 | `apps/api/Dockerfile` | Target `runner` (server API) dan `tools` (migrasi, seed, admin, cek OpenAI) |
-| `apps/api/prisma/create-admin.ts` · `src/bootstrap/` | Pembuatan admin pertama / pemulihan kata sandi admin |
+| `apps/api/prisma/create-admin.ts` · `src/bootstrap/admin-bootstrap.ts` | Pembuatan admin pertama / pemulihan kata sandi admin |
+| `apps/api/prisma/create-student.ts` · `src/bootstrap/student-bootstrap.ts` | `student:create`: murid uji langsung tanpa undangan / pemulihan kata sandinya (bagian 5a) |
 | `deploy/backup.sh` · `pgclient` (compose) · `pgurl.sh` · `pg-dump.sh` · `pg-restore.sh` | Cadangan database + volume audio; klien Postgres sekali-jalan yang memakai `DATABASE_URL` yang sama dengan API (parameter khusus Prisma dibuang) |
 | `apps/api/prisma/db-check.ts` · `src/bootstrap/db-check.ts` | `db:check`: pemeriksaan database sebelum migrasi (jalan otomatis di awal `db:deploy`) dengan pesan yang menjelaskan penyebab dan tindakan |
 | `apps/api/src/audio/` | Penyimpanan audio: `local-storage.service.ts` (disk, bawaan), `object-storage.service.ts` (S3, untuk nanti), `local-media.ts` (penyajian `/media`), `storage-options.ts` (aturan env) |
@@ -432,6 +467,15 @@ atau ubah `.env`) saat menjalankan langkah 2.
 **Sudah** (sandbox Linux, Docker 29.3.1 / Compose v5.1.1, mode HTTP `:80`/`:8080`):
 - Stack dibangun dari nol dan dijalankan: `up`, migrasi otomatis, seed (104 kosakata, 56 kalimat, 7 lesson, 128 latihan,
   7 badge, 1 skenario), `admin:create` (termasuk kasus gagal dan pemulihan kata sandi + pencabutan sesi).
+- **`student:create`** (murid uji tanpa undangan, bagian 5a): 31 tes unit (DB palsu, hash argon2id sungguhan) dan uji mutasi
+  (29 kesalahan buatan pada logikanya, semuanya tertangkap). Lalu pada stack sungguhan (image `tools` dibangun dengan
+  skripnya, Postgres bawaan): murid dibuat saat belum ada kelas ("Kelas Uji" otomatis); login lewat Caddy (juga dengan email
+  huruf besar), `/me`, `/path` (Hiragana terbuka) dan `/lessons/l1` menjawab 200; dijalankan ulang = kata sandi lama ditolak,
+  yang baru berlaku, refresh token lama dicabut, tetap satu baris; dua kelas aktif tanpa `CLASS_NAME` = gagal dengan daftar
+  kelas dan tidak menulis apa pun; `CLASS_NAME` (huruf/spasi berbeda) memakai kelas yang ada, memindahkan murid, atau membuat
+  kelas baru; undangan PENDING menolak lalu berhasil setelah dicabut; akun nonaktif hidup lagi; penguncian 15 menit dan
+  perintah `redis-cli del …` di panduan membukanya; kata sandi lemah / email salah / tanpa kata sandi = gagal bersih; kata
+  sandi tidak pernah tercetak.
 - **18 pemeriksaan di browser sungguhan lewat Caddy**: login admin, buat kelas, undang murid, tautan dari log, registrasi,
   onboarding, Beranda, deep-link + reload, login dengan email huruf besar, semua request satu origin tanpa CORS, tanpa
   galat konsol.

@@ -51,3 +51,6 @@ docker compose up -d --build
 docker compose run --rm tools pnpm run db:seed
 docker compose run --rm -e ADMIN_EMAIL -e ADMIN_PASSWORD tools pnpm run admin:create
 ```
+
+Murid sungguhan masuk lewat undangan dari admin; untuk **menguji** tanpa undangan, `student:create` membuat murid uji langsung
+(`docs/DEPLOY.md`, bagian 5a).
