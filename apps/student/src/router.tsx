@@ -26,7 +26,7 @@ import { FlashcardsPage } from "./pages/FlashcardsPage";
  * Public routes (no AuthGuard): /invite/:token, /login, /forgot-password,
  * /reset-password/:token. /welcome (onboarding) butuh login tapi TANPA
  * RootLayout -- layar penuh 3 langkah, bukan halaman di dalam shell navigasi.
- * Sisanya dibungkus AuthGuard + RootLayout berbasis AppShell.
+ * Sisanya dibungkus AuthGuard + RootLayout (sidebar berwarna di layar lebar, tab bawah di HP).
  */
 export const router = createBrowserRouter([
   { path: "/invite/:token", element: <AcceptInvitationPage /> },

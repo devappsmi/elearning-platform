@@ -1,12 +1,13 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button } from "@elearning/ui";
 import { apiClient, tokenStorage } from "../auth/api-client";
 import { INVALID_INPUT_TEXT, NETWORK_ERROR_TEXT, failureText, readFailure } from "../auth/api-errors";
 import { PASSWORD_HINT, newPasswordProblem } from "../auth/password-form";
 import { AuthCard } from "../components/AuthCard";
 import { TextField } from "../components/TextField";
+import { Button, buttonClasses, textLinkClasses } from "../components/ui/Button";
+import { Notice } from "../components/ui/Feedback";
 
 export const PASSWORD_RESET_DONE_NOTICE = "Password berhasil diubah. Silakan masuk dengan password barumu.";
 
@@ -59,12 +60,12 @@ export function ResetPasswordPage() {
 
   if (tokenRejected) {
     return (
-      <AuthCard title="Tautan Reset Tidak Berlaku">
-        <p className="text-sm text-gray-600">
+      <AuthCard title="Tautan Reset Tidak Berlaku" emoji="⏰">
+        <p className="text-sm font-semibold text-slate-600">
           Tautan ini sudah kedaluwarsa atau sudah dipakai. Tautan reset hanya berlaku 1 jam dan satu kali pakai.
         </p>
-        <Link to="/forgot-password">
-          <Button className="w-full">Minta Tautan Reset Baru</Button>
+        <Link to="/forgot-password" className={buttonClasses({ block: true, size: "lg" })}>
+          Minta Tautan Reset Baru
         </Link>
       </AuthCard>
     );
@@ -73,8 +74,9 @@ export function ResetPasswordPage() {
   return (
     <AuthCard
       title="Atur Ulang Password"
+      emoji="🔐"
       footer={
-        <Link to="/login" className="font-medium text-blue-600 hover:underline">
+        <Link to="/login" className={textLinkClasses}>
           Kembali ke halaman masuk
         </Link>
       }
@@ -100,11 +102,11 @@ export function ResetPasswordPage() {
           onChange={(e) => setConfirmation(e.target.value)}
         />
         {error && (
-          <p role="alert" className="text-sm text-red-600">
+          <Notice tone="error" role="alert">
             {error}
-          </p>
+          </Notice>
         )}
-        <Button type="submit" disabled={submitting} className="w-full">
+        <Button type="submit" disabled={submitting} block size="lg">
           {submitting ? "Menyimpan..." : "Simpan Password"}
         </Button>
       </form>

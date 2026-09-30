@@ -1,11 +1,12 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "@elearning/ui";
 import { apiClient } from "../auth/api-client";
 import { INVALID_INPUT_TEXT, NETWORK_ERROR_TEXT, failureText, readFailure } from "../auth/api-errors";
 import { AuthCard } from "../components/AuthCard";
 import { TextField } from "../components/TextField";
+import { Button, textLinkClasses } from "../components/ui/Button";
+import { Notice } from "../components/ui/Feedback";
 
 /** Lupa password (AUTH-03): kirim tautan reset yang berlaku 1 jam. Server SELALU
  * menjawab sukses, ada atau tidak akunnya (tidak membocorkan email mana yang
@@ -45,19 +46,19 @@ export function ForgotPasswordPage() {
   }
 
   const backToLogin = (
-    <Link to="/login" className="font-medium text-blue-600 hover:underline">
+    <Link to="/login" className={textLinkClasses}>
       Kembali ke halaman masuk
     </Link>
   );
 
   if (sent) {
     return (
-      <AuthCard title="Cek Emailmu" footer={backToLogin}>
-        <p role="status" className="text-sm text-gray-700">
-          Kalau <span className="font-medium">{email.trim()}</span> terdaftar, kami sudah mengirim tautan untuk mengatur ulang
+      <AuthCard title="Cek Emailmu" footer={backToLogin} emoji="📬">
+        <Notice tone="success" role="status">
+          Kalau <span className="font-extrabold">{email.trim()}</span> terdaftar, kami sudah mengirim tautan untuk mengatur ulang
           password. Tautannya berlaku 1 jam.
-        </p>
-        <p className="text-sm text-gray-500">
+        </Notice>
+        <p className="text-sm font-semibold text-slate-600">
           Tidak ada email masuk? Periksa juga folder spam. Demi keamanan, permintaan tautan untuk satu email dibatasi setiap
           jam, jadi pakai tautan dari email terbaru.
         </p>
@@ -69,8 +70,10 @@ export function ForgotPasswordPage() {
   }
 
   return (
-    <AuthCard title="Lupa Password" footer={backToLogin}>
-      <p className="text-sm text-gray-600">Masukkan email akunmu. Kami akan mengirim tautan untuk mengatur ulang password.</p>
+    <AuthCard title="Lupa Password" footer={backToLogin} emoji="🔑">
+      <p className="text-sm font-semibold text-slate-600">
+        Masukkan email akunmu. Kami akan mengirim tautan untuk mengatur ulang password.
+      </p>
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
         <TextField
           id="forgot-email"
@@ -82,11 +85,11 @@ export function ForgotPasswordPage() {
           onChange={(e) => setEmail(e.target.value)}
         />
         {error && (
-          <p role="alert" className="text-sm text-red-600">
+          <Notice tone="error" role="alert">
             {error}
-          </p>
+          </Notice>
         )}
-        <Button type="submit" disabled={submitting} className="w-full">
+        <Button type="submit" disabled={submitting} block size="lg">
           {submitting ? "Mengirim..." : "Kirim Tautan Reset"}
         </Button>
       </form>

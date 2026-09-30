@@ -18,8 +18,9 @@ export default defineConfig({
         short_name: "BahasaJepang",
         start_url: "/",
         display: "standalone",
-        background_color: "#ffffff",
-        theme_color: "#2563eb",
+        // Selaras dengan tampilan berwarna aplikasi (ungu): latar layar pembuka dan warna bilah status.
+        background_color: "#f5f3ff",
+        theme_color: "#6d28d9",
       },
     }),
   ],

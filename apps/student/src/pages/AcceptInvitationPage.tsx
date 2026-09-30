@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button } from "@elearning/ui";
 import type { components } from "@elearning/api-client";
 import { apiClient, tokenStorage } from "../auth/api-client";
 import { INVALID_INPUT_TEXT, NETWORK_ERROR_TEXT, failureText, readFailure } from "../auth/api-errors";
 import { PASSWORD_HINT, newPasswordProblem } from "../auth/password-form";
 import { AuthCard } from "../components/AuthCard";
 import { TextField } from "../components/TextField";
+import { Button, buttonClasses, textLinkClasses } from "../components/ui/Button";
+import { Notice } from "../components/ui/Feedback";
 
 type InvitationCheck = components["schemas"]["InvitationCheckDto"];
 type UnusableReason = Exclude<InvitationCheck["reason"], "VALID">;
@@ -70,18 +71,18 @@ export function AcceptInvitationPage() {
 
   if (state.status === "checking") {
     return (
-      <AuthCard title="Undangan">
-        <p className="text-sm text-gray-500">Memeriksa undangan...</p>
+      <AuthCard title="Undangan" emoji="💌">
+        <p className="text-sm font-semibold text-slate-600">Memeriksa undangan...</p>
       </AuthCard>
     );
   }
 
   if (state.status === "unreachable") {
     return (
-      <AuthCard title="Undangan">
-        <p role="alert" className="text-sm text-red-600">
+      <AuthCard title="Undangan" emoji="💌">
+        <Notice tone="error" role="alert">
           {NETWORK_ERROR_TEXT}
-        </p>
+        </Notice>
         <Button onClick={() => setAttempt((n) => n + 1)}>Coba Lagi</Button>
       </AuthCard>
     );
@@ -150,17 +151,18 @@ function RegistrationForm({
     <AuthCard
       title={invitation.institutionName ? `Selamat datang di ${invitation.institutionName}` : "Selamat datang"}
       width="md"
+      emoji="🎉"
       footer={
         <>
           Sudah punya akun?{" "}
-          <Link to="/login" className="font-medium text-blue-600 hover:underline">
+          <Link to="/login" className={textLinkClasses}>
             Masuk
           </Link>
         </>
       }
     >
-      <p className="text-sm text-gray-600">
-        Kamu diundang bergabung di kelas <span className="font-medium text-gray-900">{invitation.className}</span>. Lengkapi
+      <p className="text-sm font-semibold text-slate-600">
+        Kamu diundang bergabung di kelas <span className="font-extrabold text-slate-900">{invitation.className}</span>. Lengkapi
         data berikut untuk membuat akunmu.
       </p>
 
@@ -195,12 +197,12 @@ function RegistrationForm({
         />
 
         {error && (
-          <p role="alert" className="text-sm text-red-600">
+          <Notice tone="error" role="alert">
             {error}
-          </p>
+          </Notice>
         )}
 
-        <Button type="submit" disabled={submitting} className="w-full">
+        <Button type="submit" disabled={submitting} block size="lg">
           {submitting ? "Memproses..." : "Buat Akun"}
         </Button>
       </form>
@@ -208,20 +210,24 @@ function RegistrationForm({
   );
 }
 
-const UNUSABLE_COPY: Record<UnusableReason, { title: string; body: string }> = {
+const UNUSABLE_COPY: Record<UnusableReason, { title: string; body: string; emoji: string }> = {
   NOT_FOUND: {
+    emoji: "🔎",
     title: "Tautan undangan tidak valid",
     body: "Tautan ini tidak dikenali. Pastikan kamu membuka tautan lengkap dari email undangan. Kalau kamu menerima undangan yang lebih baru, pakai tautan pada email terbaru itu. Atau hubungi admin lembaga kamu.",
   },
   EXPIRED: {
+    emoji: "⏰",
     title: "Undangan sudah kedaluwarsa",
     body: "Masa berlaku undangan ini sudah habis. Kamu bisa meminta undangan baru -- admin lembaga kamu akan diberi tahu.",
   },
   REVOKED: {
+    emoji: "🚫",
     title: "Undangan sudah dicabut",
     body: "Undangan ini dicabut oleh admin. Hubungi admin lembaga kamu kalau ini keliru.",
   },
   ALREADY_ACCEPTED: {
+    emoji: "✅",
     title: "Undangan sudah dipakai",
     body: "Akun untuk undangan ini sudah dibuat. Silakan masuk dengan email dan password yang kamu buat.",
   },
@@ -257,16 +263,17 @@ function UnusableInvitation({ reason, token }: { reason: UnusableReason; token: 
     <AuthCard
       title={copy.title}
       width="md"
+      emoji={copy.emoji}
       footer={
         <>
           Sudah punya akun?{" "}
-          <Link to="/login" className="font-medium text-blue-600 hover:underline">
+          <Link to="/login" className={textLinkClasses}>
             Masuk
           </Link>
         </>
       }
     >
-      <p className="text-sm text-gray-600">{copy.body}</p>
+      <p className="text-sm font-semibold text-slate-600">{copy.body}</p>
 
       {reason === "EXPIRED" && resend.status !== "sent" && (
         <Button onClick={requestResend} disabled={resend.status === "sending"}>
@@ -274,19 +281,19 @@ function UnusableInvitation({ reason, token }: { reason: UnusableReason; token: 
         </Button>
       )}
       {resend.status === "sent" && (
-        <p role="status" className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+        <Notice tone="success" role="status">
           Permintaan sudah diteruskan ke admin lembaga kamu. Setelah undangan baru dikirim, cek emailmu.
-        </p>
+        </Notice>
       )}
       {resend.status === "failed" && (
-        <p role="alert" className="text-sm text-red-600">
+        <Notice tone="error" role="alert">
           {resend.text}
-        </p>
+        </Notice>
       )}
 
       {reason === "ALREADY_ACCEPTED" && (
-        <Link to="/login">
-          <Button className="w-full">Masuk</Button>
+        <Link to="/login" className={buttonClasses({ block: true, size: "lg" })}>
+          Masuk
         </Link>
       )}
     </AuthCard>

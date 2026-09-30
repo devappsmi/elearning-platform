@@ -1,9 +1,16 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { Button } from "@elearning/ui";
 import { apiClient } from "../auth/api-client";
 import { useAuth } from "../auth/AuthContext";
 import { NETWORK_ERROR_TEXT, failureText, readFailure } from "../auth/api-errors";
+import { fieldClasses, TextField } from "../components/TextField";
+import { Avatar } from "../components/ui/Avatar";
+import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
+import { Chip } from "../components/ui/Chip";
+import { Notice } from "../components/ui/Feedback";
+import { Icon } from "../components/ui/icons";
+import { PageHeader } from "../components/ui/PageHeader";
 import { XP_GOAL_OPTIONS, isXpGoal, type XpGoal } from "../lib/xp-goal";
 
 /** Profil (GAM-01 "murid bisa ubah target XP harian" + info akun dasar) --
@@ -52,77 +59,97 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-lg border border-gray-200 bg-white p-4">
-        <h2 className="font-medium text-gray-900">Info Akun</h2>
-        <dl className="mt-3 space-y-2 text-sm">
-          <div className="flex justify-between">
-            <dt className="text-gray-500">Email</dt>
-            <dd className="text-gray-900">{me.email}</dd>
-          </div>
-          <div className="flex justify-between">
-            <dt className="text-gray-500">Kelas</dt>
-            <dd className="text-gray-900" data-testid="profile-class">
-              {me.className}
-            </dd>
-          </div>
-          <div className="flex justify-between">
-            <dt className="text-gray-500">Bergabung</dt>
-            <dd className="text-gray-900">{new Date(me.createdAt).toLocaleDateString("id-ID")}</dd>
-          </div>
-        </dl>
-      </div>
+    <div className="mx-auto max-w-3xl">
+      <PageHeader title="Profil" subtitle="Kelola akun dan target belajarmu." emoji="🧑‍🎓" tone="violet" />
 
-      <form onSubmit={handleSubmit} className="rounded-lg border border-gray-200 bg-white p-4">
-        <h2 className="font-medium text-gray-900">Edit Profil</h2>
-        <div className="mt-3 space-y-4">
-          <div className="space-y-1">
-            <label htmlFor="profile-name" className="block text-sm font-medium text-gray-700">
-              Nama
-            </label>
-            <input
-              id="profile-name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full max-w-sm rounded-md border border-gray-300 px-3 py-2 text-sm"
-            />
+      <div className="space-y-6">
+        <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-6 text-white shadow-glow">
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-3 -top-8 select-none text-[9rem] font-black leading-none text-white/10"
+          >
+            あ
+          </span>
+          <div className="relative flex flex-wrap items-center gap-4">
+            <Avatar name={me.name} src={me.avatarUrl} size="xl" />
+            <div className="min-w-0">
+              <p className="truncate text-2xl font-black text-white">{me.name}</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Chip tone="white">
+                  <Icon name="user" className="h-4 w-4" />
+                  {me.className}
+                </Chip>
+                <Chip tone="white">
+                  <Icon name="bolt" className="h-4 w-4" />
+                  {me.dailyXpGoal} XP/hari
+                </Chip>
+              </div>
+            </div>
           </div>
-          <div className="space-y-1">
-            <label htmlFor="profile-xp-goal" className="block text-sm font-medium text-gray-700">
-              Target XP Harian
-            </label>
-            <select
-              id="profile-xp-goal"
-              value={dailyXpGoal}
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                if (isXpGoal(value)) setDailyXpGoal(value);
-              }}
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm"
-            >
-              {XP_GOAL_OPTIONS.map((goal) => (
-                <option key={goal} value={goal}>
-                  {goal} XP/hari
-                </option>
-              ))}
-            </select>
-          </div>
-          <Button type="submit" disabled={submitting}>
-            {submitting ? "Menyimpan..." : "Simpan Perubahan"}
-          </Button>
-        </div>
-        {error && (
-          <p role="alert" className="mt-2 text-sm text-red-600">
-            {error}
-          </p>
-        )}
-        {saved && (
-          <p role="status" className="mt-2 text-sm text-green-700">
-            Perubahan tersimpan.
-          </p>
-        )}
-      </form>
+        </section>
+
+        <Card tone="sky">
+          <h2 className="text-lg font-black text-slate-900">Info Akun</h2>
+          <dl className="mt-3 divide-y divide-sky-100 text-sm">
+            <div className="flex items-center justify-between gap-4 py-2.5">
+              <dt className="font-bold text-slate-600">Email</dt>
+              <dd className="min-w-0 truncate font-extrabold text-slate-900">{me.email}</dd>
+            </div>
+            <div className="flex items-center justify-between gap-4 py-2.5">
+              <dt className="font-bold text-slate-600">Kelas</dt>
+              <dd className="font-extrabold text-slate-900" data-testid="profile-class">
+                {me.className}
+              </dd>
+            </div>
+            <div className="flex items-center justify-between gap-4 py-2.5">
+              <dt className="font-bold text-slate-600">Bergabung</dt>
+              <dd className="font-extrabold text-slate-900">{new Date(me.createdAt).toLocaleDateString("id-ID")}</dd>
+            </div>
+          </dl>
+        </Card>
+
+        <Card tone="pink">
+          <form onSubmit={handleSubmit}>
+            <h2 className="text-lg font-black text-slate-900">Edit Profil</h2>
+            <div className="mt-4 space-y-4">
+              <TextField id="profile-name" label="Nama" required value={name} onChange={(e) => setName(e.target.value)} />
+              <div className="space-y-1.5">
+                <label htmlFor="profile-xp-goal" className="block text-sm font-extrabold text-slate-800">
+                  Target XP Harian
+                </label>
+                <select
+                  id="profile-xp-goal"
+                  value={dailyXpGoal}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    if (isXpGoal(value)) setDailyXpGoal(value);
+                  }}
+                  className={fieldClasses}
+                >
+                  {XP_GOAL_OPTIONS.map((goal) => (
+                    <option key={goal} value={goal}>
+                      {goal} XP/hari
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <Button type="submit" disabled={submitting} size="lg">
+                {submitting ? "Menyimpan..." : "Simpan Perubahan"}
+              </Button>
+            </div>
+            {error && (
+              <Notice tone="error" role="alert" className="mt-4">
+                {error}
+              </Notice>
+            )}
+            {saved && (
+              <Notice tone="success" role="status" className="mt-4">
+                Perubahan tersimpan.
+              </Notice>
+            )}
+          </form>
+        </Card>
+      </div>
     </div>
   );
 }

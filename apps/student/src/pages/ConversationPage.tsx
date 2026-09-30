@@ -1,9 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { ScenarioSession } from "@elearning/domain";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ScenarioSession, TEST_MODE_MAX_MISTAKES } from "@elearning/domain";
 import type { ScenarioAnswerFeedback, ScenarioContent, ScenarioLine, ScenarioMode } from "@elearning/domain";
-import { Button } from "@elearning/ui";
 import { apiClient } from "../auth/api-client";
+import { Button } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
+import { Chip } from "../components/ui/Chip";
+import { Loading, Notice } from "../components/ui/Feedback";
+import { FeedbackPanel } from "../components/ui/FeedbackPanel";
+import { Icon } from "../components/ui/icons";
+import { ProgressBar } from "../components/ui/ProgressBar";
 
 type ScenarioDetail = { id: string; titleJp: string; titleId: string; level: string; content: ScenarioContent };
 type AnswerEvent = { lineIndex: number; optionIndex: number };
@@ -113,18 +119,18 @@ export function ConversationPage() {
     }
   }
 
-  if (state.status === "loading") return <div className="p-6 text-sm text-gray-500">Memuat...</div>;
+  if (state.status === "loading") return <Loading />;
   if (state.status === "error") {
     return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-        {state.message}{" "}
-        <button className="underline" onClick={() => navigate("/conversation")}>
-          Kembali ke Percakapan
-        </button>
+      <div className="mx-auto max-w-lg space-y-4">
+        <Notice tone="error" role="alert">
+          {state.message}
+        </Notice>
+        <Button onClick={() => navigate("/conversation")}>Kembali ke Percakapan</Button>
       </div>
     );
   }
-  if (state.status === "submitting") return <div className="p-6 text-sm text-gray-500">Mengirim hasil...</div>;
+  if (state.status === "submitting") return <Loading label="Mengirim hasil..." />;
 
   const scenario = scenarioRef.current!;
 
@@ -144,9 +150,17 @@ export function ConversationPage() {
   const { line, index } = currentLineRef.current!;
 
   return (
-    <div className="mx-auto max-w-lg space-y-4">
-      <div className="h-2 overflow-hidden rounded-full bg-gray-200">
-        <div className="h-full bg-blue-600 transition-all" style={{ width: `${Math.round(session.progress * 100)}%` }} />
+    <div className="mx-auto max-w-2xl space-y-5">
+      <h1 className="sr-only">{scenario.titleId}</h1>
+      <div className="flex items-center gap-3">
+        <Link
+          to="/conversation"
+          aria-label="Tutup percakapan"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-slate-500 transition hover:bg-white hover:text-rose-600 hover:shadow focus-visible:outline-violet-600"
+        >
+          <Icon name="x" className="h-6 w-6" strokeWidth={2.8} />
+        </Link>
+        <ProgressBar className="flex-1" size="lg" tone="pink" value={Math.round(session.progress * 100)} label="Kemajuan percakapan" />
       </div>
 
       {line.kind === "narration" ? (
@@ -169,36 +183,75 @@ export function ConversationPage() {
 function ScenarioIntro({ scenario, onStart }: { scenario: ScenarioDetail; onStart: (mode: ScenarioMode) => void }) {
   const { content } = scenario;
   return (
-    <div className="mx-auto max-w-lg space-y-4">
-      <div className="rounded-lg border border-gray-200 bg-white p-6 text-center">
-        <p className="text-2xl font-semibold text-gray-900">{scenario.titleJp}</p>
-        <p className="text-gray-600">{scenario.titleId}</p>
-        <p className="mt-2 text-sm text-gray-500">
-          {content.roles.join(", ")} &middot; ~{content.estimatedMinutes} menit &middot; {scenario.level}
+    <div className="mx-auto max-w-2xl space-y-5">
+      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-fuchsia-600 via-pink-600 to-rose-600 p-6 text-center text-white shadow-glow md:p-8">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-3 -top-8 select-none text-[9rem] font-black leading-none text-white/10"
+        >
+          話
+        </span>
+        <p aria-hidden="true" className="relative text-5xl motion-safe:animate-float">
+          🗣️
         </p>
-      </div>
+        <h1 className="relative mt-3 text-3xl font-black text-white md:text-4xl">{scenario.titleJp}</h1>
+        <p className="relative mt-1 text-lg font-bold text-white">{scenario.titleId}</p>
+        <p className="relative mt-3 flex flex-wrap items-center justify-center gap-2 text-sm font-extrabold">
+          <Chip tone="white">{content.roles.join(", ")}</Chip>
+          <Chip tone="white">~{content.estimatedMinutes} menit</Chip>
+          <Chip tone="white">{scenario.level}</Chip>
+        </p>
+      </section>
 
       {content.grammarNotes.length > 0 && (
-        <div className="rounded-lg border border-gray-200 bg-white p-4">
-          <h3 className="font-medium text-gray-900">Catatan Tata Bahasa</h3>
+        <Card tone="sky">
+          <h2 className="flex items-center gap-2 text-lg font-black text-slate-900">
+            <span aria-hidden="true">📝</span>
+            Catatan Tata Bahasa
+          </h2>
           {content.grammarNotes.map((note) => (
-            <div key={note.id} className="mt-2">
-              <p className="text-sm font-medium text-gray-800">{note.title}</p>
-              <p className="text-sm text-gray-600">{note.bodyMd}</p>
+            <div key={note.id} className="mt-3 rounded-2xl bg-white/80 p-3 ring-1 ring-sky-100">
+              <p className="text-sm font-extrabold text-slate-900">{note.title}</p>
+              <p className="mt-0.5 text-sm font-semibold text-slate-600">{note.bodyMd}</p>
             </div>
           ))}
-        </div>
+        </Card>
       )}
 
-      <div className="flex justify-center gap-2">
-        <Button data-testid="start-practice" variant="secondary" onClick={() => onStart("practice")}>
-          Latihan
-        </Button>
-        <Button data-testid="start-test" onClick={() => onStart("test")}>
-          Mulai Tes
-        </Button>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Card tone="emerald" padding="sm" className="flex flex-col gap-3">
+          <p className="text-sm font-bold text-slate-700">Santai: boleh mengulang tanpa batas sampai jawabanmu benar.</p>
+          <Button data-testid="start-practice" variant="secondary" size="lg" block onClick={() => onStart("practice")}>
+            Latihan
+          </Button>
+        </Card>
+        <Card tone="pink" padding="sm" className="flex flex-col gap-3">
+          <p className="text-sm font-bold text-slate-700">
+            Ada batas: hanya {TEST_MODE_MAX_MISTAKES} kali salah, lalu sesi berhenti.
+          </p>
+          <Button data-testid="start-test" size="lg" block onClick={() => onStart("test")}>
+            Mulai Tes
+          </Button>
+        </Card>
       </div>
     </div>
+  );
+}
+
+/** Kepala tiap baris dialog: lencana pembicara. */
+function Speaker({ name, tone = "sky" }: { name: string; tone?: "sky" | "violet" }) {
+  return (
+    <p className="flex items-center gap-2">
+      <span
+        aria-hidden="true"
+        className={`grid h-8 w-8 place-items-center rounded-full text-sm font-black text-white ${
+          tone === "sky" ? "bg-gradient-to-br from-sky-500 to-indigo-600" : "bg-gradient-to-br from-violet-500 to-fuchsia-600"
+        }`}
+      >
+        {(Array.from(name)[0] ?? "?").toUpperCase()}
+      </span>
+      <span className="text-xs font-extrabold uppercase tracking-wider text-slate-600">{name}</span>
+    </p>
   );
 }
 
@@ -212,15 +265,15 @@ function NarrationLineView({
   onNext: () => void;
 }) {
   return (
-    <div data-testid="narration-line" className="space-y-2 rounded-lg border border-gray-200 bg-white p-6">
-      <p className="text-xs font-medium uppercase text-gray-400">{line.speaker}</p>
-      <p className="text-xl">{line.jp}</p>
-      <p className="text-sm text-gray-500">{line.romaji}</p>
-      <p className="text-sm text-gray-700">{line.meaning}</p>
-      <Button data-testid="next-button" onClick={onNext} className="mt-2">
+    <Card data-testid="narration-line" tone="sky" padding="lg" className="space-y-3">
+      <Speaker name={line.speaker} />
+      <p className="text-3xl font-black leading-snug text-slate-900">{line.jp}</p>
+      <p className="text-base font-extrabold text-violet-700">{line.romaji}</p>
+      <p className="text-base font-semibold text-slate-700">{line.meaning}</p>
+      <Button data-testid="next-button" size="lg" onClick={onNext} className="mt-2">
         {isLastLine ? "Selesai" : "Lanjut"}
       </Button>
-    </div>
+    </Card>
   );
 }
 
@@ -244,37 +297,51 @@ function ChoiceLineView({
   // catatan next() di scenarioSession.ts), ATAU ini baris choice TERAKHIR
   // dan dijawab benar (next() akan meng-advance index ke luar batas).
   const willFinish = feedback !== null && (isFinished || (feedback.correct && isLastLine));
+  // Pilihan murid, hanya untuk pewarnaan sesudah menjawab (komponen di-remount per baris: key=index).
+  const [chosen, setChosen] = useState<number | null>(null);
 
   return (
-    <div data-testid="choice-line" className="space-y-3 rounded-lg border border-gray-200 bg-white p-6">
-      <p className="text-xs font-medium uppercase text-gray-400">{line.speaker}</p>
-      <div className="space-y-2">
-        {line.options.map((opt, i) => (
-          <button
-            key={i}
-            data-testid="choice-option"
-            data-text={opt.jp}
-            disabled={feedback !== null}
-            onClick={() => onAnswer(i)}
-            className="block w-full rounded-md border border-gray-300 px-3 py-3 text-left text-sm hover:bg-gray-50 disabled:opacity-50"
-          >
-            {opt.jp}
-          </button>
-        ))}
+    <Card data-testid="choice-line" tone="violet" padding="lg" className="space-y-4">
+      <Speaker name={line.speaker} tone="violet" />
+      <div className="space-y-3">
+        {line.options.map((opt, i) => {
+          const answered = feedback !== null;
+          const picked = answered && chosen === i;
+          const tone = picked
+            ? feedback.correct
+              ? "border-emerald-500 bg-emerald-50 text-emerald-900"
+              : "border-rose-500 bg-rose-50 text-rose-900 motion-safe:animate-shake"
+            : answered
+              ? "border-slate-200 bg-white text-slate-500 opacity-60"
+              : "border-slate-200 bg-white text-slate-800 hover:border-violet-300 hover:bg-violet-50 active:translate-y-0.5 active:border-b-2";
+          return (
+            <button
+              key={i}
+              type="button"
+              data-testid="choice-option"
+              data-text={opt.jp}
+              disabled={answered}
+              onClick={() => {
+                setChosen(i);
+                onAnswer(i);
+              }}
+              className={`block w-full rounded-2xl border-2 border-b-4 px-4 py-3.5 text-left text-lg font-extrabold transition duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300 disabled:cursor-not-allowed ${tone}`}
+            >
+              {opt.jp}
+            </button>
+          );
+        })}
       </div>
       {feedback && (
-        <div
+        <FeedbackPanel
           data-testid="feedback"
           data-correct={feedback.correct}
-          className={`rounded-lg border p-4 ${feedback.correct ? "border-green-200 bg-green-50 text-green-800" : "border-red-200 bg-red-50 text-red-800"}`}
-        >
-          <p className="font-medium">{feedback.correct ? "Benar!" : "Kurang tepat"}</p>
-          {feedback.feedbackId && <p className="mt-1 text-sm">{feedback.feedbackId}</p>}
-          <Button data-testid="next-button" onClick={onNext} className="mt-3">
-            {willFinish ? "Lihat Hasil" : feedback.correct ? "Lanjut" : "Coba Lagi"}
-          </Button>
-        </div>
+          correct={feedback.correct}
+          detail={feedback.feedbackId || undefined}
+          nextLabel={willFinish ? "Lihat Hasil" : feedback.correct ? "Lanjut" : "Coba Lagi"}
+          onNext={onNext}
+        />
       )}
-    </div>
+    </Card>
   );
 }

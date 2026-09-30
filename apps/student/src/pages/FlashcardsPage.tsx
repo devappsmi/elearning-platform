@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@elearning/ui";
+import { Link } from "react-router-dom";
 import type { components } from "@elearning/api-client";
 import { apiClient } from "../auth/api-client";
+import { Button, buttonClasses } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
+import { Loading, Notice } from "../components/ui/Feedback";
+import { PageHeader } from "../components/ui/PageHeader";
+import { ProgressBar } from "../components/ui/ProgressBar";
 
 type DueFlashcard = components["schemas"]["DueFlashcardDto"];
 
@@ -74,24 +79,41 @@ export function FlashcardsPage() {
     }
   }
 
-  if (state.status === "loading") return <div className="p-6 text-sm text-gray-500">Memuat...</div>;
-  if (state.status === "error") return <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">{state.message}</div>;
+  if (state.status === "loading") return <Loading />;
+  if (state.status === "error") return <Notice tone="error" role="alert">{state.message}</Notice>;
   if (state.status === "empty") {
     return (
-      <div data-testid="flashcards-empty" className="mx-auto max-w-md rounded-lg border border-gray-200 bg-white p-6 text-center">
-        <p className="text-3xl">🎉</p>
-        <p className="mt-2 text-gray-700">Tidak ada kartu untuk direview hari ini. Kerjakan lebih banyak lesson supaya ada kata baru masuk antrian!</p>
+      <div className="mx-auto max-w-xl">
+        <PageHeader title="Flashcard" subtitle="Ulangi kata-kata yang sudah kamu pelajari." emoji="🎴" tone="sky" />
+        <Card data-testid="flashcards-empty" tone="emerald" padding="lg" className="text-center">
+          <p aria-hidden="true" className="text-6xl motion-safe:animate-float">
+            🎉
+          </p>
+          <p className="mt-3 text-lg font-bold text-slate-700">
+            Tidak ada kartu untuk direview hari ini. Kerjakan lebih banyak lesson supaya ada kata baru masuk antrian!
+          </p>
+          <Link to="/" className={buttonClasses({ size: "lg", className: "mt-5" })}>
+            Ke Beranda
+          </Link>
+        </Card>
       </div>
     );
   }
   if (state.status === "done") {
     return (
-      <div data-testid="flashcards-done" className="mx-auto max-w-md space-y-2 rounded-lg border border-gray-200 bg-white p-6 text-center">
-        <p className="text-3xl">✅</p>
-        <h1 className="text-xl font-semibold text-gray-900">Review Selesai</h1>
-        <p className="text-sm text-gray-600">
-          {state.correctCount} benar, {state.wrongCount} salah dari {state.total} kartu.
-        </p>
+      <div className="mx-auto max-w-xl">
+        <Card data-testid="flashcards-done" tone="emerald" padding="lg" className="space-y-3 text-center motion-safe:animate-pop-in">
+          <p aria-hidden="true" className="text-6xl">
+            ✅
+          </p>
+          <h1 className="text-3xl font-black text-slate-900">Review Selesai</h1>
+          <p className="text-base font-bold text-slate-600">
+            {state.correctCount} benar, {state.wrongCount} salah dari {state.total} kartu.
+          </p>
+          <Link to="/" className={buttonClasses({ size: "lg", className: "mt-2" })}>
+            Kembali ke Beranda
+          </Link>
+        </Card>
       </div>
     );
   }
@@ -99,42 +121,52 @@ export function FlashcardsPage() {
   const card = state.cards[state.index]!;
 
   return (
-    <div className="mx-auto max-w-md space-y-4">
-      <div className="h-2 overflow-hidden rounded-full bg-gray-200">
-        <div className="h-full bg-blue-600 transition-all" style={{ width: `${Math.round((state.index / state.cards.length) * 100)}%` }} />
-      </div>
-      <p className="text-center text-xs text-gray-500">
-        Kartu {state.index + 1} dari {state.cards.length}
-      </p>
-
-      <div data-testid="flashcard" className="space-y-3 rounded-lg border border-gray-200 bg-white p-8 text-center">
-        <p className="text-3xl">{card.surface}</p>
-        <p className="text-gray-500">
-          {card.reading} &middot; {card.romaji}
+    <div className="mx-auto max-w-xl">
+      <PageHeader title="Flashcard" subtitle="Ulangi kata-kata yang sudah kamu pelajari." emoji="🎴" tone="sky" />
+      <div className="space-y-3">
+        <ProgressBar value={state.index} max={state.cards.length} label="Kemajuan kartu" tone="sky" size="lg" />
+        <p className="text-center text-sm font-extrabold text-slate-600">
+          Kartu {state.index + 1} dari {state.cards.length}
         </p>
-        {card.audio && (
-          <audio controls src={card.audio} className="mx-auto h-8" />
-        )}
 
-        {state.revealed ? (
-          <>
-            <div data-testid="flashcard-back" className="border-t border-gray-100 pt-3">
-              <p className="text-lg text-gray-800">{card.meaning ?? "(tidak ada arti tersimpan)"}</p>
-            </div>
-            <div className="flex justify-center gap-2 pt-2">
-              <Button data-testid="answer-wrong" variant="secondary" disabled={state.submitting} onClick={() => answer(false)}>
-                Salah
+        <div
+          key={state.index}
+          data-testid="flashcard"
+          className="overflow-hidden rounded-[2rem] border border-white bg-white shadow-card motion-safe:animate-pop-in"
+        >
+          <div className="bg-gradient-to-br from-violet-600 via-fuchsia-600 to-pink-600 px-6 py-10 text-center text-white">
+            <p className="text-6xl font-black leading-tight md:text-7xl">{card.surface}</p>
+            <p className="mt-3 text-lg font-bold text-white">
+              {card.reading} &middot; {card.romaji}
+            </p>
+            {card.audio && <audio controls src={card.audio} className="mx-auto mt-4 h-9 max-w-full" />}
+          </div>
+
+          <div className="space-y-4 p-5 text-center">
+            {state.revealed ? (
+              <>
+                <div
+                  data-testid="flashcard-back"
+                  className="rounded-2xl border-2 border-emerald-200 bg-emerald-50 px-4 py-4 motion-safe:animate-pop-in"
+                >
+                  <p className="text-xl font-black text-emerald-900">{card.meaning ?? "(tidak ada arti tersimpan)"}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button data-testid="answer-wrong" variant="danger" size="lg" disabled={state.submitting} onClick={() => answer(false)}>
+                    Salah
+                  </Button>
+                  <Button data-testid="answer-correct" variant="success" size="lg" disabled={state.submitting} onClick={() => answer(true)}>
+                    Benar
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <Button data-testid="reveal-button" size="lg" block onClick={reveal}>
+                Tampilkan Jawaban
               </Button>
-              <Button data-testid="answer-correct" disabled={state.submitting} onClick={() => answer(true)}>
-                Benar
-              </Button>
-            </div>
-          </>
-        ) : (
-          <Button data-testid="reveal-button" onClick={reveal} className="mt-2">
-            Tampilkan Jawaban
-          </Button>
-        )}
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,11 +1,12 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
-import { Button } from "@elearning/ui";
 import { apiClient, tokenStorage } from "../auth/api-client";
 import { NETWORK_ERROR_TEXT, failureText, readFailure, type ApiFailure } from "../auth/api-errors";
 import { AuthCard } from "../components/AuthCard";
 import { TextField } from "../components/TextField";
+import { Button, textLinkClasses } from "../components/ui/Button";
+import { Notice } from "../components/ui/Feedback";
 
 interface LoginLocationState {
   from?: string;
@@ -63,11 +64,11 @@ export function LoginPage() {
   }
 
   return (
-    <AuthCard title="Masuk">
+    <AuthCard title="Masuk" emoji="👋">
       {locationState?.notice && (
-        <p role="status" className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+        <Notice tone="success" role="status">
           {locationState.notice}
-        </p>
+        </Notice>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -91,18 +92,18 @@ export function LoginPage() {
         />
 
         {error && (
-          <p role="alert" className="text-sm text-red-600">
+          <Notice tone="error" role="alert">
             {error}
-          </p>
+          </Notice>
         )}
 
-        <Button type="submit" disabled={submitting} className="w-full">
+        <Button type="submit" disabled={submitting} block size="lg">
           {submitting ? "Memproses..." : "Masuk"}
         </Button>
       </form>
 
       <p className="text-center text-sm">
-        <Link to="/forgot-password" className="font-medium text-blue-600 hover:underline">
+        <Link to="/forgot-password" className={textLinkClasses}>
           Lupa password?
         </Link>
       </p>

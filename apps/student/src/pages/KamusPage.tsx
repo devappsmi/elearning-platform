@@ -1,10 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import type { components } from "@elearning/api-client";
 import { apiClient } from "../auth/api-client";
+import { Card } from "../components/ui/Card";
+import type { CardTone } from "../components/ui/Card";
+import { Chip } from "../components/ui/Chip";
+import { Notice } from "../components/ui/Feedback";
+import { Icon } from "../components/ui/icons";
+import { PageHeader } from "../components/ui/PageHeader";
 
 type DictionaryEntry = components["schemas"]["DictionaryEntryDto"];
 
 const DEBOUNCE_MS = 300;
+
+// Semburat warna kartu hasil bergantian supaya daftar terasa hidup.
+const CARD_TONES: CardTone[] = ["violet", "pink", "sky", "amber", "emerald", "indigo"];
 
 /** Kamus (SUP-01) -- GET /dictionary?q=, cari via kana/romaji/kanji/arti
  * Indonesia (backend sudah menangani ketiganya lewat OR di beberapa kolom,
@@ -52,37 +61,61 @@ export function KamusPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-lg border border-gray-200 bg-white p-4">
-        <label htmlFor="dictionary-search" className="block text-sm font-medium text-gray-700">
+    <div className="mx-auto max-w-3xl">
+      <PageHeader title="Kamus" subtitle="Cari kata dalam kana, romaji, kanji, atau bahasa Indonesia." emoji="📖" tone="emerald" />
+
+      <Card tone="emerald" padding="sm" className="mb-6">
+        <label htmlFor="dictionary-search" className="block text-sm font-extrabold text-slate-800">
           Cari kata (kana, romaji, kanji, atau arti Indonesia)
         </label>
-        <input
-          id="dictionary-search"
-          autoFocus
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="mis. あ, a, atau 'halo'"
-          className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-        />
-      </div>
+        <div className="relative mt-2">
+          <Icon name="search" className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+          <input
+            id="dictionary-search"
+            autoFocus
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="mis. あ, a, atau 'halo'"
+            className="w-full rounded-2xl border-2 border-slate-300 bg-white py-3 pl-12 pr-4 text-lg font-semibold text-slate-900 transition placeholder:text-slate-400 hover:border-emerald-400 focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-200"
+          />
+        </div>
+      </Card>
 
-      {error && <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>}
+      {error && (
+        <Notice tone="error" role="alert" className="mb-6">
+          {error}
+        </Notice>
+      )}
 
       {query.trim().length === 0 ? (
-        <p className="text-sm text-gray-500">Ketik untuk mulai mencari.</p>
+        <div className="grid place-items-center gap-2 py-10 text-center">
+          <span aria-hidden="true" className="text-5xl motion-safe:animate-float">
+            🔍
+          </span>
+          <p className="text-base font-bold text-slate-600">Ketik untuk mulai mencari.</p>
+        </div>
       ) : loading ? (
-        <div className="p-6 text-sm text-gray-500">Mencari...</div>
+        <div className="grid place-items-center gap-2 py-10 text-center">
+          <span aria-hidden="true" className="text-5xl motion-safe:animate-bounce">
+            🌸
+          </span>
+          <p className="text-base font-bold text-slate-600">Mencari...</p>
+        </div>
       ) : results && results.length === 0 ? (
-        <p className="text-sm text-gray-500">Tidak ada hasil untuk &quot;{query}&quot;.</p>
+        <div className="grid place-items-center gap-2 py-10 text-center">
+          <span aria-hidden="true" className="text-5xl">
+            🤔
+          </span>
+          <p className="text-base font-bold text-slate-600">Tidak ada hasil untuk &quot;{query}&quot;.</p>
+        </div>
       ) : (
-        <div className="space-y-3">
-          {(results ?? []).map((entry) => (
-            <div key={entry.id} className="rounded-lg border border-gray-200 bg-white p-4">
+        <div className="grid gap-4 md:grid-cols-2">
+          {(results ?? []).map((entry, index) => (
+            <Card key={entry.id} tone={CARD_TONES[index % CARD_TONES.length]} className="motion-safe:animate-slide-up">
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-lg font-semibold text-gray-900">{entry.surface}</p>
-                  <p className="text-sm text-gray-500">
+                <div className="min-w-0">
+                  <p className="text-3xl font-black leading-tight text-slate-900">{entry.surface}</p>
+                  <p className="mt-0.5 text-sm font-extrabold text-violet-700">
                     {entry.reading} &middot; {entry.romaji}
                   </p>
                 </div>
@@ -90,24 +123,26 @@ export function KamusPage() {
                   <button
                     type="button"
                     onClick={() => playAudio(entry.audio)}
-                    className="rounded-full border border-gray-200 p-2 text-gray-600 hover:bg-gray-50"
+                    className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white shadow-[0_3px_0_0_#4c1d95] transition hover:brightness-110 active:translate-y-0.5 active:shadow-none focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-300"
                     aria-label="Putar audio"
                   >
-                    🔊
+                    <Icon name="speaker" className="h-5 w-5" />
                   </button>
                 )}
               </div>
-              {entry.meaning && <p className="mt-2 text-sm text-gray-800">{entry.meaning}</p>}
+              {entry.meaning && <p className="mt-3 text-lg font-extrabold text-slate-800">{entry.meaning}</p>}
               {entry.partOfSpeech && (
-                <span className="mt-2 inline-block rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">{entry.partOfSpeech}</span>
+                <Chip tone="violet" className="mt-2 px-2.5 py-0.5 text-xs">
+                  {entry.partOfSpeech}
+                </Chip>
               )}
               {entry.exampleJp && (
-                <div className="mt-3 border-t border-gray-100 pt-3 text-sm">
-                  <p className="text-gray-800">{entry.exampleJp}</p>
-                  {entry.exampleId && <p className="text-gray-500">{entry.exampleId}</p>}
+                <div className="mt-3 rounded-2xl bg-white/80 p-3 text-sm ring-1 ring-slate-100">
+                  <p className="font-bold text-slate-800">{entry.exampleJp}</p>
+                  {entry.exampleId && <p className="font-semibold text-slate-600">{entry.exampleId}</p>}
                 </div>
               )}
-            </div>
+            </Card>
           ))}
         </div>
       )}

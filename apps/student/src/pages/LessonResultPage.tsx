@@ -1,8 +1,29 @@
 import { Link, Navigate, useLocation, useParams } from "react-router-dom";
-import { Button } from "@elearning/ui";
 import type { components } from "@elearning/api-client";
+import { buttonClasses } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
+import { Confetti } from "../components/ui/Confetti";
+import { Icon } from "../components/ui/icons";
 
 type AttemptResultView = components["schemas"]["AttemptResultView"];
+
+/** Bintang hasil: `count` terisi (emas), sisanya pudar. Dibaca pembaca layar sebagai satu kalimat. */
+function Stars({ count, total = 3, size = "h-10 w-10", animate }: { count: number; total?: number; size?: string; animate?: boolean }) {
+  return (
+    <span role="img" aria-label={`${count} dari ${total} bintang`} className="inline-flex justify-center gap-2">
+      {Array.from({ length: total }, (_, i) => (
+        <Icon
+          key={i}
+          name="star"
+          className={`${size} ${i < count ? "text-amber-300 drop-shadow-[0_2px_6px_rgb(245_158_11_/_0.6)]" : "text-white/30"} ${
+            animate && i < count ? "motion-safe:animate-pop-in" : ""
+          }`}
+          style={animate ? { animationDelay: `${0.25 + i * 0.18}s` } : undefined}
+        />
+      ))}
+    </span>
+  );
+}
 
 /** Hasil Belajar (S6 PRD) -- dibaca dari router state yang dikirim
  * LessonPage setelah POST /lessons/:id/attempts sukses (bukan fetch
@@ -18,34 +39,60 @@ export function LessonResultPage() {
   if (!result) return <Navigate to="/" replace />;
 
   return (
-    <div className="mx-auto max-w-md space-y-4 text-center">
-      <div className={`rounded-lg border p-6 ${result.passed ? "border-green-200 bg-green-50" : "border-amber-200 bg-amber-50"}`}>
-        <p className="text-3xl">{result.passed ? "🎉" : "💪"}</p>
-        <h1 className="mt-2 text-xl font-semibold text-gray-900">{result.passed ? "Lulus!" : "Belum Lulus"}</h1>
-        <p className="mt-1 text-sm text-gray-600">Akurasi: {result.accuracyPercent}%</p>
-        {result.passed && <p className="mt-1 text-lg">{"⭐".repeat(result.stars)}</p>}
-        {result.xpAwarded > 0 && <p className="mt-2 text-sm font-medium text-blue-700">+{result.xpAwarded} XP</p>}
+    <div className="mx-auto max-w-md space-y-5 text-center">
+      {result.passed && <Confetti />}
+
+      <div
+        className={`relative overflow-hidden rounded-[2rem] p-7 text-white shadow-glow motion-safe:animate-pop-in ${
+          result.passed
+            ? "bg-gradient-to-br from-violet-600 via-fuchsia-600 to-pink-600"
+            : "bg-gradient-to-br from-sky-600 via-indigo-600 to-violet-600"
+        }`}
+      >
+        <span aria-hidden="true" className="pointer-events-none absolute -right-3 -top-8 select-none text-9xl font-black leading-none text-white/10">
+          {result.passed ? "✓" : "…"}
+        </span>
+        <p aria-hidden="true" className="relative text-6xl motion-safe:animate-float">
+          {result.passed ? "🎉" : "💪"}
+        </p>
+        <h1 className="relative mt-3 text-3xl font-black text-white">{result.passed ? "Lulus!" : "Belum Lulus"}</h1>
+        <p className="relative mt-1 text-base font-bold text-white">Akurasi: {result.accuracyPercent}%</p>
+        {result.passed && (
+          <p className="relative mt-4">
+            <Stars count={result.stars} animate />
+          </p>
+        )}
+        {result.xpAwarded > 0 && (
+          <p className="relative mt-4 inline-flex items-center gap-1.5 rounded-full bg-amber-300 px-4 py-1.5 text-lg font-black text-amber-950 shadow-lg">
+            <Icon name="bolt" className="h-5 w-5" />+{result.xpAwarded} XP
+          </p>
+        )}
+        {!result.passed && <p className="relative mt-4 text-sm font-bold text-white">Jangan menyerah, coba sekali lagi ya!</p>}
       </div>
 
-      <div className="rounded-lg border border-gray-200 bg-white p-4 text-left text-sm text-gray-600">
-        <div className="flex justify-between">
+      <Card tone="violet" padding="sm" className="space-y-3 text-left text-sm font-bold text-slate-600">
+        <div className="flex items-center justify-between gap-3">
           <span>Skor terbaik</span>
-          <span className="font-medium text-gray-900">
-            {result.bestScore}% ({"⭐".repeat(result.bestStars)})
+          <span className="flex items-center gap-2 font-black text-slate-900">
+            {result.bestScore}%
+            <span className="rounded-full bg-violet-600 px-2 py-0.5">
+              <Stars count={result.bestStars} size="h-4 w-4" />
+            </span>
           </span>
         </div>
-        <div className="mt-1 flex justify-between">
+        <div className="flex items-center justify-between gap-3 border-t border-violet-100 pt-3">
           <span>Jumlah percobaan</span>
-          <span className="font-medium text-gray-900">{result.attempts}</span>
+          <span className="font-black text-slate-900">{result.attempts}</span>
         </div>
-      </div>
+      </Card>
 
-      <div className="flex justify-center gap-2">
-        <Link to={`/learn/${lessonId}`}>
-          <Button variant="secondary">Coba Lagi</Button>
+      <div className="flex flex-wrap justify-center gap-3">
+        <Link to={`/learn/${lessonId}`} className={buttonClasses({ variant: "secondary", size: "lg" })}>
+          <Icon name="refresh" className="h-5 w-5" />
+          Coba Lagi
         </Link>
-        <Link to="/">
-          <Button>Kembali ke Beranda</Button>
+        <Link to="/" className={buttonClasses({ size: "lg" })}>
+          Kembali ke Beranda
         </Link>
       </div>
     </div>
