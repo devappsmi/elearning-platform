@@ -92,7 +92,7 @@ export function HomePage() {
   const totalLessons = units.reduce((sum, unit) => sum + unit.totalLessons, 0);
   const doneLessons = units.reduce((sum, unit) => sum + unit.completedLessons, 0);
   const allDone = totalLessons > 0 && doneLessons >= totalLessons;
-  let unitNumber = 0;
+  let unitIndex = 0; // hanya untuk menggilir warna spanduk; nomor yang tampil adalah `unit.order` (nomor dari penulis konten)
 
   return (
     <div className="space-y-8">
@@ -173,12 +173,12 @@ export function HomePage() {
             {level.name}
           </h2>
           {level.units.map((unit) => {
-            const index = unitNumber++;
+            const index = unitIndex++;
             return (
               <UnitPath
                 key={unit.id}
                 unit={unit}
-                number={index + 1}
+                number={unit.order}
                 themeIndex={index}
                 continueLessonId={path.continueLessonId}
               />
@@ -214,7 +214,7 @@ function UnitPath({ unit, number, themeIndex, continueLessonId }: UnitPathProps)
         <div className="relative flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-white">Unit {number}</p>
-            <h3 className="truncate text-xl font-black text-white">{unit.title}</h3>
+            <h3 className="text-balance text-xl font-black leading-tight text-white">{unit.title}</h3>
           </div>
           <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-black/20 px-3 py-1 text-sm font-extrabold ring-1 ring-white/30">
             {!unit.unlocked && <Icon name="lock" className="h-4 w-4" />}

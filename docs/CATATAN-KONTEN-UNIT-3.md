@@ -8,8 +8,8 @@ keliru. Saya **bukan penutur asli** dan **tidak mengubah satu pun tulisan Jepang
 dugaan yang perlu dikonfirmasi pengajar. Yang saya ubah otomatis hanya salah ketik yang jelas (daftar di bagian C).
 
 Cara memperbaiki: ubah kalimatnya di berkas Word, lalu jalankan `pnpm --filter api run unit:import unit_kerja_3`, periksa
-ringkasannya, commit, dan `db:seed` ulang di server. Kolom "ID" di bawah adalah id kalimat di data (mis. `k3s_6_1_2`) bila perlu
-dicari.
+ringkasannya, commit, dan `db:seed` ulang di server. Id kalimat di data (mis. `k3s_6_1_2` = bagian 6, entri 1, langkah 2)
+dicantumkan di kolom "Bagian" bila perlu dicari.
 
 ## A. Dugaan kesalahan yang paling penting
 
