@@ -29,6 +29,21 @@ export function lessonAudioItems(unit: {
   return items;
 }
 
+/** `lessonAudioItems` untuk beberapa unit sekaligus, di-dedupe LINTAS unit (teks + suara yang sama di dua unit hanya sekali). */
+export function lessonAudioItemsForUnits(units: readonly Parameters<typeof lessonAudioItems>[0][]): LessonAudioItem[] {
+  const seen = new Set<string>();
+  const items: LessonAudioItem[] = [];
+  for (const unit of units) {
+    for (const item of lessonAudioItems(unit)) {
+      const key = `${item.voice}|${item.text}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      items.push(item);
+    }
+  }
+  return items;
+}
+
 export interface LessonAudioResult {
   total: number;
   /** Teks yang audionya siap (baru dibuat atau sudah ada di cache) sebelum selesai/berhenti. */

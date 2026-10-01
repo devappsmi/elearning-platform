@@ -1,5 +1,25 @@
 import { describe, expect, it, vi } from "vitest";
-import { lessonAudioItems, seedLessonAudio, type LessonAudioItem } from "./lesson-audio-seed";
+import { lessonAudioItems, lessonAudioItemsForUnits, seedLessonAudio, type LessonAudioItem } from "./lesson-audio-seed";
+
+describe("lessonAudioItemsForUnits", () => {
+  it("menggabungkan beberapa unit berurutan; teks + suara yang sama di unit lain hanya sekali, suara lain tetap terpisah", () => {
+    const items = lessonAudioItemsForUnits([
+      { vocab: [{ surface: "あ" }, { surface: "犬" }], sentences: [{ surface: "犬が走る", voice: "male" }] },
+      { vocab: [{ surface: "犬" }, { surface: "猫" }], sentences: [{ surface: "犬が走る", voice: "male" }, { surface: "犬が走る" }] },
+    ]);
+    expect(items).toEqual([
+      { text: "あ", voice: "female" },
+      { text: "犬", voice: "female" },
+      { text: "犬が走る", voice: "male" },
+      { text: "猫", voice: "female" },
+      { text: "犬が走る", voice: "female" },
+    ]);
+  });
+
+  it("tanpa unit: kosong", () => {
+    expect(lessonAudioItemsForUnits([])).toEqual([]);
+  });
+});
 
 describe("lessonAudioItems", () => {
   it("kosakata dulu (suara perempuan), lalu kalimat menurut suara masing-masing", () => {

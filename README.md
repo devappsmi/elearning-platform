@@ -27,7 +27,7 @@ packages/
 pnpm install
 docker compose up -d      # postgres + redis (audio disimpan di disk lokal: apps/api/storage)
 pnpm db:migrate
-pnpm db:seed              # isi konten Hiragana + badge
+pnpm db:seed              # isi konten (Hiragana + Unit 3 "Percakapan di Tempat Kerja") + badge
 pnpm dev                  # jalankan api + student + admin sekaligus (Turborepo)
 ```
 
@@ -37,6 +37,10 @@ sebelum menjalankan `apps/api` (dibutuhkan `TutorModule`).
 Audio pelajaran dibuat saat `pnpm db:seed` bila ada penyedia TTS: cukup `OPENAI_API_KEY` (kunci yang sama dengan AI tutor,
 **tanpa Azure**) atau `AZURE_SPEECH_KEY` + `AZURE_SPEECH_REGION`; `TTS_PROVIDER` memilih. Dengarkan contoh suaranya dulu dengan
 `pnpm --filter api run tts:sample`. Tanpa keduanya pelajaran tetap berjalan, hanya tanpa audio (`docs/DEPLOY.md`, bagian 6a).
+
+Pelajaran tambahan ditulis pengajar di Word memakai template "Percakapan di Tempat Kerja" lalu diimpor:
+`pnpm --filter api run unit:import <unitId>` (membuat JSON unit dari .docx; `docs/DEPLOY.md`, bagian 5b). Dugaan kesalahan
+bahasa di Unit 3 yang perlu dikonfirmasi pengajar: `docs/CATATAN-KONTEN-UNIT-3.md`.
 
 ## Menjalankan di server sendiri (Docker Compose)
 

@@ -1,6 +1,8 @@
-/** Migrasi konten Hiragana -- Milestone 6 di plan fondasi (docs/PLAN.md
- * bagian "5. Migrasi Konten Hiragana"). Sumber: prisma/seed-data/raw/unit_hiragana.json
- * (salinan packages/domain/src/content/__fixtures__/unit_hiragana.json).
+/** Migrasi konten kurikulum -- Milestone 6 di plan fondasi (docs/PLAN.md
+ * bagian "5. Migrasi Konten Hiragana"), kini untuk SEMUA unit di daftar
+ * src/content-import/unit-manifest.ts: Hiragana (prisma/seed-data/raw/unit_hiragana.json,
+ * salinan packages/domain/src/content/__fixtures__/unit_hiragana.json) dan unit-unit yang
+ * ditulis pengajar di Word lalu diimpor (`pnpm run unit:import`, docs/DEPLOY.md bagian 5b).
  *
  * Skema zod packages/domain (unitSchema) jadi GERBANG VALIDASI sebelum data
  * lama di-upsert -- kalau bentuk JSON berubah/rusak, seed gagal di sini
@@ -25,21 +27,23 @@ import { PrismaClient, type Prisma } from "@prisma/client";
 import {
   unitSchema,
   BadgeCatalog,
+  BadgeService,
   scenarioContentSchema,
   type Exercise as DomainExercise,
   type Unit as DomainUnit,
 } from "@elearning/domain";
 import { AudioService } from "../src/audio/audio.service";
 import { createAudioStorage } from "../src/audio/audio-storage";
-import { lessonAudioItems, seedLessonAudio } from "../src/audio/lesson-audio-seed";
+import { lessonAudioItemsForUnits, seedLessonAudio } from "../src/audio/lesson-audio-seed";
 import { resolveStorageOptions } from "../src/audio/storage-options";
 import { createTtsClient } from "../src/audio/tts-factory";
 import { describeTtsOptions, resolveTtsOptions, ttsUnavailableReason, type TtsOptions } from "../src/audio/tts-options";
+import { seedDataPath, UNIT_MANIFEST, type UnitManifestEntry } from "../src/content-import/unit-manifest";
 
 const prisma = new PrismaClient();
 
-function loadHiraganaUnit(): DomainUnit {
-  const raw = readFileSync(join(__dirname, "seed-data/raw/unit_hiragana.json"), "utf-8");
+function loadUnit(entry: UnitManifestEntry): DomainUnit {
+  const raw = readFileSync(seedDataPath(entry.file), "utf-8");
   const json: unknown = JSON.parse(raw);
   return unitSchema.parse(json);
 }
@@ -50,11 +54,11 @@ function toPrismaExerciseType(type: DomainExercise["type"]): "CHOOSE" | "ASSEMBL
   return null; // 'speak' -- tidak dimigrasikan, lihat komentar berkas ini
 }
 
-async function seedHiraganaUnit(unit: DomainUnit): Promise<void> {
+async function seedUnit(unit: DomainUnit, levelDef: UnitManifestEntry["level"]): Promise<void> {
   const level = await prisma.level.upsert({
-    where: { code: "HIRAGANA" },
-    update: { name: "Hiragana", order: 1 },
-    create: { code: "HIRAGANA", name: "Hiragana", order: 1 },
+    where: { code: levelDef.code },
+    update: { name: levelDef.name, order: levelDef.order },
+    create: { code: levelDef.code, name: levelDef.name, order: levelDef.order },
   });
 
   await prisma.unit.upsert({
@@ -113,6 +117,10 @@ async function seedHiraganaUnit(unit: DomainUnit): Promise<void> {
     });
   }
 
+  // Kalimat yang tak ada lagi di JSON (mis. unit diimpor ulang dari Word yang sudah direvisi, id kalimat berbasis posisi) dihapus:
+  // tak ada tabel lain yang menunjuknya (soal merujuk lewat payload, bukan FK), dan kalau tertinggal ia terus jadi bahan pengecoh.
+  await prisma.sentence.deleteMany({ where: { unitId: unit.id, id: { notIn: unit.sentences.map((s) => s.id) } } });
+
   for (const [lessonIndex, lesson] of unit.lessons.entries()) {
     await prisma.lesson.upsert({
       where: { id: lesson.id },
@@ -148,7 +156,7 @@ async function seedHiraganaUnit(unit: DomainUnit): Promise<void> {
  * (lihat seedLessonAudio). SEED_AUDIO_REGENERATE=1: buat ulang SEMUA audio
  * pelajaran walau sudah ada (ganti suara/penyedia). Mengembalikan ringkasan
  * status untuk baris "Seed selesai". */
-async function seedAudioAssets(unit: DomainUnit, ttsOptions: TtsOptions): Promise<string> {
+async function seedAudioAssets(units: readonly DomainUnit[], ttsOptions: TtsOptions): Promise<string> {
   const tts = createTtsClient(ttsOptions);
   if (!tts.configured) {
     const reason = ttsUnavailableReason(ttsOptions) ?? "penyedia TTS belum siap";
@@ -166,7 +174,7 @@ async function seedAudioAssets(unit: DomainUnit, ttsOptions: TtsOptions): Promis
   const storage = createAudioStorage(resolveStorageOptions(process.env));
   const audio = new AudioService(prisma, tts, storage);
   const refresh = /^(1|true|yes)$/i.test(process.env.SEED_AUDIO_REGENERATE?.trim() ?? "");
-  const items = lessonAudioItems(unit);
+  const items = lessonAudioItemsForUnits(units);
 
   console.log(
     `Seed audio: ${items.length} teks, penyedia ${describeTtsOptions(ttsOptions)}` +
@@ -193,16 +201,14 @@ async function seedAudioAssets(unit: DomainUnit, ttsOptions: TtsOptions): Promis
   return `lengkap ${result.ready}/${result.total}`;
 }
 
-async function seedStaticBadges(): Promise<void> {
-  // BadgeCatalog.all(units) juga menambah badge dinamis per-unit conversation
-  // -- unit_hiragana bertipe 'kana', jadi tidak menghasilkan badge tambahan
-  // di sini (persis seperti BadgeService.evaluate akan memperlakukannya nanti).
-  for (const badge of BadgeCatalog.all([])) {
-    await prisma.badge.upsert({
-      where: { code: badge.id },
-      update: { nameId: badge.title, criteria: { description: badge.description } as unknown as Prisma.InputJsonValue },
-      create: { code: badge.id, nameId: badge.title, criteria: { description: badge.description } as unknown as Prisma.InputJsonValue },
-    });
+async function seedBadges(units: readonly DomainUnit[]): Promise<void> {
+  // BadgeCatalog.all(units) menambah satu badge dinamis ("Tuntas: <judul unit>") per unit bertipe conversation -- unit kana
+  // (Hiragana) tidak menghasilkan badge tambahan, persis seperti BadgeService.evaluate memperlakukannya.
+  const unitByBadgeCode = new Map(units.map((u) => [BadgeService.unitBadge(u.id), u.id]));
+  for (const badge of BadgeCatalog.all([...units])) {
+    const unitId = unitByBadgeCode.get(badge.id);
+    const data = { nameId: badge.title, criteria: { description: badge.description } as unknown as Prisma.InputJsonValue, unitId: unitId ?? null };
+    await prisma.badge.upsert({ where: { code: badge.id }, update: data, create: { code: badge.id, ...data } });
   }
 }
 
@@ -256,23 +262,24 @@ async function main(): Promise<void> {
     process.exitCode = 1;
     return;
   }
-  const unit = loadHiraganaUnit();
-  await seedHiraganaUnit(unit);
-  await seedStaticBadges();
-  const audioStatus = await seedAudioAssets(unit, ttsOptions);
+  const entries = UNIT_MANIFEST.map((entry) => ({ entry, unit: loadUnit(entry) }));
+  for (const { entry, unit } of entries) await seedUnit(unit, entry.level);
+  const units = entries.map(({ unit }) => unit);
+  await seedBadges(units);
+  const audioStatus = await seedAudioAssets(units, ttsOptions);
   await seedExampleScenario();
 
-  const [vocabCount, sentenceCount, lessonCount, exerciseCount, badgeCount, scenarioCount] = await Promise.all([
-    prisma.vocab.count({ where: { unitId: unit.id } }),
-    prisma.sentence.count({ where: { unitId: unit.id } }),
-    prisma.lesson.count({ where: { unitId: unit.id } }),
-    prisma.exercise.count({ where: { lesson: { unitId: unit.id } } }),
-    prisma.badge.count(),
-    prisma.scenario.count(),
-  ]);
-  console.log(
-    `Seed selesai: unit=${unit.id} vocab=${vocabCount} sentence=${sentenceCount} lesson=${lessonCount} exercise=${exerciseCount} badge=${badgeCount} scenario=${scenarioCount} audio=${audioStatus}`,
-  );
+  for (const unit of units) {
+    const [vocabCount, sentenceCount, lessonCount, exerciseCount] = await Promise.all([
+      prisma.vocab.count({ where: { unitId: unit.id } }),
+      prisma.sentence.count({ where: { unitId: unit.id } }),
+      prisma.lesson.count({ where: { unitId: unit.id } }),
+      prisma.exercise.count({ where: { lesson: { unitId: unit.id } } }),
+    ]);
+    console.log(`Unit ${unit.id}: vocab=${vocabCount} sentence=${sentenceCount} lesson=${lessonCount} exercise=${exerciseCount}`);
+  }
+  const [badgeCount, scenarioCount] = await Promise.all([prisma.badge.count(), prisma.scenario.count()]);
+  console.log(`Seed selesai: unit=${units.length} badge=${badgeCount} scenario=${scenarioCount} audio=${audioStatus}`);
 }
 
 main()

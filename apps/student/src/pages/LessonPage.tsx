@@ -3,12 +3,14 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { LessonSession } from "@elearning/domain";
 import type { Lesson, Unit } from "@elearning/domain";
 import { apiClient } from "../auth/api-client";
+import { NotesPanel, NotesToggle } from "../components/LessonNotes";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { Loading, Notice } from "../components/ui/Feedback";
 import { FeedbackPanel } from "../components/ui/FeedbackPanel";
 import { Icon } from "../components/ui/icons";
 import { ProgressBar } from "../components/ui/ProgressBar";
+import { langOf } from "../lib/lang";
 
 type AnswerEvent = { ref: string; kind: "choose" | "assemble"; choiceText?: string; tokens?: string[] };
 
@@ -41,6 +43,7 @@ export function LessonPage() {
   const eventsRef = useRef<AnswerEvent[]>([]);
   const [state, setState] = useState<PageState>({ status: "loading" });
   const [version, setVersion] = useState(0);
+  const [notesOpen, setNotesOpen] = useState(false);
   const bump = () => setVersion((v) => v + 1);
 
   useEffect(() => {
@@ -48,6 +51,7 @@ export function LessonPage() {
     setState({ status: "loading" });
     sessionRef.current = null;
     eventsRef.current = [];
+    setNotesOpen(false);
 
     apiClient.GET("/lessons/{id}", { params: { path: { id: lessonId! } } }).then(({ data, error }) => {
       if (cancelled) return;
@@ -121,6 +125,8 @@ export function LessonPage() {
   if (state.status === "submitting") return <Loading label="Mengirim hasil..." />;
 
   const session = sessionRef.current!;
+  // Catatan yang ditautkan unit ke pelajaran ini (unit lama tanpa `lessonId` tidak menampilkan apa pun, seperti sebelumnya).
+  const notes = session.unit.grammarNotes.filter((note) => note.lessonId === session.lesson.id);
   void version; // `version` sendiri tidak dibaca di JSX -- session (mutable, lewat ref) yang dibaca;
   // `version` cuma pemicu re-render (setVersion di bump()), makanya harus tetap "dipakai" di sini
   // supaya lint tidak menganggapnya variable mati.
@@ -138,7 +144,10 @@ export function LessonPage() {
           <Icon name="x" className="h-6 w-6" strokeWidth={2.8} />
         </Link>
         <ProgressBar className="flex-1" size="lg" value={Math.round(session.progress * 100)} label="Kemajuan pelajaran" />
+        {notes.length > 0 && <NotesToggle open={notesOpen} onToggle={() => setNotesOpen((open) => !open)} />}
       </div>
+
+      {notesOpen && notes.length > 0 && <NotesPanel notes={notes} />}
 
       {session.current.kind === "choose" ? (
         <ChooseExercise key={session.current.refId} session={session} onAnswer={handleChoice} onNext={handleNext} />
@@ -169,15 +178,20 @@ function Prompt({ text, sub, small }: { text: string; sub?: string | null; small
   return (
     <div className="space-y-2 text-center">
       <p
+        lang={langOf(text)}
         className={
           glyph
             ? "mx-auto grid h-32 w-32 place-items-center rounded-[2rem] bg-gradient-to-br from-secondary-100 via-tertiary-100 to-pink-100 text-7xl font-black text-secondary-800 shadow-inner ring-1 ring-secondary-200"
-            : `font-black leading-snug text-slate-900 ${small ? "text-xl md:text-2xl" : "text-2xl md:text-3xl"}`
+            : `text-balance font-black leading-snug text-slate-900 [word-break:auto-phrase] ${small ? "text-xl md:text-2xl" : "text-2xl md:text-3xl"}`
         }
       >
         {text}
       </p>
-      {sub && <p className="text-base font-bold text-slate-600">{sub}</p>}
+      {sub && (
+        <p lang={langOf(sub)} className="text-balance text-base font-bold text-slate-600 [word-break:auto-phrase]">
+          {sub}
+        </p>
+      )}
     </div>
   );
 }
@@ -218,6 +232,7 @@ function ChooseExercise({
               type="button"
               data-testid="choose-option"
               data-text={opt.text}
+              lang={langOf(opt.text)}
               disabled={answered}
               onClick={() => {
                 setChosen(i);
@@ -268,6 +283,7 @@ function AssembleExercise({
             key={pos}
             type="button"
             data-testid="picked-token"
+            lang={langOf(bank[i] ?? "")}
             disabled={feedback !== null}
             onClick={() => setPicked((p) => p.filter((_, idx) => idx !== pos))}
             className="rounded-xl border-2 border-b-4 border-secondary-300 bg-secondary-100 px-4 py-2 text-lg font-extrabold text-secondary-900 transition hover:bg-secondary-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300 disabled:cursor-not-allowed disabled:opacity-60"
@@ -284,6 +300,7 @@ function AssembleExercise({
             type="button"
             data-testid="bank-token"
             data-text={token}
+            lang={langOf(token)}
             disabled={feedback !== null}
             onClick={() => setPicked((p) => [...p, i])}
             className="rounded-xl border-2 border-b-4 border-slate-200 bg-white px-4 py-2 text-lg font-extrabold text-slate-800 transition hover:border-secondary-300 hover:bg-secondary-50 active:translate-y-0.5 active:border-b-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300 disabled:cursor-not-allowed disabled:opacity-60"

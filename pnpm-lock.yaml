@@ -166,6 +166,9 @@ importers:
       '@types/passport-local':
         specifier: ^1.0.38
         version: 1.0.38
+      fflate:
+        specifier: ^0.8.3
+        version: 0.8.3
       prisma:
         specifier: ^6.1.0
         version: 6.19.3(typescript@5.9.3)

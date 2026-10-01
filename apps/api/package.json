@@ -17,6 +17,7 @@
     "db:seed": "prisma db seed",
     "admin:create": "ts-node prisma/create-admin.ts",
     "student:create": "ts-node prisma/create-student.ts",
+    "unit:import": "ts-node prisma/import-unit.ts",
     "tts:sample": "ts-node prisma/tts-sample.ts",
     "generate-openapi": "nest build && node dist/generate-openapi.js"
   },
@@ -53,6 +54,7 @@
     "@types/node": "^22.10.5",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
+    "fflate": "^0.8.3",
     "prisma": "^6.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",

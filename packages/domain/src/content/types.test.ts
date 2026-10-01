@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
-import { findVocabById, unitSchema } from './types';
+import { findVocabById, grammarNoteSchema, unitSchema } from './types';
 
 // Parse konten Hiragana sungguhan (bukan fixture buatan) supaya skema zod
 // benar-benar tervalidasi terhadap output tools/gen_hiragana.py, bukan cuma
@@ -38,5 +38,23 @@ describe('unitSchema terhadap __fixtures__/unit_hiragana.json', () => {
     const firstId = unit.vocab[0]!.id;
     expect(findVocabById(unit, firstId)?.id).toBe(firstId);
     expect(findVocabById(unit, 'tidak-ada')).toBeUndefined();
+  });
+});
+
+describe('grammarNoteSchema', () => {
+  test('lesson_id opsional dipetakan ke lessonId (catatan yang ditautkan ke satu pelajaran)', () => {
+    const note = grammarNoteSchema.parse({ id: 'g1', title: 'Judul', body_md: 'Isi', lesson_id: 'l1' });
+    expect(note).toEqual({ id: 'g1', title: 'Judul', bodyMd: 'Isi', lessonId: 'l1' });
+  });
+
+  test('tanpa lesson_id (atau null): tidak ada kunci lessonId sama sekali -- catatan lama tidak berubah bentuk', () => {
+    expect(grammarNoteSchema.parse({ id: 'g1', title: 'Judul', body_md: 'Isi' })).toStrictEqual({ id: 'g1', title: 'Judul', bodyMd: 'Isi' });
+    expect(grammarNoteSchema.parse({ id: 'g1', title: 'Judul', body_md: 'Isi', lesson_id: null })).toStrictEqual({ id: 'g1', title: 'Judul', bodyMd: 'Isi' });
+  });
+
+  test('catatan di dalam unit ikut membawa lessonId', () => {
+    const raw = JSON.parse(readFileSync(join(__dirname, '__fixtures__/unit_hiragana.json'), 'utf-8'));
+    const unit = unitSchema.parse({ ...raw, grammar_notes: [{ id: 'g_x', title: 'T', body_md: 'B', lesson_id: raw.lessons[0].id }] });
+    expect(unit.grammarNotes).toEqual([{ id: 'g_x', title: 'T', bodyMd: 'B', lessonId: raw.lessons[0].id }]);
   });
 });

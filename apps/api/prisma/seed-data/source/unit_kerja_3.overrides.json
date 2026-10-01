@@ -1,0 +1,156 @@
+{
+  "textFixes": [
+    {
+      "field": "id",
+      "from": "Nai (kendaraan)",
+      "to": "Naik (kendaraan)",
+      "why": "salah ketik: 'Naik'"
+    },
+    {
+      "field": "id",
+      "from": "Lemberunya",
+      "to": "Lemburnya",
+      "why": "salah ketik: 'lembur'"
+    },
+    {
+      "field": "id",
+      "from": "lemberunya",
+      "to": "lemburnya",
+      "why": "salah ketik: 'lembur'"
+    },
+    {
+      "field": "id",
+      "from": "nonto TV",
+      "to": "nonton TV",
+      "why": "salah ketik: 'nonton'"
+    },
+    {
+      "field": "id",
+      "from": "itentukankan",
+      "to": "itentukan",
+      "why": "salah ketik: 'ditentukan' (juga huruf 'd' lebar-penuh)"
+    },
+    {
+      "field": "id",
+      "from": "saya Sedang mau",
+      "to": "saya sedang mau",
+      "why": "huruf besar nyasar di tengah kalimat"
+    },
+    {
+      "field": "id",
+      "from": "Anak anak",
+      "to": "Anak-anak",
+      "why": "kata ulang memakai tanda hubung"
+    },
+    {
+      "field": "id",
+      "from": "anak anak",
+      "to": "anak-anak",
+      "why": "kata ulang memakai tanda hubung"
+    },
+    {
+      "field": "id",
+      "from": "Laki laki",
+      "to": "Laki-laki",
+      "why": "kata ulang memakai tanda hubung"
+    },
+    {
+      "field": "id",
+      "from": "laki laki",
+      "to": "laki-laki",
+      "why": "kata ulang memakai tanda hubung"
+    },
+    {
+      "field": "id",
+      "from": "Akhir akhir",
+      "to": "Akhir-akhir",
+      "why": "kata ulang memakai tanda hubung"
+    },
+    {
+      "field": "jp",
+      "from": "初めている",
+      "to": "始めている",
+      "why": "kanji keliru (初, bukan 始); rangkaiannya 始める -> 始めている -> 始めているところです"
+    },
+    {
+      "field": "romaji",
+      "from": "Ima koro",
+      "to": "Ima goro",
+      "why": "今頃 dibaca いまごろ"
+    },
+    {
+      "field": "romaji",
+      "from": "Ibentou",
+      "to": "Ibento",
+      "why": "イベント tanpa う (romaji salah ketik)"
+    },
+    {
+      "field": "romaji",
+      "from": "ibentou",
+      "to": "ibento",
+      "why": "イベント tanpa う (romaji salah ketik)"
+    },
+    {
+      "field": "romaji",
+      "from": "Takakuite",
+      "to": "Takakute",
+      "why": "高くて dibaca たかくて"
+    },
+    {
+      "field": "romaji",
+      "from": "takakuite",
+      "to": "takakute",
+      "why": "高くて dibaca たかくて"
+    },
+    {
+      "field": "romaji",
+      "from": "Itsuka made ni keihi keisan",
+      "to": "Itsuka made ni keihi seisan",
+      "why": "tulisan Jepangnya 経費精算 (せいさん), bukan 計算"
+    },
+    {
+      "field": "romaji",
+      "from": "itsuka made ni keihi keisan",
+      "to": "itsuka made ni keihi seisan",
+      "why": "tulisan Jepangnya 経費精算 (せいさん), bukan 計算"
+    }
+  ],
+  "tokens": {
+    "急いでください。": [
+      "急いで",
+      "ください。"
+    ],
+    "体調をくずさないように": [
+      "体調を",
+      "くずさないように"
+    ],
+    "答えが見つかりそうにない": [
+      "答えが",
+      "見つかり",
+      "そうにない"
+    ],
+    "複雑で答えがみつかりそうにない": [
+      "複雑で",
+      "答えが",
+      "みつかり",
+      "そうにない"
+    ]
+  },
+  "runReadings": {
+    "続": "つづ"
+  },
+  "acceptedWarnings": [
+    {
+      "contains": "punya 2 bentuk di romaji tetapi 1 di tulisan Jepang",
+      "why": "Untuk 'Kono ryouri wa sukoshi karai ...' template hanya menulis bentuk ようです dalam tulisan Jepang (みたいです hanya ada di romaji); yang dipakai satu bentuk itu."
+    },
+    {
+      "contains": "Sekininkan ga tsuyokute\" tidak sama panjang",
+      "why": "Terjemahan bagian ketiga ('責任感が強くて') tidak ditulis di template; di catatan tampil '…'."
+    },
+    {
+      "contains": "kalimat ganda berurutan dilewati: 先生に質問しようとしたところです",
+      "why": "Kalimat yang sama tertulis dua kali berturut-turut di template; satu saja dipakai."
+    }
+  ]
+}

@@ -216,6 +216,81 @@ sama dengan pendaftaran lewat undangan: satu baris murid dengan email baku (huru
 - **Bukan untuk murid sungguhan**: tidak ada bukti bahwa pemilik email tahu akunnya, dan kata sandinya dipilih operator. Akun
   uji yang sudah tidak dipakai dinonaktifkan di halaman detail Murid (admin).
 
+### 5b. Unit pelajaran dari template Word (konten pengajar)
+
+Pengajar menulis pelajaran di Word memakai **template "Percakapan di Tempat Kerja"**. Perintah `unit:import` mengubahnya menjadi
+**unit bertipe percakapan** (kosakata, kalimat, catatan tata bahasa, dan satu pelajaran latihan per pola); hasilnya berupa
+berkas JSON yang di-commit, lalu `db:seed` memasukkannya ke database. Unit yang sudah ada: **Unit 3** (`unit_kerja_3`, 11 pola
+tata bahasa N4-N3: sedang berlangsung ～ている, sudah dilakukan ～てある, segera ～するところ, membiasakan ～ようにしている,
+keputusan ～ことになる, peraturan ～ことになっている, rupanya ～よう/みたい, kelihatannya ～そう, katanya ～そうだ, konon ～らしい,
+dan ciri khas ～らしい).
+
+**Bentuk template** (satu unit per berkas; contoh nyata: `apps/api/prisma/seed-data/source/Percakapan_di_Tempat_Kerja_Unit_3.docx`):
+
+```
+Percakapan di Tempat Kerja（職場での会話 Shokuba de no kaiwa）      <- judul kursus (Indonesia, Jepang, romaji)
+N4–N3                                                           <- tingkat
+Unit 3                                                          <- nomor unit
+Keadaan Sedang Berlangsung (～ている ... te iru )                 <- BAGIAN = satu pola (nama + pola + romaji) = satu pelajaran
+① ・ Hajimeru – Hajimete iru – Hajimete iru tokoro desu          <- ENTRI: rangkaian bentuk, tiga baris
+    始める – 始めている – 始めているところです                          (romaji / Jepang / Indonesia; pemisah " – ")
+    Mulai – Sedang mulai – Baru saja (sedang) mulai
+Kaigi ga hajimete iru tokoro desu                               <- kalimat bertahap, tiga baris per langkah:
+    会議が始めているところです                                         dari frasa pendek ke kalimat penuh, tiap
+    Rapatnya baru saja mulai                                       langkah memuat langkah sebelumnya + satu tambahan
+Choudo ima, kaigi ga hajimete iru tokoro desu.
+    ちょうど今、会議が始めているところです。
+    Tepat sekarang, rapatnya baru saja mulai.
+```
+
+Aturan: nomor entri (①②) opsional; blok yang berisi " – " adalah rangkaian bentuk (boleh disisipkan di tengah entri sebagai kata
+bantu untuk langkah berikutnya), selain itu kalimat; dua bentuk setara ditulis dipisah `/` (ようです/みたいです) dan menjadi dua
+kalimat. Bagian dengan nomor tertulis ("10a. ") memakai nomor itu.
+
+**Yang dibuat dari satu entri:** kata dasar (elemen pertama rangkaian) jadi kosakata; tiap kalimat bertahap jadi kalimat dengan
+bacaan (kana) yang diturunkan dari romaji pengajar; soal per entri berurutan seperti template: pilih arti kata dasar → susun
+tiap langkah kalimat (potongan susun diturunkan dari rangkaian bentuk dan selisih antarlangkah) → pilih arti kalimat penuh.
+Rangkaian bentuk dan contoh kalimat tiap bagian tampil sebagai **catatan** (tombol "Catatan" di halaman belajar).
+
+```bash
+# Dijalankan di komputer pengembang (hasilnya di-commit), bukan di server:
+pnpm --filter api run unit:import                        # daftar unit yang punya sumber Word
+pnpm --filter api run unit:import unit_kerja_3           # buat ulang prisma/seed-data/raw/unit_kerja_3.json dari sumbernya
+pnpm --filter api run unit:import unit_kerja_3 --check   # tanpa menulis: JSON tersimpan sama dengan hasil impor? (kode keluar 1 bila beda)
+```
+
+**Menambah unit baru:** (1) taruh .docx di `apps/api/prisma/seed-data/source/`; (2) tambahkan entri di `UNIT_MANIFEST`
+(`apps/api/src/content-import/unit-manifest.ts`): berkas JSON keluaran, level (kode, nama, urutan), dan `source` (docx, overrides,
+`unitId`, `idPrefix` yang unik antarunit, nomor unit); (3) jalankan `unit:import <unitId>` dan baca ringkasannya; (4) commit .docx,
+JSON, dan overrides. `pnpm test` menjaga dua hal: JSON yang di-commit SAMA dengan hasil impor ulang sumbernya, dan isi tiap unit
+utuh (acuan soal ada, potongan menyusun kalimatnya, id tidak bentrok antarunit).
+
+**Peringatan impor** (tercetak oleh `unit:import`) berarti sumbernya patut diperiksa: baris yang tak membentuk kelompok tiga baris,
+rangkaian yang tak sama panjang, kalimat "A/B" yang jumlah bentuknya beda di romaji dan tulisan Jepang, **romaji yang tidak cocok
+dengan tulisan Jepangnya** (salah ketik di salah satunya), dan kalimat yang potongannya tak bisa diturunkan. Cara utama
+menanganinya: perbaiki di Word lalu impor ulang. Untuk yang tak bisa/perlu diubah di sumber, `*.overrides.json` di samping .docx
+memuat `textFixes` (perbaikan salah ketik, tiap perbaikan harus terpakai dan alasannya dicatat), `tokens` (potongan susun
+pengganti), `runReadings` (bacaan pengganti satu deretan kanji, mis. 続 = つづ karena romaji tak membedakan ず/づ), dan
+`acceptedWarnings` (peringatan yang sudah ditinjau dan memang demikian; peringatan baru yang belum diterima membuat tes gagal).
+**Impor tidak memeriksa kebenaran bahasa Jepangnya** (dan kesalahan bacaan di dalam deretan kanji tak terdeteksi): isi pelajaran
+adalah tanggung jawab pengajar. Dugaan kesalahan di Unit 3 dicatat di [`CATATAN-KONTEN-UNIT-3.md`](CATATAN-KONTEN-UNIT-3.md).
+
+**Di server:**
+
+```bash
+cd /home/user/elearning-platform && git pull
+cd deploy && docker compose up -d --build        # tidak ada migrasi baru untuk unit ini
+docker compose run --rm tools pnpm run db:seed   # menambah level N4, unit, kosakata, kalimat, pelajaran, lencana, audio (bila TTS terisi)
+```
+
+`db:seed` aman diulang. Ia menambah/memperbarui level **N4** (kolom level baru mengenal sampai N4, jadi tingkat "N4-N3" di
+template masuk N4), unit, 62 kosakata, 145 kalimat, 11 pelajaran (267 soal), lencana "Tuntas: Percakapan di Tempat Kerja", dan
+audio. Kalimat yang sudah tidak ada di JSON ikut dihapus dari database (hanya itu yang diurus otomatis; kosakata dan pelajaran
+yang dihapus dari JSON dibiarkan karena bisa sudah punya riwayat murid).
+
+Murid melihat unit baru di Beranda di bawah level **N4**. Jalur belajar adalah SATU urutan linear lintas level: pelajaran pertama
+unit ini terbuka setelah semua pelajaran sebelumnya (kini Hiragana) tuntas; sesudahnya terbuka satu per satu.
+
 ## 6. Fitur opsional: AI tutor dan audio pelajaran
 
 Semuanya boleh dikosongkan; hanya fitur terkait yang nonaktif.
@@ -257,11 +332,11 @@ docker compose up -d
 docker compose run --rm tools pnpm run tts:sample
 #    mencetak tautan .../media/samples/tts-openai-<sidik>-01-female.mp3 dst.; buka di browser
 
-# 3. Cocok? Buat semua audio (160 teks, satu per satu -- perkiraan beberapa menit; kemajuan tercetak tiap 20 teks)
+# 3. Cocok? Buat semua audio (367 teks: 160 Hiragana + 207 Unit 3, satu per satu -- perkiraan beberapa menit; kemajuan tercetak tiap 20 teks)
 docker compose run --rm tools pnpm run db:seed
 ```
 
-Baris `Seed selesai: …` di akhir keluaran seed memuat `audio=lengkap 160/160` (atau `dilewati` / `sebagian n/160`,
+Baris `Seed selesai: …` di akhir keluaran seed memuat `audio=lengkap 367/367` (atau `dilewati` / `sebagian n/367`,
 alasannya tercetak di peringatan sebelumnya). Seed yang berhenti di tengah (kunci ditolak, kuota habis) aman diulang: yang sudah jadi
 tidak dibuat ulang.
 
@@ -455,6 +530,7 @@ atau ubah `.env`) saat menjalankan langkah 2.
 | `apps/api/Dockerfile` | Target `runner` (server API) dan `tools` (migrasi, seed, admin, cek OpenAI) |
 | `apps/api/prisma/create-admin.ts` · `src/bootstrap/admin-bootstrap.ts` | Pembuatan admin pertama / pemulihan kata sandi admin |
 | `apps/api/prisma/create-student.ts` · `src/bootstrap/student-bootstrap.ts` | `student:create`: murid uji langsung tanpa undangan / pemulihan kata sandinya (bagian 5a) |
+| `apps/api/prisma/import-unit.ts` · `src/content-import/` · `prisma/seed-data/{units,source}` | `unit:import`: template Word pengajar → JSON unit (bagian 5b); daftar unit yang di-seed ada di `unit-manifest.ts` |
 | `deploy/backup.sh` · `pgclient` (compose) · `pgurl.sh` · `pg-dump.sh` · `pg-restore.sh` | Cadangan database + volume audio; klien Postgres sekali-jalan yang memakai `DATABASE_URL` yang sama dengan API (parameter khusus Prisma dibuang) |
 | `apps/api/prisma/db-check.ts` · `src/bootstrap/db-check.ts` | `db:check`: pemeriksaan database sebelum migrasi (jalan otomatis di awal `db:deploy`) dengan pesan yang menjelaskan penyebab dan tindakan |
 | `apps/api/src/audio/` | Penyimpanan audio: `local-storage.service.ts` (disk, bawaan), `object-storage.service.ts` (S3, untuk nanti), `local-media.ts` (penyajian `/media`), `storage-options.ts` (aturan env) |

@@ -258,6 +258,23 @@ interface LessonNodeProps {
   current: boolean;
 }
 
+const TRAILING_JAPANESE_PATTERN_RE = /^(.*\S)\s*(\([^()]*[\u3040-\u30ff\u3400-\u9fff][^()]*\))$/;
+
+/** Judul pelajaran di jalur belajar. Judul yang berakhiran pola Jepang dalam kurung ("Keadaan Sedang Berlangsung (～ている)") dipecah:
+ *  nama di satu baris, pola di baris sendiri -- supaya pola tidak terpotong di tengah ("～てい / る"). */
+function LessonTitle({ title }: { title: string }) {
+  const match = TRAILING_JAPANESE_PATTERN_RE.exec(title);
+  if (!match) return <>{title}</>;
+  return (
+    <>
+      {match[1]}{" "}
+      <span lang="ja" className="block [overflow-wrap:anywhere]">
+        {match[2]}
+      </span>
+    </>
+  );
+}
+
 function LessonNode({ lesson, index, themeIndex, current }: LessonNodeProps) {
   const theme = THEMES[themeIndex % THEMES.length] ?? THEMES[0];
   const wave = WAVE[index % WAVE.length] ?? 0;
@@ -312,7 +329,7 @@ function LessonNode({ lesson, index, themeIndex, current }: LessonNodeProps) {
           lesson.state === "locked" ? "text-slate-500" : "text-slate-800"
         }`}
       >
-        {lesson.title}
+        <LessonTitle title={lesson.title} />
         <span className="sr-only">
           {lesson.state === "locked" ? ", terkunci" : lesson.state === "done" ? `, selesai, ${stars} bintang` : ", tersedia"}
         </span>
