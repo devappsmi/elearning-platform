@@ -278,7 +278,7 @@ adalah tanggung jawab pengajar. Dugaan kesalahan di Unit 3 dicatat di [`CATATAN-
 **Di server:**
 
 ```bash
-cd /home/user/elearning-platform && git pull
+git pull                                         # di folder repo di server
 cd deploy && docker compose up -d --build        # tidak ada migrasi baru untuk unit ini
 docker compose run --rm tools pnpm run db:seed   # menambah level N4, unit, kosakata, kalimat, pelajaran, lencana, audio (bila TTS terisi)
 ```
