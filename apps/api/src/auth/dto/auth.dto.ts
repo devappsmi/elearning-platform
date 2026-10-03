@@ -1,4 +1,7 @@
+import { PASSWORD_LETTER_AND_DIGIT, PASSWORD_MIN_LENGTH } from "@elearning/domain";
 import { IsEmail, IsString, Matches, MinLength } from "class-validator";
+import { NormalizeEmail } from "../../common/normalize-email.decorator";
+import { Trim } from "../../common/trim.decorator";
 
 export class ValidateInvitationDto {
   @IsString()
@@ -9,18 +12,21 @@ export class RegisterDto {
   @IsString()
   token!: string;
 
+  @Trim()
   @IsString()
   @MinLength(1)
   name!: string;
 
-  // AC AUTH-02: min. 8 karakter, huruf+angka
+  // AC AUTH-02: min. 8 karakter, huruf+angka -- aturannya dari @elearning/domain
+  // (satu sumber dengan validasi klien di form murid), dipakai juga di ResetPasswordDto.
   @IsString()
-  @MinLength(8)
-  @Matches(/^(?=.*[A-Za-z])(?=.*\d).+$/, { message: "Password harus mengandung huruf dan angka" })
+  @MinLength(PASSWORD_MIN_LENGTH)
+  @Matches(PASSWORD_LETTER_AND_DIGIT, { message: "Password harus mengandung huruf dan angka" })
   password!: string;
 }
 
 export class LoginDto {
+  @NormalizeEmail()
   @IsEmail()
   email!: string;
 
@@ -34,6 +40,7 @@ export class RefreshDto {
 }
 
 export class ForgotPasswordDto {
+  @NormalizeEmail()
   @IsEmail()
   email!: string;
 }
@@ -43,8 +50,8 @@ export class ResetPasswordDto {
   token!: string;
 
   @IsString()
-  @MinLength(8)
-  @Matches(/^(?=.*[A-Za-z])(?=.*\d).+$/, { message: "Password harus mengandung huruf dan angka" })
+  @MinLength(PASSWORD_MIN_LENGTH)
+  @Matches(PASSWORD_LETTER_AND_DIGIT, { message: "Password harus mengandung huruf dan angka" })
   password!: string;
 }
 

@@ -1,0 +1,226 @@
+# Stack PRODUKSI (satu server). Panduan lengkap: docs/DEPLOY.md.
+#
+#   cd deploy && sh gen-env.sh && $EDITOR .env
+#   docker compose up -d --build
+#   docker compose run --rm tools pnpm run db:seed
+#   docker compose run --rm -e ADMIN_EMAIL -e ADMIN_PASSWORD tools pnpm run admin:create
+#
+# Yang menerima lalu lintas dari luar HANYA `edge` (Caddy: port 80/443, dan 8080 untuk mode uji lewat IP).
+# Redis dan API tidak dipublikasikan ke host. Audio disimpan di disk server (volume `media_data`) dan
+# disajikan API di /media lewat Caddy -- tanpa S3 (tahap uji coba; driver S3 masih ada di kode, lihat docs/DEPLOY.md).
+#
+# DATABASE: bawaannya memakai Postgres YANG SUDAH ADA -- isi DATABASE_URL di .env (docs/DEPLOY.md, bagian 2a).
+# Postgres bawaan stack ini (layanan `postgres`) hanya menyala bila profil `builtin-db` diaktifkan
+# (COMPOSE_PROFILES=builtin-db di .env, atau `sh gen-env.sh --builtin-db`).
+# Butuh Docker Compose v2.20+.
+
+name: elearning
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+# Alamat database, SATU definisi untuk API, migrasi, alat, dan klien cadangan. DATABASE_URL terisi = Postgres milik Anda;
+# kosong = Postgres bawaan stack ini (profil `builtin-db`). Kata sandi berkarakter khusus harus di-encode (@ %40, : %3A,
+# / %2F, ? %3F, # %23, % %25, $ %24) -- `docker compose run --rm tools pnpm run db:check` memeriksanya.
+x-database-url: &database-url ${DATABASE_URL:-postgresql://elearning:${POSTGRES_PASSWORD:-}@postgres:5432/elearning}
+
+# Postgres di MESIN YANG SAMA dengan Docker dicapai lewat host.docker.internal (di dalam container, "localhost" adalah
+# container itu sendiri). Di Linux nama itu harus dipetakan ke gerbang host secara eksplisit.
+x-host-gateway: &host-gateway
+  - "host.docker.internal:host-gateway"
+
+x-api-environment: &api-environment
+  NODE_ENV: production
+  PORT: "3001"
+  # Zona waktu "hari" untuk kuota tutor, streak, dan leaderboard mingguan (lihat docs/PLAN.md).
+  TZ: ${TZ:-Asia/Jakarta}
+  DATABASE_URL: *database-url
+  REDIS_URL: redis://redis:6379
+  JWT_STUDENT_SECRET: ${JWT_STUDENT_SECRET:?isi JWT_STUDENT_SECRET di deploy/.env}
+  JWT_ADMIN_SECRET: ${JWT_ADMIN_SECRET:?isi JWT_ADMIN_SECRET di deploy/.env}
+  JWT_ACCESS_TTL: ${JWT_ACCESS_TTL:-1h}
+  JWT_REFRESH_TTL: ${JWT_REFRESH_TTL:-14d}
+  MAIL_FROM: ${MAIL_FROM:-noreply@example.com}
+  MAIL_PROVIDER_API_KEY: ${MAIL_PROVIDER_API_KEY:-}
+  # Penyimpanan audio: DISK LOKAL. Berkas ditulis ke volume media_data (/data/media) dan disajikan API di /media;
+  # Caddy meneruskan /media/* dari situs murid ke API. STORAGE_PUBLIC_BASE_URL = alamat yang dibuka BROWSER.
+  STORAGE_DRIVER: ${STORAGE_DRIVER:-local}
+  STORAGE_LOCAL_DIR: /data/media
+  STORAGE_PUBLIC_BASE_URL: ${STORAGE_PUBLIC_BASE_URL:-${PUBLIC_STUDENT_URL}/media}
+  # Hanya dipakai bila kelak STORAGE_DRIVER=s3 (kosong = tak berpengaruh).
+  S3_ENDPOINT: ${S3_ENDPOINT:-}
+  S3_REGION: ${S3_REGION:-}
+  S3_BUCKET: ${S3_BUCKET:-}
+  S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-}
+  S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-}
+  OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-gpt-5.6-terra}
+  OPENAI_STT_MODEL: ${OPENAI_STT_MODEL:-gpt-transcribe}
+  OPENAI_TTS_MODEL: ${OPENAI_TTS_MODEL:-gpt-4o-mini-tts}
+  OPENAI_TTS_VOICE_DEFAULT: ${OPENAI_TTS_VOICE_DEFAULT:-nova}
+  TUTOR_DAILY_QUOTA: ${TUTOR_DAILY_QUOTA:-20}
+  # Audio PELAJARAN (dibuat sekali lewat `db:seed`). TTS_PROVIDER: auto (bawaan; Azure bila AZURE_* terisi, kalau tidak
+  # OpenAI bila OPENAI_API_KEY terisi) | openai | azure | none. Suara/arahan OpenAI kosong = bawaan di kode.
+  TTS_PROVIDER: ${TTS_PROVIDER:-auto}
+  OPENAI_LESSON_TTS_VOICE_FEMALE: ${OPENAI_LESSON_TTS_VOICE_FEMALE:-}
+  OPENAI_LESSON_TTS_VOICE_MALE: ${OPENAI_LESSON_TTS_VOICE_MALE:-}
+  OPENAI_LESSON_TTS_INSTRUCTIONS: ${OPENAI_LESSON_TTS_INSTRUCTIONS:-}
+  AZURE_SPEECH_KEY: ${AZURE_SPEECH_KEY:-}
+  AZURE_SPEECH_REGION: ${AZURE_SPEECH_REGION:-}
+  AZURE_TTS_VOICE_FEMALE: ${AZURE_TTS_VOICE_FEMALE:-}
+  AZURE_TTS_VOICE_MALE: ${AZURE_TTS_VOICE_MALE:-}
+  # Alamat publik kedua aplikasi: dipakai untuk membentuk tautan undangan/reset password dan untuk CORS.
+  CORS_ORIGIN_STUDENT: ${PUBLIC_STUDENT_URL:?isi PUBLIC_STUDENT_URL di deploy/.env}
+  CORS_ORIGIN_ADMIN: ${PUBLIC_ADMIN_URL:?isi PUBLIC_ADMIN_URL di deploy/.env}
+  # Tepat satu proxy tepercaya (Caddy) di depan API -- supaya pembatas per-IP membaca IP klien sungguhan.
+  TRUST_PROXY: "1"
+
+# Alat sekali-jalan (migrasi, seed, admin) -- image dari target `tools` di apps/api/Dockerfile.
+x-tools: &tools
+  build:
+    context: ..
+    dockerfile: apps/api/Dockerfile
+    target: tools
+  image: elearning-tools:local
+  environment: *api-environment
+  extra_hosts: *host-gateway
+  volumes:
+    - media_data:/data/media # seed bisa menghasilkan audio (bila TTS diisi) ke penyimpanan yang sama dengan API
+  logging: *logging
+
+services:
+  # Postgres BAWAAN -- hanya menyala dengan profil `builtin-db` (uji cepat tanpa server database sendiri). Bila DATABASE_URL
+  # menunjuk Postgres Anda, layanan ini tidak dibuat sama sekali dan tidak ada yang bergantung padanya.
+  postgres:
+    image: postgres:17-alpine
+    profiles: ["builtin-db"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: elearning
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-}
+      POSTGRES_DB: elearning
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U elearning -d elearning"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    logging: *logging
+
+  # Redis menyimpan pembatas laju, kunci login, kuota tutor, dan leaderboard mingguan -> persisten (AOF).
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    logging: *logging
+
+  # Migrasi skema database; `api` baru start setelah ini SELESAI dengan sukses.
+  # `db:deploy` = pemeriksaan database (`db:check`, pesan yang jelas bila koneksi/hak salah) lalu `prisma migrate deploy`.
+  migrate:
+    <<: *tools
+    command: ["pnpm", "run", "db:deploy"]
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+        required: false # tidak ada bila memakai Postgres sendiri
+
+  api:
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    image: elearning-api:local
+    restart: unless-stopped
+    environment: *api-environment
+    extra_hosts: *host-gateway
+    depends_on:
+      postgres:
+        condition: service_healthy
+        required: false # tidak ada bila memakai Postgres sendiri
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    expose:
+      - "3001"
+    volumes:
+      - media_data:/data/media # audio hasil TTS: ditulis di sini, disajikan API di /media
+    # Pemeriksaan lebih rapat daripada bawaan image (30 dtk) supaya `up` tidak menunggu lama sebelum `edge` mulai.
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/health', (r) => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    logging: *logging
+
+  # Caddy + berkas statis kedua aplikasi web. Satu-satunya layanan yang membuka port ke luar.
+  edge:
+    build:
+      context: ..
+      dockerfile: deploy/edge.Dockerfile
+    image: elearning-edge:local
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      STUDENT_ADDRESS: ${STUDENT_ADDRESS:?isi STUDENT_ADDRESS di deploy/.env}
+      ADMIN_ADDRESS: ${ADMIN_ADDRESS:?isi ADMIN_ADDRESS di deploy/.env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+      - "8080:8080"
+    volumes:
+      - caddy_data:/data # sertifikat HTTPS -- jangan dihapus (batas penerbitan Let's Encrypt)
+      - caddy_config:/config
+    logging: *logging
+
+  # Perintah manual: seed konten, buat admin, dsb. `docker compose run --rm tools pnpm run <skrip>`.
+  tools:
+    <<: *tools
+    profiles: ["tools"]
+    command: ["pnpm", "run", "db:seed"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+        required: false # tidak ada bila memakai Postgres sendiri
+
+  # Klien Postgres sekali-jalan untuk cadangan dan pemulihan (backup.sh; docs/DEPLOY.md, "Cadangan dan pemulihan"). Memakai
+  # DATABASE_URL yang SAMA dengan API, jadi berlaku untuk Postgres sendiri maupun bawaan. Versi klien harus SAMA atau LEBIH
+  # BARU dari server: server Postgres 18 -> PG_CLIENT_IMAGE=postgres:18-alpine di .env.
+  pgclient:
+    image: ${PG_CLIENT_IMAGE:-postgres:17-alpine}
+    profiles: ["tools"]
+    entrypoint: ["sh"]
+    environment:
+      DATABASE_URL: *database-url
+    extra_hosts: *host-gateway
+    volumes:
+      - ./pgurl.sh:/pgurl.sh:ro
+      - ./pg-dump.sh:/pg-dump.sh:ro
+      - ./pg-restore.sh:/pg-restore.sh:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+        required: false # tidak ada bila memakai Postgres sendiri
+    logging: *logging
+
+volumes:
+  postgres_data:
+  redis_data:
+  media_data:
+  caddy_data:
+  caddy_config:

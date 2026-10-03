@@ -120,20 +120,20 @@ enum UserStatus {
 }
 
 model User {
-  id                    String     @id @default(cuid())
-  classId               String     @map("class_id")
-  class                 Class      @relation(fields: [classId], references: [id])
-  name                  String
-  email                 String     @unique
-  passwordHash          String     @map("password_hash")
-  avatarUrl             String?    @map("avatar_url")
-  status                UserStatus @default(ACTIVE)
-  dailyXpGoal           Int        @default(30) @map("daily_xp_goal") // GAM-01: murid bisa ubah 10/30/50
-  placementStartUnitId  String?    @map("placement_start_unit_id") // AUTH-05: null = mulai Level 1
-  placementStartUnit    Unit?      @relation(fields: [placementStartUnitId], references: [id])
-  createdAt             DateTime   @default(now()) @map("created_at")
-  updatedAt             DateTime   @updatedAt @map("updated_at")
-  lastActiveAt          DateTime?  @map("last_active_at")
+  id                   String     @id @default(cuid())
+  classId              String     @map("class_id")
+  class                Class      @relation(fields: [classId], references: [id])
+  name                 String
+  email                String     @unique
+  passwordHash         String     @map("password_hash")
+  avatarUrl            String?    @map("avatar_url")
+  status               UserStatus @default(ACTIVE)
+  dailyXpGoal          Int        @default(30) @map("daily_xp_goal") // GAM-01: murid bisa ubah 10/30/50
+  placementStartUnitId String?    @map("placement_start_unit_id") // AUTH-05: null = mulai Level 1
+  placementStartUnit   Unit?      @relation(fields: [placementStartUnitId], references: [id])
+  createdAt            DateTime   @default(now()) @map("created_at")
+  updatedAt            DateTime   @updatedAt @map("updated_at")
+  lastActiveAt         DateTime?  @map("last_active_at")
 
   refreshTokens    RefreshToken[]
   passwordResets   PasswordResetToken[]
@@ -199,20 +199,56 @@ model Level {
   @@map("levels")
 }
 
+// kana = Hiragana/Katakana (latihan aksara); conversation = unit tematik N5+
+// yang dapat badge "Tuntas: <judul>" otomatis (lihat BadgeCatalog.all di
+// packages/domain -- filter `type === 'conversation'`).
+enum UnitType {
+  KANA
+  CONVERSATION
+}
+
 model Unit {
-  id      String @id @default(cuid())
-  levelId String @map("level_id")
-  level   Level  @relation(fields: [levelId], references: [id])
-  title   String
-  order   Int
+  id           String   @id @default(cuid())
+  levelId      String   @map("level_id")
+  level        Level    @relation(fields: [levelId], references: [id])
+  title        String
+  order        Int
+  description  String   @default("")
+  type         UnitType @default(KANA)
+  // GrammarNote[] ({id,title,bodyMd}) -- domain packages/domain punya skema
+  // zod-nya (content/types.ts), di sini cuma disimpan sebagai data.
+  grammarNotes Json     @default("[]") @map("grammar_notes")
 
   lessons        Lesson[]
   vocab          Vocab[]
+  sentences      Sentence[]
   placementUsers User[] // kebalikan dari User.placementStartUnit
   badges         Badge[] // badge dinamis per-unit
 
   @@unique([levelId, order])
   @@map("units")
+}
+
+// Ditambahkan saat Milestone 6/7 (di luar draft skema awal Milestone 3) --
+// dibutuhkan supaya ExerciseFactory/LessonSession packages/domain (yang
+// menarik distractor assemble/choose-kalimat dari SELURUH unit.sentences,
+// bukan cuma sentence yang dirujuk satu exercise) bisa direkonstruksi utuh
+// dari DB. Paralel dengan alasan Vocab ada di skema: SUP-01/02 + kebutuhan
+// query relasional, bukan literal §9.3 PRD.
+model Sentence {
+  id             String @id @default(cuid())
+  unitId         String @map("unit_id")
+  unit           Unit   @relation(fields: [unitId], references: [id])
+  surface        String
+  kana           String
+  romaji         String
+  meaning        String
+  words          Json // WordPart[] {surface,kana}[] -- lihat packages/domain content/types.ts
+  assembleTokens Json?  @map("assemble_tokens") // string[]? -- null = fallback ke words[].surface (lihat ExerciseFactory.tokensOf)
+  voice          String @default("female")
+
+  @@index([unitId])
+  @@map("sentences")
 }
 
 model Lesson {
@@ -244,7 +280,13 @@ model Exercise {
   lesson     Lesson       @relation(fields: [lessonId], references: [id])
   type       ExerciseType
   order      Int
-  payload    Json // bentuknya divalidasi zod packages/domain, bukan Postgres
+  // { ref: string, variant?: string } -- padanan persis domain `Exercise` di
+  // packages/domain/content/types.ts (minus `type`, sudah jadi kolom sendiri
+  // di sini). `ref` menunjuk ke Vocab.id atau Sentence.id di unit yang sama.
+  // MATCHING/LISTENING/FILL_IN belum ada seeder-nya (lihat catatan di
+  // packages/domain/exercises/preparedExercise.ts) -- kolom `type` sudah
+  // menampung nilainya di skema Postgres, payload-nya belum didesain.
+  payload    Json
   difficulty Int          @default(1)
 
   @@index([lessonId])
@@ -260,7 +302,11 @@ model Vocab {
   jp           String
   reading      String
   romaji       String
-  meaningId    String  @map("meaning_id")
+  // Nullable -- diperbaiki saat Milestone 6 (seeding sungguhan): 104/104 entri
+  // Hiragana TIDAK punya meaning_id (karakter fonetik murni, bukan kosakata
+  // berarti, mis. "あ") -- lihat catatan di packages/domain/content/types.ts.
+  // Draft skema Milestone 3 sebelumnya salah asumsi field ini selalu terisi.
+  meaningId    String? @map("meaning_id")
   partOfSpeech String? @map("part_of_speech")
   exampleJp    String? @map("example_jp")
   exampleId    String? @map("example_id")

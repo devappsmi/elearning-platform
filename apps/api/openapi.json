@@ -1,0 +1,3388 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/auth/invitations/validate": {
+      "post": {
+        "operationId": "AuthController_validateInvitation",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateInvitationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationCheckDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPairDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPairDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPairDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/forgot": {
+      "post": {
+        "operationId": "AuthController_forgot",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/reset": {
+      "post": {
+        "operationId": "AuthController_reset",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/invitations/{token}/request-resend": {
+      "post": {
+        "operationId": "AuthController_requestResend",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/admin/auth/login": {
+      "post": {
+        "operationId": "AdminAuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminLoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPairDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
+    "/admin/auth/refresh": {
+      "post": {
+        "operationId": "AdminAuthController_refresh",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminRefreshDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenPairDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
+    "/admin/auth/me": {
+      "get": {
+        "operationId": "AdminAuthController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeAdminDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Auth"
+        ]
+      }
+    },
+    "/me": {
+      "get": {
+        "operationId": "UsersController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      },
+      "patch": {
+        "operationId": "UsersController_updateMe",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/leaderboard": {
+      "get": {
+        "operationId": "GamificationController_leaderboard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeaderboardResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Gamification"
+        ]
+      }
+    },
+    "/path": {
+      "get": {
+        "operationId": "LearningPathController_getPath",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PathView"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Learning Path"
+        ]
+      }
+    },
+    "/lessons/{id}": {
+      "get": {
+        "operationId": "LessonsController_getLesson",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/lessons/{id}/attempts": {
+      "post": {
+        "operationId": "LessonsController_submitAttempt",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitAttemptDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptResultView"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Lessons"
+        ]
+      }
+    },
+    "/admin/classes": {
+      "post": {
+        "operationId": "AdminClassesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateClassDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassWithLevelDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Classes"
+        ]
+      },
+      "get": {
+        "operationId": "AdminClassesController_list",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "ACTIVE",
+                "ARCHIVED"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClassListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Classes"
+        ]
+      }
+    },
+    "/admin/classes/{id}": {
+      "get": {
+        "operationId": "AdminClassesController_detail",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Classes"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminClassesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateClassDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassWithLevelDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Classes"
+        ]
+      }
+    },
+    "/admin/classes/{id}/archive": {
+      "patch": {
+        "operationId": "AdminClassesController_archive",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Classes"
+        ]
+      }
+    },
+    "/admin/classes/{id}/unarchive": {
+      "patch": {
+        "operationId": "AdminClassesController_unarchive",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Classes"
+        ]
+      }
+    },
+    "/admin/invitations/template": {
+      "get": {
+        "operationId": "AdminInvitationsController_downloadTemplate",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Invitations"
+        ]
+      }
+    },
+    "/admin/invitations": {
+      "post": {
+        "operationId": "AdminInvitationsController_createSingle",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInvitationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Invitations"
+        ]
+      },
+      "get": {
+        "operationId": "AdminInvitationsController_list",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "PENDING",
+                "ACCEPTED",
+                "EXPIRED",
+                "REVOKED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "classId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InvitationListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Invitations"
+        ]
+      }
+    },
+    "/admin/invitations/bulk": {
+      "post": {
+        "operationId": "AdminInvitationsController_createBulk",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Invitations"
+        ]
+      }
+    },
+    "/admin/invitations/{id}/resend": {
+      "post": {
+        "operationId": "AdminInvitationsController_resend",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Invitations"
+        ]
+      }
+    },
+    "/admin/invitations/{id}": {
+      "delete": {
+        "operationId": "AdminInvitationsController_revoke",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Invitations"
+        ]
+      }
+    },
+    "/admin/students": {
+      "get": {
+        "operationId": "AdminStudentsController_list",
+        "parameters": [
+          {
+            "name": "classId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Students"
+        ]
+      }
+    },
+    "/admin/students/{id}": {
+      "get": {
+        "operationId": "AdminStudentsController_detail",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Students"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminStudentsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStudentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Students"
+        ]
+      }
+    },
+    "/admin/students/{id}/progress": {
+      "get": {
+        "operationId": "AdminStudentsController_progress",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentProgressDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Students"
+        ]
+      }
+    },
+    "/admin/students/{id}/reset-password": {
+      "post": {
+        "operationId": "AdminStudentsController_resetPassword",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Students"
+        ]
+      }
+    },
+    "/admin/dashboard": {
+      "get": {
+        "operationId": "AdminDashboardController_summary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummaryDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "admin-access-token": []
+          }
+        ],
+        "tags": [
+          "Admin Dashboard"
+        ]
+      }
+    },
+    "/scenarios": {
+      "get": {
+        "operationId": "ScenariosController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScenarioSummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Scenarios"
+        ]
+      }
+    },
+    "/scenarios/{id}": {
+      "get": {
+        "operationId": "ScenariosController_detail",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Scenarios"
+        ]
+      }
+    },
+    "/scenarios/{id}/attempts": {
+      "post": {
+        "operationId": "ScenariosController_submitAttempt",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitScenarioAttemptDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioAttemptResultDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Scenarios"
+        ]
+      }
+    },
+    "/dictionary": {
+      "get": {
+        "operationId": "DictionaryController_search",
+        "parameters": [
+          {
+            "name": "q",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DictionaryEntryDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Dictionary"
+        ]
+      }
+    },
+    "/flashcards/due": {
+      "get": {
+        "operationId": "FlashcardsController_due",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DueFlashcardDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Flashcards"
+        ]
+      }
+    },
+    "/flashcards/review": {
+      "post": {
+        "operationId": "FlashcardsController_review",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewFlashcardDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlashcardReviewResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Flashcards"
+        ]
+      }
+    },
+    "/tutor/scenarios": {
+      "get": {
+        "operationId": "TutorController_scenarios",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TutorCatalogDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Tutor"
+        ]
+      }
+    },
+    "/tutor/quota": {
+      "get": {
+        "operationId": "TutorController_quota",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TutorQuotaDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Tutor"
+        ]
+      }
+    },
+    "/tutor/reply": {
+      "post": {
+        "operationId": "TutorController_reply",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TutorReplyRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TutorReplyResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Tutor"
+        ]
+      }
+    },
+    "/tutor/transcribe": {
+      "post": {
+        "operationId": "TutorController_transcribe",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "file"
+                ],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TutorTranscribeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Tutor"
+        ]
+      }
+    },
+    "/tutor/speak": {
+      "post": {
+        "operationId": "TutorController_speak",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TutorSpeakRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TutorSpeakResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Tutor"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Elearning Platform API",
+    "description": "Backend NestJS platform kursus bahasa Jepang (single-tenant). Lihat docs/PRD.md dan docs/PLAN.md di repo untuk konteks produk lengkap.",
+    "version": "0.0.1",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "access-token": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      },
+      "admin-access-token": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "ValidateInvitationDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "InvitationCheckDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": [
+              "VALID",
+              "NOT_FOUND",
+              "EXPIRED",
+              "REVOKED",
+              "ALREADY_ACCEPTED"
+            ]
+          },
+          "invitationId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "className": {
+            "type": "string"
+          },
+          "institutionName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "pattern": "PASSWORD_LETTER_AND_DIGIT"
+          }
+        },
+        "required": [
+          "token",
+          "name",
+          "password"
+        ]
+      },
+      "TokenPairDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "RefreshDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "ForgotPasswordDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "MessageResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "ResetPasswordDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "pattern": "PASSWORD_LETTER_AND_DIGIT"
+          }
+        },
+        "required": [
+          "token",
+          "password"
+        ]
+      },
+      "AdminLoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "AdminRefreshDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "MeAdminDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "OWNER",
+              "STAFF"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "lastLoginAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "role",
+          "id",
+          "name",
+          "email",
+          "isActive",
+          "createdAt",
+          "lastLoginAt"
+        ]
+      },
+      "MeDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "classId": {
+            "type": "string"
+          },
+          "className": {
+            "type": "string"
+          },
+          "dailyXpGoal": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "lastActiveAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "avatarUrl",
+          "classId",
+          "className",
+          "dailyXpGoal",
+          "status",
+          "createdAt",
+          "lastActiveAt"
+        ]
+      },
+      "UpdateMeDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "avatarUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "dailyXpGoal": {
+            "type": "number",
+            "enum": [
+              10,
+              30,
+              50
+            ]
+          }
+        }
+      },
+      "LeaderboardEntryDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "xp": {
+            "type": "number"
+          },
+          "rank": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "userId",
+          "name",
+          "xp",
+          "rank"
+        ]
+      },
+      "LeaderboardResponseDto": {
+        "type": "object",
+        "properties": {
+          "weekOf": {
+            "type": "string"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeaderboardEntryDto"
+            }
+          }
+        },
+        "required": [
+          "weekOf",
+          "entries"
+        ]
+      },
+      "PathLessonView": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "done",
+              "available",
+              "locked"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          },
+          "isCheckpoint": {
+            "type": "boolean"
+          },
+          "stars": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": [
+          "state",
+          "id",
+          "title",
+          "order",
+          "isCheckpoint",
+          "stars"
+        ]
+      },
+      "PathUnitView": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "kana",
+              "conversation"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          },
+          "unlocked": {
+            "type": "boolean"
+          },
+          "completedLessons": {
+            "type": "number"
+          },
+          "totalLessons": {
+            "type": "number"
+          },
+          "lessons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PathLessonView"
+            }
+          }
+        },
+        "required": [
+          "type",
+          "id",
+          "title",
+          "order",
+          "unlocked",
+          "completedLessons",
+          "totalLessons",
+          "lessons"
+        ]
+      },
+      "PathLevelView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          },
+          "units": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PathUnitView"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "name",
+          "order",
+          "units"
+        ]
+      },
+      "StreakView": {
+        "type": "object",
+        "properties": {
+          "current": {
+            "type": "number"
+          },
+          "longest": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "current",
+          "longest"
+        ]
+      },
+      "PathView": {
+        "type": "object",
+        "properties": {
+          "levels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PathLevelView"
+            }
+          },
+          "continueLessonId": {
+            "type": "string",
+            "nullable": true
+          },
+          "streak": {
+            "$ref": "#/components/schemas/StreakView"
+          }
+        },
+        "required": [
+          "levels",
+          "continueLessonId",
+          "streak"
+        ]
+      },
+      "AnswerEventDto": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "choose",
+              "assemble"
+            ]
+          },
+          "choiceText": {
+            "type": "string"
+          },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "ref",
+          "kind"
+        ]
+      },
+      "SubmitAttemptDto": {
+        "type": "object",
+        "properties": {
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AnswerEventDto"
+            }
+          }
+        },
+        "required": [
+          "answers"
+        ]
+      },
+      "AttemptResultView": {
+        "type": "object",
+        "properties": {
+          "passed": {
+            "type": "boolean"
+          },
+          "accuracyPercent": {
+            "type": "number"
+          },
+          "stars": {
+            "type": "number"
+          },
+          "xpAwarded": {
+            "type": "number"
+          },
+          "bestScore": {
+            "type": "number"
+          },
+          "bestStars": {
+            "type": "number"
+          },
+          "attempts": {
+            "type": "number"
+          },
+          "wrongRefs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "passed",
+          "accuracyPercent",
+          "stars",
+          "xpAwarded",
+          "bestScore",
+          "bestStars",
+          "attempts",
+          "wrongRefs"
+        ]
+      },
+      "CreateClassDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "targetLevelId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "LevelSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "name",
+          "order"
+        ]
+      },
+      "ClassWithLevelDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "ARCHIVED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "targetLevelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "targetLevel": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LevelSummaryDto"
+              }
+            ]
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "targetLevelId",
+          "targetLevel",
+          "description",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "StudentCountDto": {
+        "type": "object",
+        "properties": {
+          "students": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "students"
+        ]
+      },
+      "ClassListItemDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "ARCHIVED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "targetLevelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "targetLevel": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LevelSummaryDto"
+              }
+            ]
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "_count": {
+            "$ref": "#/components/schemas/StudentCountDto"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "targetLevelId",
+          "targetLevel",
+          "description",
+          "createdAt",
+          "updatedAt",
+          "_count"
+        ]
+      },
+      "ClassStudentSummaryDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "lastActiveAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "email",
+          "lastActiveAt"
+        ]
+      },
+      "ClassDetailDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "ARCHIVED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "targetLevelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "targetLevel": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LevelSummaryDto"
+              }
+            ]
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "students": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassStudentSummaryDto"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "targetLevelId",
+          "targetLevel",
+          "description",
+          "createdAt",
+          "updatedAt",
+          "students"
+        ]
+      },
+      "UpdateClassDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "targetLevelId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "ClassDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "ARCHIVED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "targetLevelId": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "targetLevelId",
+          "description",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CreateInvitationDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "classId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "classId"
+        ]
+      },
+      "InvitationDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "EXPIRED",
+              "REVOKED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "classId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "acceptedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "revokedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "classId",
+          "name",
+          "email",
+          "expiresAt",
+          "acceptedAt",
+          "revokedAt",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "InvitationClassSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "InvitationListItemDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "EXPIRED",
+              "REVOKED"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "classId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "acceptedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "revokedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "class": {
+            "$ref": "#/components/schemas/InvitationClassSummaryDto"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "classId",
+          "name",
+          "email",
+          "expiresAt",
+          "acceptedAt",
+          "revokedAt",
+          "createdAt",
+          "updatedAt",
+          "class"
+        ]
+      },
+      "StudentClassSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "StudentListItemDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "lastActiveAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "class": {
+            "$ref": "#/components/schemas/StudentClassSummaryDto"
+          },
+          "totalXp": {
+            "type": "number"
+          },
+          "streak": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "email",
+          "lastActiveAt",
+          "createdAt",
+          "class",
+          "totalXp",
+          "streak"
+        ]
+      },
+      "StudentDetailDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "dailyXpGoal": {
+            "type": "number"
+          },
+          "lastActiveAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "class": {
+            "$ref": "#/components/schemas/StudentClassSummaryDto"
+          }
+        },
+        "required": [
+          "status",
+          "id",
+          "name",
+          "email",
+          "avatarUrl",
+          "dailyXpGoal",
+          "lastActiveAt",
+          "createdAt",
+          "class"
+        ]
+      },
+      "LevelInfoDto": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "number"
+          },
+          "xpIntoLevel": {
+            "type": "number"
+          },
+          "xpForNextLevel": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "level",
+          "xpIntoLevel",
+          "xpForNextLevel"
+        ]
+      },
+      "StreakInfoDto": {
+        "type": "object",
+        "properties": {
+          "current": {
+            "type": "number"
+          },
+          "longest": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "current",
+          "longest"
+        ]
+      },
+      "UnitProgressDto": {
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string"
+          },
+          "unitTitle": {
+            "type": "string"
+          },
+          "completedLessons": {
+            "type": "number"
+          },
+          "totalStars": {
+            "type": "number"
+          },
+          "averageStars": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "unitId",
+          "unitTitle",
+          "completedLessons",
+          "totalStars",
+          "averageStars"
+        ]
+      },
+      "ScenarioProgressDto": {
+        "type": "object",
+        "properties": {
+          "scenarioId": {
+            "type": "string"
+          },
+          "titleJp": {
+            "type": "string"
+          },
+          "titleId": {
+            "type": "string"
+          },
+          "attempts": {
+            "type": "number"
+          },
+          "bestScore": {
+            "type": "number"
+          },
+          "lastAttemptAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scenarioId",
+          "titleJp",
+          "titleId",
+          "attempts",
+          "bestScore",
+          "lastAttemptAt"
+        ]
+      },
+      "RecentActivityDto": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "LESSON",
+              "CHECKPOINT",
+              "SCENARIO",
+              "DAILY_QUIZ"
+            ]
+          },
+          "amount": {
+            "type": "number"
+          },
+          "refId": {
+            "type": "string",
+            "nullable": true
+          },
+          "at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "amount",
+          "refId",
+          "at"
+        ]
+      },
+      "ActivityHeatmapPointDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "xp": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "xp"
+        ]
+      },
+      "StudentProgressDto": {
+        "type": "object",
+        "properties": {
+          "xpTotal": {
+            "type": "number"
+          },
+          "level": {
+            "$ref": "#/components/schemas/LevelInfoDto"
+          },
+          "streak": {
+            "$ref": "#/components/schemas/StreakInfoDto"
+          },
+          "unitProgress": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UnitProgressDto"
+            }
+          },
+          "scenarioProgress": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScenarioProgressDto"
+            }
+          },
+          "recentActivity": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecentActivityDto"
+            }
+          },
+          "activityHeatmap": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ActivityHeatmapPointDto"
+            }
+          }
+        },
+        "required": [
+          "xpTotal",
+          "level",
+          "streak",
+          "unitProgress",
+          "scenarioProgress",
+          "recentActivity",
+          "activityHeatmap"
+        ]
+      },
+      "UpdateStudentDto": {
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          }
+        }
+      },
+      "ResetPasswordResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "ClassCompletionRateDto": {
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "string"
+          },
+          "className": {
+            "type": "string"
+          },
+          "studentCount": {
+            "type": "number"
+          },
+          "completionRate": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "classId",
+          "className",
+          "studentCount",
+          "completionRate"
+        ]
+      },
+      "DashboardSummaryDto": {
+        "type": "object",
+        "properties": {
+          "streakDistribution": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "activeStudentsThisWeek": {
+            "type": "number"
+          },
+          "totalActiveStudents": {
+            "type": "number"
+          },
+          "averageXp": {
+            "type": "number"
+          },
+          "lessonCompletionRateByClass": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassCompletionRateDto"
+            }
+          }
+        },
+        "required": [
+          "streakDistribution",
+          "activeStudentsThisWeek",
+          "totalActiveStudents",
+          "averageXp",
+          "lessonCompletionRateByClass"
+        ]
+      },
+      "ScenarioSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "titleJp": {
+            "type": "string"
+          },
+          "titleId": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "estimatedMinutes": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "titleJp",
+          "titleId",
+          "level",
+          "roles",
+          "estimatedMinutes"
+        ]
+      },
+      "ScenarioAnswerEventDto": {
+        "type": "object",
+        "properties": {
+          "lineIndex": {
+            "type": "number",
+            "minimum": 0
+          },
+          "optionIndex": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "lineIndex",
+          "optionIndex"
+        ]
+      },
+      "SubmitScenarioAttemptDto": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "PRACTICE",
+              "TEST"
+            ]
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScenarioAnswerEventDto"
+            }
+          },
+          "durationSec": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "mode",
+          "events",
+          "durationSec"
+        ]
+      },
+      "ScenarioAttemptResultDto": {
+        "type": "object",
+        "properties": {
+          "passed": {
+            "type": "boolean"
+          },
+          "accuracyPercent": {
+            "type": "number"
+          },
+          "score": {
+            "type": "number"
+          },
+          "mistakeCount": {
+            "type": "number"
+          },
+          "failed": {
+            "type": "boolean"
+          },
+          "xpAwarded": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "passed",
+          "accuracyPercent",
+          "score",
+          "mistakeCount",
+          "failed",
+          "xpAwarded"
+        ]
+      },
+      "DictionaryEntryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "surface": {
+            "type": "string"
+          },
+          "reading": {
+            "type": "string"
+          },
+          "romaji": {
+            "type": "string"
+          },
+          "meaning": {
+            "type": "string",
+            "nullable": true
+          },
+          "partOfSpeech": {
+            "type": "string",
+            "nullable": true
+          },
+          "exampleJp": {
+            "type": "string",
+            "nullable": true
+          },
+          "exampleId": {
+            "type": "string",
+            "nullable": true
+          },
+          "audio": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "surface",
+          "reading",
+          "romaji",
+          "meaning",
+          "partOfSpeech",
+          "exampleJp",
+          "exampleId",
+          "audio"
+        ]
+      },
+      "DueFlashcardDto": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string"
+          },
+          "surface": {
+            "type": "string"
+          },
+          "reading": {
+            "type": "string"
+          },
+          "romaji": {
+            "type": "string"
+          },
+          "meaning": {
+            "type": "string",
+            "nullable": true
+          },
+          "audio": {
+            "type": "string"
+          },
+          "srsStage": {
+            "type": "number"
+          },
+          "nextReviewAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "itemId",
+          "surface",
+          "reading",
+          "romaji",
+          "meaning",
+          "audio",
+          "srsStage",
+          "nextReviewAt"
+        ]
+      },
+      "ReviewFlashcardDto": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string"
+          },
+          "correct": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "itemId",
+          "correct"
+        ]
+      },
+      "FlashcardReviewResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "TutorScenarioDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description"
+        ]
+      },
+      "TutorCharacterDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "personality": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "personality"
+        ]
+      },
+      "TutorCatalogDto": {
+        "type": "object",
+        "properties": {
+          "scenarios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TutorScenarioDto"
+            }
+          },
+          "characters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TutorCharacterDto"
+            }
+          }
+        },
+        "required": [
+          "scenarios",
+          "characters"
+        ]
+      },
+      "TutorQuotaDto": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "number"
+          },
+          "used": {
+            "type": "number"
+          },
+          "remaining": {
+            "type": "number"
+          },
+          "resetsAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "limit",
+          "used",
+          "remaining",
+          "resetsAt"
+        ]
+      },
+      "TutorTurnDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "role",
+          "text"
+        ]
+      },
+      "TutorReplyRequestDto": {
+        "type": "object",
+        "properties": {
+          "scenarioId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "characterId": {
+            "type": "string"
+          },
+          "history": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TutorTurnDto"
+            }
+          },
+          "vocab": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "roleplay",
+              "help"
+            ]
+          }
+        },
+        "required": [
+          "scenarioId",
+          "history"
+        ]
+      },
+      "TutorReplyResponseDto": {
+        "type": "object",
+        "properties": {
+          "reply": {
+            "type": "string"
+          },
+          "quota": {
+            "$ref": "#/components/schemas/TutorQuotaDto"
+          }
+        },
+        "required": [
+          "reply",
+          "quota"
+        ]
+      },
+      "TutorTranscribeResponseDto": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "TutorSpeakRequestDto": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "characterId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "TutorSpeakResponseDto": {
+        "type": "object",
+        "properties": {
+          "audioUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "audioUrl"
+        ]
+      }
+    }
+  }
+}

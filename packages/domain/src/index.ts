@@ -3,6 +3,9 @@
  * packages/domain/src/. Lihat README/plan untuk pemetaan lengkap
  * source -> destination. */
 
+// auth: kebijakan password AUTH-02 (dipakai bersama server + form murid)
+export * from './auth/passwordPolicy';
+
 // content: skema zod + tipe konten (Unit/Lesson/Exercise/Vocab/Sentence)
 export * from './content/types';
 
@@ -28,6 +31,10 @@ export * from './gamification/badgeCatalog';
 
 // srs: statistik repetisi kata/kalimat
 export * from './srs/wordRepetitionService';
+
+// scenario: skema + sesi latihan percakapan ber-template (CONV-01..04)
+export * from './scenario/types';
+export * from './scenario/scenarioSession';
 
 // shared: utilitas tanggal, angka, RNG
 export * from './shared/dates';

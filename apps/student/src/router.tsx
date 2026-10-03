@@ -1,41 +1,61 @@
 import { createBrowserRouter } from "react-router-dom";
 import { AuthGuard } from "./auth/AuthGuard";
 import { RootLayout } from "./components/RootLayout";
-import { StubPage } from "./pages/StubPage";
+import { HomePage } from "./pages/HomePage";
+import { LessonPage } from "./pages/LessonPage";
+import { LessonResultPage } from "./pages/LessonResultPage";
+import { LoginPage } from "./pages/LoginPage";
+import { AcceptInvitationPage } from "./pages/AcceptInvitationPage";
+import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage";
+import { WelcomePage } from "./pages/WelcomePage";
+import { KamusPage } from "./pages/KamusPage";
+import { LeaderboardPage } from "./pages/LeaderboardPage";
+import { ProfilePage } from "./pages/ProfilePage";
+import { ConversationCatalogPage } from "./pages/ConversationCatalogPage";
+import { ConversationPage } from "./pages/ConversationPage";
+import { ConversationResultPage } from "./pages/ConversationResultPage";
+import { FlashcardsPage } from "./pages/FlashcardsPage";
+import { TutorPage } from "./pages/TutorPage";
+import { TUTOR_PATH } from "./lib/tutor-chat";
 
 /**
- * Route skeleton for Milestone 10 — every route resolves to a stub page.
- * Real per-screen UI is a separate Fase 1 plan.
+ * SEMUA rute murid sungguhan (tidak ada lagi StubPage): alur belajar (7c),
+ * Kamus/Leaderboard/Profil (7f), Percakapan (7g), Flashcard (7h), dan halaman
+ * masuk-ke-produk -- undangan/registrasi, lupa + reset password, onboarding
+ * (7i), dan Ngobrol dengan AI (7m). Lihat docs/PLAN.md.
  *
  * Public routes (no AuthGuard): /invite/:token, /login, /forgot-password,
- * /reset-password/:token. Everything else is wrapped in AuthGuard + the
- * shared AppShell-based RootLayout.
+ * /reset-password/:token. /welcome (onboarding) butuh login tapi TANPA
+ * RootLayout -- layar penuh 3 langkah, bukan halaman di dalam shell navigasi.
+ * Sisanya dibungkus AuthGuard + RootLayout (sidebar berwarna di layar lebar, tab bawah di HP).
  */
 export const router = createBrowserRouter([
-  { path: "/invite/:token", element: <StubPage title="Terima Undangan" /> },
-  { path: "/login", element: <StubPage title="Login" /> },
-  { path: "/forgot-password", element: <StubPage title="Lupa Password" /> },
-  { path: "/reset-password/:token", element: <StubPage title="Reset Password" /> },
+  { path: "/invite/:token", element: <AcceptInvitationPage /> },
+  { path: "/login", element: <LoginPage /> },
+  { path: "/forgot-password", element: <ForgotPasswordPage /> },
+  { path: "/reset-password/:token", element: <ResetPasswordPage /> },
   {
     element: <AuthGuard />,
     children: [
+      { path: "/welcome", element: <WelcomePage /> },
       {
         element: <RootLayout />,
         children: [
-          { path: "/welcome", element: <StubPage title="Selamat Datang" /> },
-          { path: "/", element: <StubPage title="Beranda" /> },
-          { path: "/learn/:lessonId", element: <StubPage title="Belajar" /> },
-          { path: "/learn/:lessonId/result", element: <StubPage title="Hasil Belajar" /> },
-          { path: "/conversation", element: <StubPage title="Percakapan" /> },
-          { path: "/conversation/:id", element: <StubPage title="Detail Percakapan" /> },
+          { path: "/", element: <HomePage /> },
+          { path: "/learn/:lessonId", element: <LessonPage /> },
+          { path: "/learn/:lessonId/result", element: <LessonResultPage /> },
+          { path: "/conversation", element: <ConversationCatalogPage /> },
+          { path: TUTOR_PATH, element: <TutorPage /> },
+          { path: "/conversation/:id", element: <ConversationPage /> },
           {
             path: "/conversation/:id/result",
-            element: <StubPage title="Hasil Percakapan" />,
+            element: <ConversationResultPage />,
           },
-          { path: "/dictionary", element: <StubPage title="Kamus" /> },
-          { path: "/flashcards", element: <StubPage title="Flashcard" /> },
-          { path: "/leaderboard", element: <StubPage title="Leaderboard" /> },
-          { path: "/profile", element: <StubPage title="Profil" /> },
+          { path: "/dictionary", element: <KamusPage /> },
+          { path: "/flashcards", element: <FlashcardsPage /> },
+          { path: "/leaderboard", element: <LeaderboardPage /> },
+          { path: "/profile", element: <ProfilePage /> },
         ],
       },
     ],

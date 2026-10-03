@@ -1,0 +1,94 @@
+# Reverse proxy + file server untuk stack produksi (lihat docker-compose.yml, docs/DEPLOY.md).
+#
+# Dua situs, satu per aplikasi web. Alamatnya dari environment:
+#   STUDENT_ADDRESS / ADMIN_ADDRESS = nama host  -> Caddy mengurus sertifikat HTTPS (Let's Encrypt) otomatis
+#   STUDENT_ADDRESS / ADMIN_ADDRESS = ":80" dst. -> HTTP biasa (uji lewat IP, tanpa domain)
+#
+# Di kedua situs, jalur yang sama:
+#   /api/*    -> layanan `api` (awalan /api dibuang), kecuali dokumentasi Swagger yang TIDAK dibuka ke publik
+#   /media/*  -> layanan `api`, yang menyajikan berkas audio dari disk (hanya baca); hanya untuk situs murid
+#   lainnya   -> berkas statis aplikasi (SPA; jalur yang tak dikenal jatuh ke index.html)
+# Aplikasi memanggil API lewat alamat RELATIF (/api) di origin-nya sendiri, jadi tidak butuh CORS.
+#
+# Semua penanganan memakai penanda yang SALING LEPAS (bukan bergantung pada urutan `handle`).
+
+(pengaman) {
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+	log {
+		output stdout
+	}
+}
+
+(backend) {
+	@docs path /api/api-docs /api/api-docs/* /api/api-docs-json
+	handle @docs {
+		respond "Not found" 404
+	}
+
+	@api {
+		path /api/*
+		not path /api/api-docs /api/api-docs/* /api/api-docs-json
+	}
+	handle @api {
+		uri strip_prefix /api
+		reverse_proxy api:3001
+	}
+
+	@sehat path /healthz
+	handle @sehat {
+		respond "ok" 200
+	}
+}
+
+(spa) {
+	@statis {
+		not path /api/* /media/* /healthz
+	}
+	handle @statis {
+		root * {args[0]}
+		encode zstd gzip
+
+		@berhash path /assets/*
+		header @berhash Cache-Control "public, max-age=31536000, immutable"
+		@cangkang {
+			not path /assets/*
+		}
+		header @cangkang Cache-Control "no-cache"
+
+		try_files {path} /index.html
+		file_server
+	}
+}
+
+{$STUDENT_ADDRESS} {
+	import pengaman
+	import backend
+
+	# Audio pelajaran: API menyajikannya dari disk di /media (jalur dipertahankan, tanpa strip). Hanya baca.
+	@media path /media/*
+	handle @media {
+		@bukanbaca not method GET HEAD
+		respond @bukanbaca 405
+		reverse_proxy api:3001
+	}
+
+	import spa /srv/student
+}
+
+{$ADMIN_ADDRESS} {
+	import pengaman
+	import backend
+
+	# Situs admin tidak menyajikan media (tanpa ini jalur /media akan dijawab 200 kosong).
+	@media path /media/*
+	handle @media {
+		respond "Not found" 404
+	}
+
+	import spa /srv/admin
+}
