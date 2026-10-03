@@ -295,8 +295,12 @@ unit ini terbuka setelah semua pelajaran sebelumnya (kini Hiragana) tuntas; sesu
 
 Semuanya boleh dikosongkan; hanya fitur terkait yang nonaktif.
 
-- **AI tutor** (OpenAI): isi `OPENAI_API_KEY` di `.env`, lalu `docker compose up -d` (API dibuat ulang). Endpoint `/tutor/*`
-  sudah ada, tetapi **belum ada layar tutor di aplikasi murid** (Fase 2). Nama model bawaan
+- **AI tutor** (OpenAI): isi `OPENAI_API_KEY` di `.env`, lalu `docker compose up -d` (API dibuat ulang). Murid memakainya di
+  aplikasi murid lewat menu **Percakapan → Ngobrol dengan AI** (alamat `/conversation/ngobrol-ai`): memilih situasi dan
+  teman bicara, lalu bicara lewat mikrofon atau mengetik; AI membalas dengan teks dan suara, dan membetulkan kalimat murid di
+  dalam balasannya. Tanpa `OPENAI_API_KEY` layar tetap terbuka tetapi murid mendapat pesan bahwa AI belum diaktifkan.
+  **Merekam suara butuh HTTPS** (atau `localhost`): peramban memblokir mikrofon di alamat `http://` biasa, dan di sana tombol
+  mikrofon mati sehingga murid hanya bisa mengetik. Jatah 20 balasan per murid per hari (`TUTOR_DAILY_QUOTA`). Nama model bawaan
   (`gpt-5.6-terra`, `gpt-transcribe`, `gpt-4o-mini-tts`) belum terbukti ada. Dari server Anda (jaringan bebas)
   bisa langsung dicek — 15 tes, biaya sen:
   ```bash
@@ -479,7 +483,10 @@ atau ubah `.env`) saat menjalankan langkah 2.
 - **Konten baru Hiragana + 1 skenario percakapan**; kamus ±107 entri. Konten lain adalah pekerjaan pengajar/PO.
 - **Halaman Pengaturan admin masih kerangka** (modul backend-nya belum ada); nama lembaga hanya bisa diatur lewat
   `INSTITUTION_NAME` pada `admin:create`.
-- **AI tutor belum punya layar** di aplikasi murid (Fase 2).
+- **Layar Ngobrol dengan AI baru diuji dengan server OpenAI tiruan dan Chromium bermikrofon palsu.** Belum pernah dicoba:
+  suara asli murid ke model pengenalan ucapan sungguhan (ketepatan membaca bahasa Jepang murid pemula), suara balasan OpenAI
+  yang sungguhan, serta Safari/iPhone dan Firefox. AI hanya membetulkan lewat kalimat balasannya; tidak ada penilaian
+  pengucapan (itu fitur Fase 2) dan server tidak menyimpan riwayat percakapan.
 - **Migrasi berjalan otomatis** tiap `docker compose up` terhadap database Anda: perubahan skema dari versi kode baru langsung
   diterapkan. Untuk database yang dikelola tim lain, coba versi baru di salinan dulu. Satu pengguna database dipakai untuk
   migrasi dan API (hak `CREATE` diperlukan selama ada migrasi baru).

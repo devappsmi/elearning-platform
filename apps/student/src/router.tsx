@@ -16,12 +16,14 @@ import { ConversationCatalogPage } from "./pages/ConversationCatalogPage";
 import { ConversationPage } from "./pages/ConversationPage";
 import { ConversationResultPage } from "./pages/ConversationResultPage";
 import { FlashcardsPage } from "./pages/FlashcardsPage";
+import { TutorPage } from "./pages/TutorPage";
+import { TUTOR_PATH } from "./lib/tutor-chat";
 
 /**
  * SEMUA rute murid sungguhan (tidak ada lagi StubPage): alur belajar (7c),
  * Kamus/Leaderboard/Profil (7f), Percakapan (7g), Flashcard (7h), dan halaman
  * masuk-ke-produk -- undangan/registrasi, lupa + reset password, onboarding
- * (7i). Lihat docs/PLAN.md.
+ * (7i), dan Ngobrol dengan AI (7m). Lihat docs/PLAN.md.
  *
  * Public routes (no AuthGuard): /invite/:token, /login, /forgot-password,
  * /reset-password/:token. /welcome (onboarding) butuh login tapi TANPA
@@ -44,6 +46,7 @@ export const router = createBrowserRouter([
           { path: "/learn/:lessonId", element: <LessonPage /> },
           { path: "/learn/:lessonId/result", element: <LessonResultPage /> },
           { path: "/conversation", element: <ConversationCatalogPage /> },
+          { path: TUTOR_PATH, element: <TutorPage /> },
           { path: "/conversation/:id", element: <ConversationPage /> },
           {
             path: "/conversation/:id/result",

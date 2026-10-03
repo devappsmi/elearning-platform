@@ -34,6 +34,10 @@ pnpm dev                  # jalankan api + student + admin sekaligus (Turborepo)
 Salin `apps/api/.env.example` ke `apps/api/.env` dan isi `OPENAI_API_KEY`
 sebelum menjalankan `apps/api` (dibutuhkan `TutorModule`).
 
+Percakapan suara dengan AI ada di aplikasi murid: menu **Percakapan → Ngobrol dengan AI** (`/conversation/ngobrol-ai`).
+Murid bicara lewat mikrofon (atau mengetik), AI membalas dengan teks dan suara serta membetulkan kalimatnya. Merekam butuh
+`localhost` atau HTTPS; tanpa itu hanya bisa mengetik (`docs/DEPLOY.md`, bagian 6).
+
 Audio pelajaran dibuat saat `pnpm db:seed` bila ada penyedia TTS: cukup `OPENAI_API_KEY` (kunci yang sama dengan AI tutor,
 **tanpa Azure**) atau `AZURE_SPEECH_KEY` + `AZURE_SPEECH_REGION`; `TTS_PROVIDER` memilih. Dengarkan contoh suaranya dulu dengan
 `pnpm --filter api run tts:sample`. Tanpa keduanya pelajaran tetap berjalan, hanya tanpa audio (`docs/DEPLOY.md`, bagian 6a).

@@ -110,6 +110,18 @@ const PATHS = {
       <path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6" />
     </>
   ),
+  send: (
+    <>
+      <path d="M20.5 3.5 10.2 13.8" />
+      <path d="M20.5 3.5 14 20.5l-3.8-6.7L3.5 10l17-6.5Z" />
+    </>
+  ),
+  speakerOff: (
+    <>
+      <path d="M11 5.2 6.6 8.9H3.5v6.2h3.1L11 18.8V5.2Z" />
+      <path d="m15.5 9.5 5 5m0-5-5 5" />
+    </>
+  ),
 } satisfies Record<string, ReactNode>;
 
 /** Ikon isi penuh (tidak digambar sebagai garis). */
@@ -118,6 +130,7 @@ const FILLED = {
   bolt: <path d="M13.4 2 4.6 13.6a.6.6 0 0 0 .5 1H10l-1.2 7.1a.4.4 0 0 0 .7.3l8.9-11.6a.6.6 0 0 0-.5-1H13l1.2-7a.4.4 0 0 0-.8-.4Z" />,
   play: <path d="M8.2 4.9v14.2a.9.9 0 0 0 1.4.8l10.6-7.1a.9.9 0 0 0 0-1.5L9.6 4.1a.9.9 0 0 0-1.4.8Z" />,
   heart: <path d="M12 20.6 4.2 13A5 5 0 0 1 12 6.5 5 5 0 0 1 19.8 13L12 20.6Z" />,
+  stop: <rect x="6" y="6" width="12" height="12" rx="2.6" />,
 } satisfies Record<string, ReactNode>;
 
 export type IconName = keyof typeof PATHS | keyof typeof FILLED;

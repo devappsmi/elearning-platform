@@ -173,6 +173,69 @@ describe("OpenAiSpeechToTextClient (SDK nyata vs server tiruan)", () => {
     const error = await client.transcribe({ audio: Buffer.from("x"), filename: "recording.ogg", mimetype: "audio/ogg" }).catch((e: unknown) => e);
 
     expect(error).toMatchObject({ status: 400 });
+    expect(requests).toHaveLength(1); // 4xx biasa tidak dicoba ulang
+  });
+
+  // Retry bawaan SDK `openai` v4 untuk unggahan multipart mengirim ulang HEADER tanpa ISI, sehingga permintaan ulang
+  // menggantung sampai timeout 45 detik. Itu sebabnya klien ini mencoba ulang sendiri dengan berkas yang dibuat baru.
+  describe("percobaan ulang unggahan suara", () => {
+    const upload = { audio: Buffer.from("BYTES-REKAMAN-PALSU"), filename: "recording.webm", mimetype: "audio/webm" };
+
+    it("5xx sesaat lalu pulih -> sukses, dan permintaan ulang membawa berkas yang UTUH", async () => {
+      let calls = 0;
+      handler = (_req, res) => (++calls === 1 ? sendJson(res, 500, { error: { message: "sesaat" } }) : sendJson(res, 200, { text: "もういちど" }));
+      const client = new OpenAiSpeechToTextClient("sk-test-key", "stt-uji");
+
+      const text = await client.transcribe(upload);
+
+      expect(text).toBe("もういちど");
+      expect(requests).toHaveLength(2);
+      for (const req of requests) {
+        const raw = req.body.toString("latin1");
+        expect(raw).toContain('name="file"; filename="recording.webm"');
+        expect(raw).toContain("BYTES-REKAMAN-PALSU");
+        expect(multipartField(req, "language")).toBe("ja");
+        expect(multipartField(req, "model")).toBe("stt-uji");
+      }
+    }, 10_000);
+
+    it("5xx terus-menerus -> dicoba ulang SEKALI saja, lalu galat (dengan status) dilempar", async () => {
+      handler = (_req, res) => sendJson(res, 503, { error: { message: "boom" } });
+      const client = new OpenAiSpeechToTextClient("sk-test-key", "stt-uji");
+
+      const error = await client.transcribe(upload).catch((e: unknown) => e);
+
+      expect(error).toMatchObject({ status: 503 });
+      expect(requests).toHaveLength(2); // 1 percobaan + 1 ulang
+    }, 10_000);
+
+    it("429 (terlalu banyak permintaan) dicoba ulang", async () => {
+      let calls = 0;
+      handler = (_req, res) => (++calls === 1 ? sendJson(res, 429, { error: { message: "rate limit" } }) : sendJson(res, 200, { text: "はい" }));
+      const client = new OpenAiSpeechToTextClient("sk-test-key", "stt-uji");
+
+      expect(await client.transcribe(upload)).toBe("はい");
+      expect(requests).toHaveLength(2);
+    }, 10_000);
+
+    it("sambungan putus di tengah jalan -> dicoba ulang dan pulih", async () => {
+      let calls = 0;
+      handler = (_req, res) => (++calls === 1 ? res.socket?.destroy() : sendJson(res, 200, { text: "つながった" }));
+      const client = new OpenAiSpeechToTextClient("sk-test-key", "stt-uji");
+
+      expect(await client.transcribe(upload)).toBe("つながった");
+      expect(requests).toHaveLength(2);
+    }, 10_000);
+
+    it.each([400, 401, 413, 415])("%i (salah permintaan/kunci) TIDAK dicoba ulang", async (status) => {
+      handler = (_req, res) => sendJson(res, status, { error: { message: "ditolak" } });
+      const client = new OpenAiSpeechToTextClient("sk-test-key", "stt-uji");
+
+      const error = await client.transcribe(upload).catch((e: unknown) => e);
+
+      expect(error).toMatchObject({ status });
+      expect(requests).toHaveLength(1);
+    });
   });
 });
 
