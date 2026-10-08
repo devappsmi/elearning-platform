@@ -14,5 +14,5 @@
     "sourceMap": true
   },
   "include": ["src/**/*.ts", "prisma/**/*.ts"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.testkit.ts", "**/*.live.ts"]
 }

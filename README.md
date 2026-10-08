@@ -19,17 +19,51 @@ packages/
   domain/    Logic murni (framework-free): exercise engine, XP/streak/badge, SRS, path layout
   ui/        Primitif UI bersama (shadcn/ui + token Tailwind)
   config/    Preset eslint/tailwind bersama
+qa/          Paket uji dan QC untuk penguji (di luar workspace; panduan: qa/README.md)
 ```
+
+## Pengujian dan QC
+
+Untuk penguji (bukan pengembang): folder [`qa/`](qa/README.md) berisi buku kasus uji Excel (258 kasus), uji browser otomatis (Playwright), uji asap API, ekspor isi pelajaran untuk pengajar, daftar periksa rilis, dan templat bug. Berdiri sendiri dan tidak ikut `pnpm test`; mulai dari `qa/README.md`.
 
 ## Menjalankan untuk pengembangan
 
 ```bash
 pnpm install
-docker compose up -d      # postgres + redis + minio
+docker compose up -d      # postgres + redis (audio disimpan di disk lokal: apps/api/storage)
 pnpm db:migrate
-pnpm db:seed              # isi konten Hiragana + badge
+pnpm db:seed              # isi konten (Hiragana + Unit 3 "Percakapan di Tempat Kerja") + badge
 pnpm dev                  # jalankan api + student + admin sekaligus (Turborepo)
 ```
 
 Salin `apps/api/.env.example` ke `apps/api/.env` dan isi `OPENAI_API_KEY`
 sebelum menjalankan `apps/api` (dibutuhkan `TutorModule`).
+
+Percakapan suara dengan AI ada di aplikasi murid: menu **Percakapan → Ngobrol dengan AI** (`/conversation/ngobrol-ai`).
+Murid bicara lewat mikrofon (atau mengetik), AI membalas dengan teks dan suara serta membetulkan kalimatnya. Merekam butuh
+`localhost` atau HTTPS; tanpa itu hanya bisa mengetik (`docs/DEPLOY.md`, bagian 6).
+
+Audio pelajaran dibuat saat `pnpm db:seed` bila ada penyedia TTS: cukup `OPENAI_API_KEY` (kunci yang sama dengan AI tutor,
+**tanpa Azure**) atau `AZURE_SPEECH_KEY` + `AZURE_SPEECH_REGION`; `TTS_PROVIDER` memilih. Dengarkan contoh suaranya dulu dengan
+`pnpm --filter api run tts:sample`. Tanpa keduanya pelajaran tetap berjalan, hanya tanpa audio (`docs/DEPLOY.md`, bagian 6a).
+
+Pelajaran tambahan ditulis pengajar di Word memakai template "Percakapan di Tempat Kerja" lalu diimpor:
+`pnpm --filter api run unit:import <unitId>` (membuat JSON unit dari .docx; `docs/DEPLOY.md`, bagian 5b). Dugaan kesalahan
+bahasa di Unit 3 yang perlu dikonfirmasi pengajar: `docs/CATATAN-KONTEN-UNIT-3.md`.
+
+## Menjalankan di server sendiri (Docker Compose)
+
+Stack produksi satu server (murid, admin, API, Redis, penyimpanan audio, HTTPS otomatis) ada di
+[`deploy/`](deploy); databasenya memakai **Postgres yang sudah ada di server Anda** (`DATABASE_URL`; Postgres bawaan hanya
+untuk uji cepat: `sh gen-env.sh --builtin-db`). Panduan lengkap: [`docs/DEPLOY.md`](docs/DEPLOY.md). Ringkasnya:
+
+```bash
+cd deploy
+sh gen-env.sh && nano .env          # rahasia acak + alamat domain/IP + DATABASE_URL (Postgres Anda, bagian 2a panduan)
+docker compose up -d --build
+docker compose run --rm tools pnpm run db:seed
+docker compose run --rm -e ADMIN_EMAIL -e ADMIN_PASSWORD tools pnpm run admin:create
+```
+
+Murid sungguhan masuk lewat undangan dari admin; untuk **menguji** tanpa undangan, `student:create` membuat murid uji langsung
+(`docs/DEPLOY.md`, bagian 5a).

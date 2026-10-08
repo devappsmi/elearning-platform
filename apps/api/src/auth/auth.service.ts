@@ -1,24 +1,31 @@
-import { BadRequestException, ForbiddenException, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Inject, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import * as argon2 from "argon2";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import type Redis from "ioredis";
 import { PrismaService } from "../prisma/prisma.service";
 import { REDIS_CLIENT } from "../redis/redis.module";
 import { MailService } from "../mail/mail.service";
 import { generateOpaqueToken, hashOpaqueToken } from "../common/opaque-token.util";
 import { addDuration } from "../common/duration.util";
+import { normalizeEmail } from "../common/email.util";
 import type { Env } from "../config/env.validation";
-
-export type InvitationValidationReason = "VALID" | "NOT_FOUND" | "EXPIRED" | "REVOKED" | "ALREADY_ACCEPTED";
+import { FORGOT_EMAIL_LIMIT, FORGOT_EMAIL_WINDOW_SECONDS } from "./auth.const";
+import type { InvitationCheckDto } from "./dto/invitation-check.dto";
 
 const LOGIN_FAIL_LIMIT = 5;
 const LOGIN_LOCK_SECONDS = 15 * 60;
 const PASSWORD_RESET_TTL_HOURS = 1;
 
+/** Hasil `requestPasswordReset`. Endpoint publik membuangnya (selalu 200); pemanggil
+ * terpercaya (reset yang dipicu admin) memakainya supaya bisa menjawab jujur. */
+export type PasswordResetOutcome = "SENT" | "THROTTLED" | "UNKNOWN_EMAIL";
+
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
@@ -27,13 +34,28 @@ export class AuthService {
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
-  async validateInvitation(token: string): Promise<{ reason: InvitationValidationReason; invitationId?: string }> {
-    const invitation = await this.prisma.invitation.findUnique({ where: { tokenHash: hashOpaqueToken(token) } });
+  /** Untuk halaman /invite/:token. Detail undangan (nama, email, kelas,
+   * lembaga) HANYA dikembalikan saat VALID -- status lain cuma `reason`,
+   * supaya token yang sudah tak berlaku tidak membocorkan apa pun. */
+  async validateInvitation(token: string): Promise<InvitationCheckDto> {
+    const invitation = await this.prisma.invitation.findUnique({
+      where: { tokenHash: hashOpaqueToken(token) },
+      select: { id: true, name: true, email: true, status: true, expiresAt: true, class: { select: { name: true } } },
+    });
     if (!invitation) return { reason: "NOT_FOUND" };
     if (invitation.status === "REVOKED") return { reason: "REVOKED" };
     if (invitation.status === "ACCEPTED") return { reason: "ALREADY_ACCEPTED" };
     if (invitation.status === "EXPIRED" || invitation.expiresAt < new Date()) return { reason: "EXPIRED" };
-    return { reason: "VALID", invitationId: invitation.id };
+
+    const institution = await this.prisma.institution.findFirst({ select: { name: true } });
+    return {
+      reason: "VALID",
+      invitationId: invitation.id,
+      name: invitation.name,
+      email: invitation.email,
+      className: invitation.class.name,
+      institutionName: institution?.name ?? null,
+    };
   }
 
   /** AUTH-02: registrasi via undangan -- classId/email diambil dari
@@ -70,7 +92,10 @@ export class AuthService {
     return this.issueTokenPair(user.id);
   }
 
-  async login(email: string, password: string) {
+  async login(rawEmail: string, password: string) {
+    // Kunci lockout memakai email BAKU: tanpa itu, mengganti kapitalisasi ("A@x" vs "a@x")
+    // melewati lockout dan hitungan gagal terpecah per ejaan.
+    const email = normalizeEmail(rawEmail);
     const lockKey = `login_lock:${email}`;
     if (await this.redis.get(lockKey)) {
       throw new ForbiddenException("Terlalu banyak percobaan gagal. Coba lagi dalam 15 menit.");
@@ -136,10 +161,26 @@ export class AuthService {
     return pair;
   }
 
-  /** Selalu 200 -- tidak membocorkan apakah email terdaftar (no user enumeration). */
+  /** Selalu 200 -- tidak membocorkan apakah email terdaftar (no user enumeration),
+   * juga tidak membocorkan apakah permintaan ini kena batas per-email. */
   async forgotPassword(email: string): Promise<void> {
+    await this.requestPasswordReset(email);
+  }
+
+  /** Inti lupa-password. Urutannya SENGAJA: batas per-email dihitung DULU untuk
+   * SEMUA alamat (terdaftar atau tidak) sebelum ada query DB -- perilakunya
+   * seragam, dan alamat tak terdaftar pun tidak bisa dipakai membuat beban DB. */
+  async requestPasswordReset(rawEmail: string): Promise<PasswordResetOutcome> {
+    const email = normalizeEmail(rawEmail);
+    if (!(await this.consumeResetEmailQuota(email))) {
+      // Bukan email di log (PII): cukup rujukan pendek untuk mengorelasikan pengulangan.
+      const ref = createHash("sha256").update(email).digest("hex").slice(0, 12);
+      this.logger.warn(`Reset password dibatasi per-email (maks ${FORGOT_EMAIL_LIMIT} per ${FORGOT_EMAIL_WINDOW_SECONDS} dtk), tidak dikirim -- rujukan ${ref}`);
+      return "THROTTLED";
+    }
+
     const user = await this.prisma.user.findUnique({ where: { email } });
-    if (!user) return;
+    if (!user) return "UNKNOWN_EMAIL";
 
     const { token, tokenHash } = generateOpaqueToken();
     await this.prisma.passwordResetToken.create({
@@ -152,6 +193,17 @@ export class AuthService {
 
     const resetUrl = `${this.config.get("CORS_ORIGIN_STUDENT", { infer: true })}/reset-password/${token}`;
     await this.mail.sendPasswordReset({ to: user.email, resetUrl });
+    return "SENT";
+  }
+
+  /** Jendela tetap per alamat. `SET NX EX` lebih dulu supaya kunci SELALU punya TTL:
+   * `INCR` lalu `EXPIRE` terpisah bisa meninggalkan kunci tanpa TTL (alamat itu
+   * terkunci selamanya) kalau proses mati di antara keduanya. */
+  private async consumeResetEmailQuota(email: string): Promise<boolean> {
+    const key = `forgot_email:${email}`;
+    await this.redis.set(key, 0, "EX", FORGOT_EMAIL_WINDOW_SECONDS, "NX");
+    const count = await this.redis.incr(key);
+    return count <= FORGOT_EMAIL_LIMIT;
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
@@ -161,7 +213,7 @@ export class AuthService {
     }
 
     const passwordHash = await argon2.hash(newPassword, { type: argon2.argon2id });
-    await this.prisma.$transaction([
+    const [user] = await this.prisma.$transaction([
       this.prisma.user.update({ where: { id: record.userId }, data: { passwordHash } }),
       this.prisma.passwordResetToken.update({ where: { id: record.id }, data: { usedAt: new Date() } }),
       // Ganti password -> paksa re-login di semua device (revoke semua refresh token aktif).
@@ -170,6 +222,12 @@ export class AuthService {
         data: { revokedAt: new Date() },
       }),
     ]);
+
+    // Murid yang lupa password biasanya sudah salah-ketik berkali-kali dan TERKUNCI
+    // (5x gagal -> 15 menit). Tautan reset membuktikan dia menguasai emailnya, jadi
+    // kunci + hitungan gagalnya dicabut di sini -- kalau tidak, password barunya
+    // ditolak sampai kunci habis dan reset terasa "tidak berhasil".
+    await this.redis.del(`login_lock:${user.email}`, `login_fail:${user.email}`);
   }
 
   async requestInvitationResend(token: string): Promise<void> {

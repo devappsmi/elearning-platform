@@ -1,0 +1,59 @@
+{
+  "scenario_id": "perkenalan",
+  "title": { "id": "Perkenalan Diri", "jp": "自己紹介" },
+  "level": "N5",
+  "roles": ["classmate", "new_student"],
+  "estimated_minutes": 3,
+  "lines": [
+    {
+      "speaker": "classmate",
+      "jp": "こんにちは！はじめまして。",
+      "romaji": "konnichiwa! hajimemashite.",
+      "id": "Halo! Perkenalkan."
+    },
+    {
+      "speaker": "new_student",
+      "type": "choice",
+      "options": [
+        { "jp": "はじめまして。よろしくお願いします。", "correct": true },
+        {
+          "jp": "さようなら。",
+          "correct": false,
+          "feedback_id": "「さようなら」artinya 'selamat tinggal' -- dipakai saat berpisah, bukan saat baru berkenalan. Coba 「はじめまして」(salam kenal)."
+        }
+      ]
+    },
+    {
+      "speaker": "classmate",
+      "jp": "お名前は何ですか。",
+      "romaji": "onamae wa nan desu ka.",
+      "id": "Siapa nama Anda?"
+    },
+    {
+      "speaker": "new_student",
+      "type": "choice",
+      "options": [
+        { "jp": "わたしの名前はアニです。", "correct": true },
+        {
+          "jp": "わたしは名前です。",
+          "correct": false,
+          "feedback_id": "Pola yang benar: 「わたしの名前は〜です」(nama saya adalah ~), bukan 「わたしは名前です」."
+        }
+      ]
+    },
+    {
+      "speaker": "classmate",
+      "jp": "よろしくお願いします、アニさん。",
+      "romaji": "yoroshiku onegaishimasu, ani-san.",
+      "id": "Senang berkenalan denganmu, Ani."
+    }
+  ],
+  "vocab": ["voc_hajimemashite", "voc_onamae", "voc_yoroshiku"],
+  "grammar_notes": [
+    {
+      "id": "g_jibun_shoukai",
+      "title": "Pola perkenalan diri",
+      "body_md": "「わたしの名前は〜です」= 'Nama saya adalah ~'. 「はじめまして」dipakai SEKALI di awal perkenalan (bukan tiap bertemu), dijawab dengan 「よろしくお願いします」(mohon bantuannya / senang berkenalan)."
+    }
+  ]
+}
