@@ -17,11 +17,11 @@ KASUS = [
       "PL-07, NL-03", "Belum teruji dengan materi sungguhan (dokumen fitur PL-07: Sebagian)."),
     K("TC-BT-01", A_BT, "Murid", "P2", "Fitur yang belum dibangun tidak tampil atau menjanjikan sesuatu",
       "Sudah masuk sebagai murid.",
-      ["Telusuri semua layar murid mencari: tes penempatan level, kuis harian, ujian akhir unit, jenis soal selain pilih dan susun, saran mengulang pelajaran terlemah, penilaian pengucapan, "
+      ["Telusuri semua layar murid mencari: kuis harian, ujian akhir unit, jenis soal selain pilih dan susun, saran mengulang pelajaran terlemah, penilaian pengucapan, "
        "kartu koreksi atau terjemahan balasan AI, riwayat percakapan, pembekuan streak, lencana, materi Katakana/N5, pilihan peran di skenario, flashcard mode tes.",
        "Baca juga teks bantuan dan pesan di tiap layar."],
       "Tidak ada tombol, tautan, atau kalimat yang menjanjikan fitur-fitur itu atau membuka halaman setengah jadi. Satu-satunya pengecualian yang diketahui: kalimat di layar \"Cek Emailmu\" (lihat TC-AK-16).",
-      "AK-11, PL-08, PL-10, PL-11, MT-05, MT-06, PC-07, PC-08, AI-15, AI-16, AI-17, FC-05, GM-06, GM-07"),
+      "PL-08, PL-10, PL-11, MT-05, MT-06, PC-07, PC-08, AI-15, AI-16, AI-17, FC-05, GM-06, GM-07"),
     K("TC-KT-11", A_KT, "Semua", "P3", "Alat impor unit dari dokumen Word dapat diulang dan hasilnya sama",
       "Komputer pengembang dengan repositori dan pnpm; dijalankan tim teknis, bukan murid.",
       ["pnpm --filter api run unit:import  (daftar unit yang punya sumber Word).",

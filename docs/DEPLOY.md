@@ -291,7 +291,7 @@ yang dihapus dari JSON dibiarkan karena bisa sudah punya riwayat murid).
 Murid melihat unit baru di Beranda di bawah level **N4**. Jalur belajar adalah SATU urutan linear lintas level: pelajaran pertama
 unit ini terbuka setelah semua pelajaran sebelumnya (kini Hiragana) tuntas; sesudahnya terbuka satu per satu.
 
-## 6. Fitur opsional: AI tutor dan audio pelajaran
+## 6. Fitur opsional: AI tutor, audio pelajaran, tes penempatan
 
 Semuanya boleh dikosongkan; hanya fitur terkait yang nonaktif.
 
@@ -309,6 +309,7 @@ Semuanya boleh dikosongkan; hanya fitur terkait yang nonaktif.
   Kalau ada nama model yang ditolak, pesan gagalnya mencantumkan model yang tersedia untuk akun Anda; ubah
   `OPENAI_*_MODEL` di `.env`. Rincian ada di `docs/PLAN.md` bagian 6.
 - **Audio pelajaran** (suara kosakata/kalimat): lihat 6a. **Tidak wajib Azure** — kunci OpenAI yang sama dengan AI tutor cukup.
+- **Tes penempatan** (menyala bawaan): lihat 6b.
 - Perubahan `.env` selalu diikuti `docker compose up -d`; hanya layanan yang variabelnya berubah yang dibuat ulang.
 
 ### 6a. Audio pelajaran (tanpa Azure)
@@ -363,6 +364,23 @@ Berkas ditimpa di alamat yang sama, dan baris database baru diperbarui setelah b
 tengah jalan (kuota, kunci), teks yang belum sempat dibuat ulang tetap memakai audio lamanya. Browser murid bisa masih
 menyimpan audio lama sampai 1 hari (cache).
 
+### 6b. Tes penempatan (PRD AUTH-05)
+
+Murid baru yang **belum menyelesaikan satu pelajaran pun** ditawari tes 15 soal (di Beranda dan langkah 3 layar sambutan,
+alamat `/placement`): membaca huruf dan arti kata berhuruf kana, diambil dari isi unit huruf di awal jalur (kini Hiragana).
+Benar minimal 80% → unit itu **dilewati** dan murid langsung mulai di unit berikutnya (kini "Percakapan di Tempat Kerja",
+level N4); unit yang dilewati tetap bisa dipelajari. Tes hanya bisa diambil **sekali** per murid dan boleh dilewati (mulai dari
+awal). Tidak butuh kunci atau layanan tambahan (kunci jawaban disimpan sementara di Redis, 2 jam).
+
+- **Mematikan**: `PLACEMENT_TEST_ENABLED=false` di `.env`, lalu `docker compose up -d`. Tes tidak lagi ditawarkan; hasil yang
+  sudah tersimpan **tetap berlaku** (murid yang sudah melewati Hiragana tidak terkunci ulang). Nilai selain `true`/`false`
+  menggagalkan boot API dengan pesan yang menyebut nama variabelnya.
+- **Melihat hasil**: kolom `placement_taken_at`, `placement_correct`, `placement_total`, `placement_start_unit_id` di tabel
+  `users` (start unit kosong + tanggal terisi = ikut tes tetapi mulai dari awal). Belum ditampilkan di aplikasi admin.
+- **Mengizinkan murid mengulang tes** (mis. salah tekan): kosongkan keempat kolom itu untuk murid tersebut, selama ia belum
+  menyelesaikan pelajaran. Contoh: `UPDATE users SET placement_taken_at = NULL, placement_correct = NULL, placement_total = NULL,
+  placement_start_unit_id = NULL WHERE email = 'murid@contoh.id';`
+
 ## 7. Penyimpanan audio
 
 Untuk tahap uji coba, audio hasil TTS disimpan di **disk server** (volume Docker `media_data`), **bukan S3**. API menulisnya
@@ -395,7 +413,7 @@ docker compose exec postgres psql -U elearning -d elearning \
 | Status / log | `docker compose ps` · `docker compose logs -f api` (atau `edge`, `migrate`, `postgres` bila memakai yang bawaan, …). Log otomatis dirotasi (3 × 10 MB per layanan) |
 | Restart satu layanan | `docker compose restart api` |
 | Hentikan / nyalakan semua | `docker compose stop` · `docker compose start` — data aman. Layanan bawaan `restart: unless-stopped` menyala lagi sendiri setelah server reboot |
-| Update ke versi baru | `git pull` lalu `docker compose up -d --build`. Migrasi database berjalan otomatis (layanan `migrate`) dan API baru start setelahnya |
+| Update ke versi baru | `git pull` lalu `docker compose up -d --build`. Migrasi database berjalan otomatis (layanan `migrate`) dan API baru start setelahnya. Bila catatan rilis menyebut perubahan konten, lanjutkan dengan `docker compose run --rm tools pnpm run db:seed` |
 | Jalankan seed ulang (konten baru) | `docker compose run --rm tools pnpm run db:seed` |
 | Lupa kata sandi admin / admin tambahan | Jalankan lagi `admin:create` dengan email yang sama: kata sandi diganti, akun diaktifkan lagi, semua sesi lamanya dicabut. Email baru = akun admin baru (peran OWNER) |
 | Murid uji tanpa undangan / lupa kata sandi murid uji | `student:create` (bagian 5a). Email baru = murid baru; email yang sama = kata sandi diganti dan sesi lama dicabut |

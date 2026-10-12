@@ -20,7 +20,7 @@ Rilis / versi: ____________________   Tanggal: ____________   Penguji utama: ___
 
 - [ ] 8. Semua kasus uji prioritas P1 sudah dijalankan dan lulus (tidak ada Gagal atau Belum diuji) (**Wajib**) _(rujukan: Lembar Ringkasan (otomatis))_
 - [ ] 9. Tidak ada bug Kritis atau Tinggi yang masih terbuka (**Wajib**) _(rujukan: Lembar Ringkasan (otomatis))_
-- [ ] 10. Uji asap API lulus penuh (npm run test:api, dan --lengkap di lingkungan uji) (**Wajib**) _(rujukan: TC-API-01 sampai TC-API-26)_
+- [ ] 10. Uji asap API lulus penuh (npm run test:api, dan --lengkap di lingkungan uji) (**Wajib**) _(rujukan: TC-API-01 sampai TC-API-27)_
 - [ ] 11. Uji browser otomatis lulus tanpa kegagalan baru (npm test) (**Wajib**) _(rujukan: qa/README.md)_
 - [ ] 12. Pemindaian aksesibilitas otomatis tidak melaporkan pelanggaran serius/kritis baru (**Wajib**) _(rujukan: TC-AX-01 sampai TC-AX-03)_
 

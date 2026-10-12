@@ -133,9 +133,12 @@ def cari_id_skrip():
             peta[id_].add(str(berkas.relative_to(AKAR / "e2e")))
     smoke = AKAR / "api" / "smoke.mjs"
     if smoke.exists():
-        for id_ in re.findall(r'uji\("(TC-API-\d+)"', smoke.read_text(encoding="utf-8")):
-            lengkap = int(id_.split("-")[2]) >= 21
-            peta[id_].add("api/smoke.mjs --lengkap" if lengkap else "api/smoke.mjs")
+        # Pemeriksaan yang mengubah data hanya jalan dengan --lengkap: semuanya ada di dalam blok `if (lengkap) {`.
+        teks = smoke.read_text(encoding="utf-8")
+        awal_lengkap = teks.find("if (lengkap) {")
+        for m in re.finditer(r'uji\("(TC-API-\d+)"', teks):
+            lengkap = 0 <= awal_lengkap < m.start()
+            peta[m.group(1)].add("api/smoke.mjs --lengkap" if lengkap else "api/smoke.mjs")
     return peta
 
 
@@ -344,6 +347,7 @@ AKUN = [
     ("Murid uji utama (QA_STUDENT_*)", "qa-murid@example.com", "Semua uji murid dan uji otomatis; progres belajar akan terisi."),
     ("Murid uji kedua (QA_STUDENT2_*)", "qa-murid2@example.com", "Uji yang mengubah akun: pindah kelas, nonaktifkan, reset password."),
     ("Murid uji penguncian (QA_LOCKOUT_*)", "qa-murid-kunci@example.com", "HANYA uji penguncian akun; terkunci 15 menit sesudahnya."),
+    ("Murid baru tes penempatan (QA_MURID_BARU_*)", "qa-murid-baru-1@example.com", "Tes penempatan (TC-AK-32 s.d. 36); terpakai setelah tes dikirim, buat akun baru tiap putaran."),
     ("Admin uji (QA_ADMIN_*)", "qa-admin@example.com", "Semua uji admin."),
     ("Murid baru (dari undangan)", "qa-baru-1@example.com", "Uji pendaftaran lewat undangan (TC-AK-01 dan seterusnya)."),
 ]
@@ -498,7 +502,7 @@ QC = [
     ("Lingkungan dan rilis", "Alamat di tautan undangan dan reset password menunjuk ke aplikasi murid yang benar", "Ya", "TC-AD-30"),
     ("Pengujian", "Semua kasus uji prioritas P1 sudah dijalankan dan lulus (tidak ada Gagal atau Belum diuji)", "Ya", "Lembar Ringkasan (otomatis)"),
     ("Pengujian", "Tidak ada bug Kritis atau Tinggi yang masih terbuka", "Ya", "Lembar Ringkasan (otomatis)"),
-    ("Pengujian", "Uji asap API lulus penuh (npm run test:api, dan --lengkap di lingkungan uji)", "Ya", "TC-API-01 sampai TC-API-26"),
+    ("Pengujian", "Uji asap API lulus penuh (npm run test:api, dan --lengkap di lingkungan uji)", "Ya", "TC-API-01 sampai TC-API-27"),
     ("Pengujian", "Uji browser otomatis lulus tanpa kegagalan baru (npm test)", "Ya", "qa/README.md"),
     ("Pengujian", "Pemindaian aksesibilitas otomatis tidak melaporkan pelanggaran serius/kritis baru", "Ya", "TC-AX-01 sampai TC-AX-03"),
     ("Alur inti manual", "Undangan dibuat admin, murid mendaftar, lulus pelajaran pertama, XP dan Leaderboard benar", "Ya", "TC-AK-01, TC-PL-10, TC-NL-02, TC-AD-14"),

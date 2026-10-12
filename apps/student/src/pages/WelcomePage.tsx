@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { components } from "@elearning/api-client";
 import { apiClient } from "../auth/api-client";
 import { useAuth } from "../auth/AuthContext";
 import { INVALID_INPUT_TEXT, NETWORK_ERROR_TEXT, failureText, readFailure } from "../auth/api-errors";
 import { AuthCard } from "../components/AuthCard";
-import { Button } from "../components/ui/Button";
+import { Button, buttonClasses } from "../components/ui/Button";
 import { Notice } from "../components/ui/Feedback";
 import { Icon } from "../components/ui/icons";
+import { PLACEMENT_PATH, joinTitles } from "../lib/placement";
 import { XP_GOAL_OPTIONS, isXpGoal, type XpGoal } from "../lib/xp-goal";
 
 type PathView = components["schemas"]["PathView"];
 type PathState = PathView | "loading" | "failed";
+type PlacementStatus = components["schemas"]["PlacementStatusView"];
 
 const STEP_COUNT = 3;
 
@@ -26,16 +28,18 @@ const LEVEL_EMOJI = ["🌸", "🍙", "🗻", "🎏", "⛩️"] as const;
 
 /** Onboarding singkat 3 layar setelah registrasi (PRD S3 `/welcome`: target
  * harian, level, mulai). Hanya menampilkan yang NYATA: target harian benar-benar
- * disimpan (PATCH /me), level awal dibaca dari jalur belajar kelasnya (GET /path).
- * Tes penempatan (AUTH-05, opsional) belum ada, jadi tidak ditawarkan di sini --
- * murid selalu mulai dari awal jalurnya. Halaman ini bisa dibuka lagi kapan saja
- * lewat /welcome; tidak ada penanda "sudah onboarding" di server. */
+ * disimpan (PATCH /me), level awal dibaca dari jalur belajar kelasnya (GET /path)
+ * dan hasil tes penempatan (GET /placement, AUTH-05). Selama tes itu tersedia,
+ * langkah 3 menawarkannya; "Mulai Belajar" = melewatinya dan mulai dari awal.
+ * Halaman ini bisa dibuka lagi kapan saja lewat /welcome; tidak ada penanda
+ * "sudah onboarding" di server. */
 export function WelcomePage() {
   const { me, setMe } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [goal, setGoal] = useState<XpGoal>(isXpGoal(me.dailyXpGoal) ? me.dailyXpGoal : 30);
   const [path, setPath] = useState<PathState>("loading");
+  const [placement, setPlacement] = useState<PlacementStatus | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,6 +53,13 @@ export function WelcomePage() {
       .catch(() => {
         if (!cancelled) setPath("failed");
       });
+    // Pelengkap: tanpa status tes penempatan, langkah 2-3 tetap tampil seperti murid yang mulai dari awal.
+    apiClient
+      .GET("/placement")
+      .then(({ data }) => {
+        if (!cancelled && data) setPlacement(data);
+      })
+      .catch(() => undefined);
     return () => {
       cancelled = true;
     };
@@ -77,8 +88,11 @@ export function WelcomePage() {
   }
 
   const firstName = me.name.trim().split(/\s+/)[0] || me.name;
-  const firstLevel = path !== "loading" && path !== "failed" ? (path.levels[0] ?? null) : null;
-  const startLevelName = firstLevel?.name ?? null;
+  const levels = path !== "loading" && path !== "failed" ? path.levels : [];
+  // Unit awal dari tes penempatan (hanya bila ada unit yang dilewati); selain itu awal jalur.
+  const placedUnit = placement?.result && placement.result.skippedUnits.length > 0 ? placement.result.startUnit : null;
+  const startLevelIndex = Math.max(0, placedUnit ? levels.findIndex((level) => level.units.some((unit) => unit.id === placedUnit.id)) : 0);
+  const startLevelName = levels[startLevelIndex]?.name ?? null;
 
   const progress = (
     <div className="space-y-2">
@@ -179,10 +193,18 @@ export function WelcomePage() {
         )}
         {path !== "loading" && path !== "failed" && (
           <>
-            <p className="text-sm font-semibold text-slate-600">
-              Kamu mulai dari awal jalur, yaitu level <span className="font-extrabold text-slate-900">{startLevelName ?? "-"}</span>.
-              Selesaikan pelajarannya berurutan untuk membuka yang berikutnya.
-            </p>
+            {placedUnit ? (
+              <p className="text-sm font-semibold text-slate-600" data-testid="welcome-placed">
+                Berdasarkan tes penempatan, kamu mulai dari unit <span className="font-extrabold text-slate-900">{placedUnit.title}</span>{" "}
+                di level <span className="font-extrabold text-slate-900">{startLevelName ?? "-"}</span>. Unit sebelumnya dilewati, tapi tetap
+                bisa kamu pelajari kapan saja.
+              </p>
+            ) : (
+              <p className="text-sm font-semibold text-slate-600">
+                Kamu mulai dari awal jalur, yaitu level <span className="font-extrabold text-slate-900">{startLevelName ?? "-"}</span>.
+                Selesaikan pelajarannya berurutan untuk membuka yang berikutnya.
+              </p>
+            )}
             <ol className="space-y-3" data-testid="welcome-levels">
               {path.levels.map((level, index) => {
                 const lessons = level.units.reduce((sum, unit) => sum + unit.totalLessons, 0);
@@ -190,7 +212,7 @@ export function WelcomePage() {
                   <li
                     key={level.id}
                     className={`flex items-center gap-4 rounded-2xl border-2 p-4 ${
-                      index === 0 ? "border-secondary-500 bg-secondary-50 shadow-[0_4px_0_0_theme(colors.secondary.300)]" : "border-slate-200 bg-white"
+                      index === startLevelIndex ? "border-secondary-500 bg-secondary-50 shadow-[0_4px_0_0_theme(colors.secondary.300)]" : "border-slate-200 bg-white"
                     }`}
                   >
                     <span
@@ -202,10 +224,13 @@ export function WelcomePage() {
                     <span className="min-w-0 flex-1">
                       <span className="flex flex-wrap items-center gap-2">
                         <span className="font-extrabold text-slate-900">{level.name}</span>
-                        {index === 0 && (
+                        {index === startLevelIndex && (
                           <span className="rounded-full bg-secondary-600 px-2.5 py-0.5 text-xs font-extrabold text-white">
                             mulai di sini
                           </span>
+                        )}
+                        {index < startLevelIndex && (
+                          <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-extrabold text-slate-700">dilewati</span>
                         )}
                       </span>
                       <span className="block text-sm font-semibold text-slate-600">
@@ -251,6 +276,18 @@ export function WelcomePage() {
           </div>
         )}
       </dl>
+      {placement?.available && (
+        <div data-testid="welcome-placement-offer" className="space-y-3 rounded-2xl border-2 border-amber-200 bg-amber-50 p-4">
+          <p className="font-extrabold text-slate-900">Sudah bisa membaca {joinTitles(placement.sections.map((s) => s.title))}?</p>
+          <p className="text-sm font-semibold text-slate-700">
+            Ikut tes penempatan ({placement.questionCount} soal). Kalau lulus, bagian itu dilewati dan kamu langsung mulai dari unit
+            berikutnya. Tidak ingin ikut? Tekan &ldquo;Mulai Belajar&rdquo; untuk mulai dari awal.
+          </p>
+          <Link to={PLACEMENT_PATH} className={buttonClasses({ variant: "secondary", size: "md" })}>
+            Ikut tes penempatan
+          </Link>
+        </div>
+      )}
       <ul className="space-y-2 text-sm font-semibold text-slate-700">
         {[
           "Selesaikan pelajaran untuk mendapat XP.",

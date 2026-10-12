@@ -11,6 +11,7 @@ import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { WelcomePage } from "./pages/WelcomePage";
 import { KamusPage } from "./pages/KamusPage";
 import { KanaPage } from "./pages/KanaPage";
+import { PlacementPage } from "./pages/PlacementPage";
 import { LeaderboardPage } from "./pages/LeaderboardPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { ConversationCatalogPage } from "./pages/ConversationCatalogPage";
@@ -20,12 +21,13 @@ import { FlashcardsPage } from "./pages/FlashcardsPage";
 import { TutorPage } from "./pages/TutorPage";
 import { TUTOR_PATH } from "./lib/tutor-chat";
 import { KANA_PATH } from "./lib/kana";
+import { PLACEMENT_PATH } from "./lib/placement";
 
 /**
  * SEMUA rute murid sungguhan (tidak ada lagi StubPage): alur belajar (7c),
  * Kamus/Leaderboard/Profil (7f), Percakapan (7g), Flashcard (7h), dan halaman
  * masuk-ke-produk -- undangan/registrasi, lupa + reset password, onboarding
- * (7i), dan Ngobrol dengan AI (7m). Lihat docs/PLAN.md.
+ * (7i), Ngobrol dengan AI (7m), Huruf Jepang (7p), dan tes penempatan (7q). Lihat docs/PLAN.md.
  *
  * Public routes (no AuthGuard): /invite/:token, /login, /forgot-password,
  * /reset-password/:token. /welcome (onboarding) butuh login tapi TANPA
@@ -56,6 +58,7 @@ export const router = createBrowserRouter([
           },
           { path: "/dictionary", element: <KamusPage /> },
           { path: KANA_PATH, element: <KanaPage /> },
+          { path: PLACEMENT_PATH, element: <PlacementPage /> },
           { path: "/flashcards", element: <FlashcardsPage /> },
           { path: "/leaderboard", element: <LeaderboardPage /> },
           { path: "/profile", element: <ProfilePage /> },

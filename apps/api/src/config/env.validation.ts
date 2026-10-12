@@ -49,6 +49,16 @@ export const envSchema = z.object({
   // hardcode 20; sekarang bisa diubah tanpa deploy kode.
   TUTOR_DAILY_QUOTA: z.coerce.number().int().positive().default(20),
 
+  // Tes penempatan (PRD AUTH-05, "opsional, bisa dimatikan lewat pengaturan"): `false` = tidak ditawarkan lagi; murid
+  // baru selalu mulai dari awal jalur. Hasil tes yang SUDAH tersimpan tetap berlaku (jalur murid itu tidak terkunci ulang).
+  PLACEMENT_TEST_ENABLED: z.preprocess(
+    (value) => (typeof value === "string" ? value.trim().toLowerCase() || undefined : value),
+    z
+      .enum(["true", "false"])
+      .default("true")
+      .transform((value) => value === "true"),
+  ),
+
   // TTS untuk audio PELAJARAN (AudioModule, Milestone 8) -- terpisah dari TTS milik AI tutor. Penyedia:
   // `auto` (bawaan) = Azure bila AZURE_SPEECH_KEY+REGION terisi, kalau tidak OpenAI bila OPENAI_API_KEY terisi, kalau
   // tidak ada satu pun audio dimatikan; atau paksa `azure` / `openai` / `none`. Aturan lengkap: audio/tts-options.ts.

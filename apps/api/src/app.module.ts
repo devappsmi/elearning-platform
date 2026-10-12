@@ -24,14 +24,16 @@ import { ScenariosModule } from "./scenarios/scenarios.module";
 import { DictionaryModule } from "./dictionary/dictionary.module";
 import { FlashcardsModule } from "./flashcards/flashcards.module";
 import { TutorModule } from "./tutor/tutor.module";
+import { PlacementModule } from "./placement/placement.module";
 
 /** Modul fitur lain (Admin content editor/pengumuman Fase 2 -- lihat plan
  * bagian 3) ditambahkan di milestone berikutnya. File ini mengkabelkan
  * bagian cross-cutting + health check (Milestone 4), vertical slice auth
  * (Milestone 5), vertical slice belajar inti (Milestone 7), pipeline audio
  * TTS (Milestone 8), Milestone 9 -- modul admin (kelas/undangan/murid/
- * dashboard) + skenario percakapan/kamus/flashcard, dan Milestone 11 --
- * TutorModule (AI tutor). AudioModule tidak punya controller sendiri (audio
+ * dashboard) + skenario percakapan/kamus/flashcard, Milestone 11 --
+ * TutorModule (AI tutor), dan PlacementModule (tes penempatan AUTH-05,
+ * docs/PLAN.md bagian 7q). AudioModule tidak punya controller sendiri (audio
  * konten di-generate saat seed, bukan saat request -- lihat catatan di
  * audio.service.ts); konsumen requestnya adalah TutorModule (`/tutor/speak`).
  *
@@ -63,6 +65,7 @@ import { TutorModule } from "./tutor/tutor.module";
     DictionaryModule,
     FlashcardsModule,
     TutorModule,
+    PlacementModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

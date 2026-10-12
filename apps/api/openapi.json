@@ -1522,6 +1522,94 @@
           "Tutor"
         ]
       }
+    },
+    "/placement": {
+      "get": {
+        "operationId": "PlacementController_status",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlacementStatusView"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Placement"
+        ]
+      }
+    },
+    "/placement/tests": {
+      "post": {
+        "operationId": "PlacementController_createTest",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlacementTestView"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Placement"
+        ]
+      }
+    },
+    "/placement/attempts": {
+      "post": {
+        "operationId": "PlacementController_submit",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitPlacementDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlacementAttemptResultView"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "tags": [
+          "Placement"
+        ]
+      }
     }
   },
   "info": {
@@ -1936,6 +2024,9 @@
           "unlocked": {
             "type": "boolean"
           },
+          "skipped": {
+            "type": "boolean"
+          },
           "completedLessons": {
             "type": "number"
           },
@@ -1955,6 +2046,7 @@
           "title",
           "order",
           "unlocked",
+          "skipped",
           "completedLessons",
           "totalLessons",
           "lessons"
@@ -3381,6 +3473,308 @@
         },
         "required": [
           "audioUrl"
+        ]
+      },
+      "PlacementUnitView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "levelName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "levelName"
+        ]
+      },
+      "PlacementOutcomeView": {
+        "type": "object",
+        "properties": {
+          "takenAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "correct": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "startUnit": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PlacementUnitView"
+              }
+            ]
+          },
+          "skippedUnits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlacementUnitView"
+            }
+          }
+        },
+        "required": [
+          "takenAt",
+          "correct",
+          "total",
+          "startUnit",
+          "skippedUnits"
+        ]
+      },
+      "PlacementStatusView": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "questionCount": {
+            "type": "number"
+          },
+          "passPercent": {
+            "type": "number"
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlacementUnitView"
+            }
+          },
+          "result": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PlacementOutcomeView"
+              }
+            ]
+          }
+        },
+        "required": [
+          "enabled",
+          "available",
+          "questionCount",
+          "passPercent",
+          "sections",
+          "result"
+        ]
+      },
+      "PlacementTestSectionView": {
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "questionCount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "unitId",
+          "title",
+          "questionCount"
+        ]
+      },
+      "PlacementChoiceView": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "sub": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "PlacementQuestionView": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "kana_to_romaji",
+              "romaji_to_kana",
+              "word_meaning"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "sectionUnitId": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "promptSub": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlacementChoiceView"
+            }
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "sectionUnitId",
+          "prompt",
+          "options"
+        ]
+      },
+      "PlacementTestView": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "passPercent": {
+            "type": "number"
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlacementTestSectionView"
+            }
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlacementQuestionView"
+            }
+          }
+        },
+        "required": [
+          "testId",
+          "expiresAt",
+          "passPercent",
+          "sections",
+          "questions"
+        ]
+      },
+      "PlacementAnswerDto": {
+        "type": "object",
+        "properties": {
+          "choiceText": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200
+          }
+        }
+      },
+      "SubmitPlacementDto": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "string"
+          },
+          "answers": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlacementAnswerDto"
+            }
+          }
+        },
+        "required": [
+          "testId",
+          "answers"
+        ]
+      },
+      "PlacementSectionResultView": {
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "correct": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "passed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "unitId",
+          "title",
+          "correct",
+          "total",
+          "passed"
+        ]
+      },
+      "PlacementAttemptResultView": {
+        "type": "object",
+        "properties": {
+          "takenAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "correct": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "startUnit": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PlacementUnitView"
+              }
+            ]
+          },
+          "skippedUnits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlacementUnitView"
+            }
+          },
+          "passPercent": {
+            "type": "number"
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlacementSectionResultView"
+            }
+          }
+        },
+        "required": [
+          "takenAt",
+          "correct",
+          "total",
+          "startUnit",
+          "skippedUnits",
+          "passPercent",
+          "sections"
         ]
       }
     }

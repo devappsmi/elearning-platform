@@ -79,6 +79,7 @@ export class ContentService {
       where: { userId, completedAt: { not: null } },
       select: { lessonId: true },
     });
+    const user = await this.prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { placementStartUnitId: true } });
     const completedLessonIds = new Set(completedLessonRows.map((p) => p.lessonId));
     const completedLessonKeys = new Set<string>();
     for (const u of flatUnits) {
@@ -87,7 +88,9 @@ export class ContentService {
       }
     }
 
-    const unitUnlocked = UnlockRules.isUnitUnlocked(flatUnits, unitIndex, completedLessonKeys);
+    // Unit awal hasil tes penempatan (AUTH-05) -- aturan yang sama dengan LearningPathService.getPath.
+    const startIndex = UnlockRules.startIndexOf(flatUnits, user.placementStartUnitId);
+    const unitUnlocked = UnlockRules.isUnitUnlocked(flatUnits, unitIndex, completedLessonKeys, startIndex);
     const state = deriveNodeStates(unit, unitUnlocked, completedLessonKeys)[lessonIndex]!;
     if (state === "locked") {
       throw new ForbiddenException(`Lesson ${lessonId} masih terkunci -- selesaikan lesson sebelumnya dulu`);

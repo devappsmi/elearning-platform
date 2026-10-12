@@ -98,7 +98,7 @@ KASUS = [
     K("TC-AX-01", A_AX, "Murid", "P1", "Pemindaian otomatis (axe): halaman murid yang butuh masuk",
       "Skrip otomatis; tidak ada langkah manual.",
       ["Jalankan npm run test:a11y."],
-      "Tidak ada pelanggaran WCAG 2.1 A/AA tingkat serius atau kritis pada Beranda, Percakapan, pengantar skenario, Ngobrol dengan AI, Kamus, Flashcard, Leaderboard, Profil, sambutan, dan layar pelajaran.",
+      "Tidak ada pelanggaran WCAG 2.1 A/AA tingkat serius atau kritis pada Beranda, Percakapan, pengantar skenario, Ngobrol dengan AI, Kamus, Flashcard, Leaderboard, Profil, sambutan, Huruf Jepang, tes penempatan, dan layar pelajaran.",
       "TP-04", "Pemindaian otomatis hanya menangkap sebagian masalah; lanjutkan dengan TC-AX-04 sampai TC-AX-09."),
     K("TC-AX-02", A_AX, "Murid", "P1", "Pemindaian otomatis (axe): halaman murid tanpa masuk",
       "Skrip otomatis.",

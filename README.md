@@ -24,7 +24,7 @@ qa/          Paket uji dan QC untuk penguji (di luar workspace; panduan: qa/READ
 
 ## Pengujian dan QC
 
-Untuk penguji (bukan pengembang): folder [`qa/`](qa/README.md) berisi buku kasus uji Excel (260 kasus), uji browser otomatis (Playwright), uji asap API, ekspor isi pelajaran untuk pengajar, daftar periksa rilis, dan templat bug. Berdiri sendiri dan tidak ikut `pnpm test`; mulai dari `qa/README.md`.
+Untuk penguji (bukan pengembang): folder [`qa/`](qa/README.md) berisi buku kasus uji Excel (266 kasus), uji browser otomatis (Playwright), uji asap API, ekspor isi pelajaran untuk pengajar, daftar periksa rilis, dan templat bug. Berdiri sendiri dan tidak ikut `pnpm test`; mulai dari `qa/README.md`.
 
 ## Menjalankan untuk pengembangan
 

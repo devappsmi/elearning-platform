@@ -16,7 +16,7 @@ FITUR = [
     ('AK-08', 'Keluar', 'Tersedia', 'Murid: Akun dan masuk'),
     ('AK-09', 'Penempatan kelas otomatis', 'Tersedia', 'Murid: Akun dan masuk'),
     ('AK-10', 'Email otomatis dari aplikasi', 'Belum', 'Murid: Akun dan masuk'),
-    ('AK-11', 'Tes penempatan level', 'Belum', 'Murid: Akun dan masuk'),
+    ('AK-11', 'Tes penempatan level', 'Tersedia', 'Murid: Akun dan masuk'),  # dibangun 12 Okt 2026 (docs/PLAN.md bagian 7q)
     ('BR-01', 'Ringkasan di Beranda', 'Tersedia', 'Murid: Beranda dan jalur belajar'),
     ('BR-02', 'Lanjutkan belajar', 'Tersedia', 'Murid: Beranda dan jalur belajar'),
     ('BR-03', 'Peta jalur belajar', 'Tersedia', 'Murid: Beranda dan jalur belajar'),

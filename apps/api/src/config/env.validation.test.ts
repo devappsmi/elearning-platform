@@ -105,3 +105,21 @@ describe("validateEnv -- penyedia TTS audio pelajaran", () => {
   });
 });
 
+
+describe("validateEnv -- tes penempatan", () => {
+  it("bawaan menyala; baris kosong (`PLACEMENT_TEST_ENABLED=` di .env atau compose) juga menyala", () => {
+    expect(validateEnv(BASE).PLACEMENT_TEST_ENABLED).toBe(true);
+    expect(validateEnv({ ...BASE, PLACEMENT_TEST_ENABLED: "" }).PLACEMENT_TEST_ENABLED).toBe(true);
+  });
+
+  it("false/true, huruf besar dan spasi dinormalkan", () => {
+    expect(validateEnv({ ...BASE, PLACEMENT_TEST_ENABLED: "false" }).PLACEMENT_TEST_ENABLED).toBe(false);
+    expect(validateEnv({ ...BASE, PLACEMENT_TEST_ENABLED: " FALSE " }).PLACEMENT_TEST_ENABLED).toBe(false);
+    expect(validateEnv({ ...BASE, PLACEMENT_TEST_ENABLED: "True" }).PLACEMENT_TEST_ENABLED).toBe(true);
+  });
+
+  it("nilai lain (mis. `0` atau salah ketik) gagal saat boot, bukan diam-diam menyala", () => {
+    expect(() => validateEnv({ ...BASE, PLACEMENT_TEST_ENABLED: "0" })).toThrow(/Env tidak valid.*PLACEMENT_TEST_ENABLED/s);
+    expect(() => validateEnv({ ...BASE, PLACEMENT_TEST_ENABLED: "flase" })).toThrow(/PLACEMENT_TEST_ENABLED/);
+  });
+});

@@ -40,6 +40,9 @@ export const cfg = {
   /** Akun KHUSUS uji penguncian. Setelah uji ini akun terkunci 15 menit, jadi jangan dipakai untuk hal lain. */
   lockout: { email: read("QA_LOCKOUT_EMAIL"), password: read("QA_LOCKOUT_PASSWORD") } satisfies Credentials,
   admin: { email: read("QA_ADMIN_EMAIL"), password: read("QA_ADMIN_PASSWORD") } satisfies Credentials,
+  /** Murid BARU untuk uji tes penempatan: belum pernah ikut tes dan belum menyelesaikan pelajaran. Tes hanya bisa diambil
+   *  sekali, jadi setelah uji ini akun tersebut "terpakai" -- buat akun baru untuk putaran berikutnya. Opsional. */
+  freshStudent: { email: read("QA_MURID_BARU_EMAIL"), password: read("QA_MURID_BARU_PASSWORD") } satisfies Credentials,
 
   /** Pelajaran yang dimainkan uji belajar. `l1` = pelajaran pertama Hiragana, selalu terbuka. */
   lessonId: read("QA_LESSON_ID", "l1"),

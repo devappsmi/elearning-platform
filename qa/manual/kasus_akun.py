@@ -184,6 +184,54 @@ KASUS = [
       "Tab 1 tidak berhenti dengan layar kosong. Murid diarahkan ke Masuk atau diberi pesan yang jelas, tanpa teks galat teknis.",
       "AK-08"),
 
+    # --------------------------------------------------------------------------- Tes penempatan (PRD AUTH-05, Okt 2026)
+    K("TC-AK-32", A_AK, "Murid", "P2", "Tes penempatan hanya ditawarkan kepada murid yang belum mulai belajar",
+      "Murid uji utama (sudah pernah menyelesaikan pelajaran) dan satu murid baru yang belum menyelesaikan pelajaran apa pun.",
+      ["Dengan murid baru: buka Beranda, lalu langkah 3 layar sambutan (/welcome).",
+       "Tekan Ikut tes di kartu \"Sudah bisa membaca Hiragana?\", baca penjelasannya, lalu tekan \"Lewati, mulai dari awal\".",
+       "Dengan murid uji utama: buka Beranda, lalu buka alamat /placement langsung."],
+      "Murid baru melihat kartu tawaran di Beranda dan di langkah 3 sambutan; penjelasan tes menyebut 15 soal, ambang 80%, dan bahwa tes hanya sekali. "
+      "\"Lewati\" kembali ke Beranda tanpa memulai tes (tawaran masih ada). Murid yang sudah menyelesaikan pelajaran tidak melihat tawaran, dan /placement "
+      "hanya menampilkan keterangan (tanpa tombol Mulai tes).",
+      "AK-11, AK-03", "Uji otomatis memeriksa sisi murid uji utama tanpa memulai tes."),
+    K("TC-AK-33", A_AK, "Murid", "P1", "Mengerjakan tes penempatan sampai selesai tanpa lulus: mulai dari awal",
+      "Murid baru yang belum pernah ikut tes (QA_MURID_BARU_* untuk skrip). Tes hanya sekali per akun.",
+      ["Buka /placement dan tekan Mulai tes.",
+       "Jawab soal pertama, tekan Lanjut, lalu tekan Sebelumnya dan periksa pilihan soal pertama.",
+       "Jawab semua soal dengan \"Belum tahu\" (atau sebagian besar salah) sampai Kirim jawaban.",
+       "Tekan Mulai belajar, lalu buka /placement lagi."],
+      "Tiap soal menampilkan nomor (Soal n dari 15), perintah sesuai jenisnya (cara membaca huruf, pilih huruf untuk bunyi, arti kata), empat pilihan, dan "
+      "\"Belum tahu\"; tidak ada tanda benar/salah selama tes; Lanjut baru aktif setelah memilih; Sebelumnya mempertahankan pilihan. Hasil: \"Kita mulai dari awal\", "
+      "skor, dan jumlah benar yang diperlukan (12). Beranda: tawaran hilang, Hiragana tetap unit pertama dan Lanjutkan Belajar menuju pelajaran pertamanya. "
+      "/placement menampilkan hasil tersimpan.",
+      "AK-11"),
+    K("TC-AK-34", A_AK, "Murid", "P1", "Lulus tes penempatan: Hiragana dilewati, mulai di unit berikutnya",
+      "Murid baru lain yang belum pernah ikut tes; penguji bisa membaca hiragana (atau gunakan tabel di /kana).",
+      ["Kerjakan tes dan jawab dengan benar minimal 12 dari 15 soal.",
+       "Tekan Mulai belajar.",
+       "Buka pelajaran pertama di unit sesudah Hiragana, lalu pelajaran pertama di unit Hiragana.",
+       "Buka /welcome dan maju ke langkah 2."],
+      "Hasil \"Hebat! Hiragana dilewati\" dengan skor dan unit awal (saat ini \"Percakapan di Tempat Kerja\", level N4). Di Beranda spanduk unit Hiragana "
+      "bertanda \"Dilewati lewat tes penempatan\", kartu pengantar huruf tidak muncul, dan Lanjutkan Belajar menuju pelajaran pertama unit awal (bisa dikerjakan dan "
+      "disimpan). Pelajaran Hiragana tetap bisa dibuka (berurutan seperti biasa). Langkah 2 sambutan menyebut unit awal dan menandai level Hiragana \"dilewati\".",
+      "AK-11, BR-04", "Tidak bisa diotomatiskan tanpa kunci jawaban (kunci sengaja hanya ada di server)."),
+    K("TC-AK-35", A_AK, "Semua", "P2", "Tes penempatan dimatikan lewat pengaturan server",
+      "Akses ke server: isi PLACEMENT_TEST_ENABLED=false di .env lalu docker compose up -d api. Satu murid baru dan satu murid yang sudah lulus tes (TC-AK-34).",
+      ["Masuk sebagai murid baru: periksa Beranda, langkah 3 sambutan, dan /placement.",
+       "Masuk sebagai murid yang sudah lulus tes: periksa Beranda.",
+       "Kembalikan PLACEMENT_TEST_ENABLED=true (atau hapus barisnya) lalu docker compose up -d api."],
+      "Saat dimatikan: tidak ada tawaran tes, dan /placement menampilkan \"Tes penempatan sedang tidak tersedia\". Murid yang sudah lulus tetap melewati Hiragana "
+      "(hasil lama tetap berlaku). Setelah dinyalakan lagi tawaran kembali muncul untuk murid baru.",
+      "AK-11"),
+    K("TC-AK-36", A_AK, "Murid", "P3", "Tes penempatan di dua tab: hanya satu hasil yang tersimpan",
+      "Murid baru yang belum pernah ikut tes.",
+      ["Buka /placement di dua tab dan tekan Mulai tes di tab 1, lalu di tab 2.",
+       "Selesaikan tes di tab 1 dan kirim.",
+       "Selesaikan tes di tab 2 dan kirim."],
+      "Tab 1 mendapat pesan bahwa tesnya sudah diganti tes yang lebih baru (tes terakhir yang dimulai yang berlaku) dan kembali ke penjelasan tes. "
+      "Tab 2 tersimpan dan menampilkan hasil. Setelah itu tidak ada tab yang bisa menyimpan hasil kedua; /placement menampilkan satu hasil saja.",
+      "AK-11"),
+
     # ------------------------------------------------------------------------------------- Beranda dan jalur belajar
     K("TC-BR-01", A_BR, "Murid", "P1", "Beranda menyapa murid dan menampilkan statistik belajar",
       "Sudah masuk.",

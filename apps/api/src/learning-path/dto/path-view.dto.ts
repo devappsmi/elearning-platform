@@ -33,6 +33,8 @@ export class PathUnitView {
   @ApiProperty({ enum: ["kana", "conversation"] })
   type!: "kana" | "conversation";
   unlocked!: boolean;
+  /** Dilewati berkat tes penempatan (AUTH-05): terbuka untuk dipelajari, tapi bukan syarat unit berikutnya. */
+  skipped!: boolean;
   completedLessons!: number;
   totalLessons!: number;
   lessons!: PathLessonView[];

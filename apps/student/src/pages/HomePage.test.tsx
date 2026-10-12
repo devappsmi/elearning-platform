@@ -54,9 +54,12 @@ function pathWith({ done }: { done: number }) {
   };
 }
 
-function renderHome(done: number) {
-  mockApi({ GET: { "/path": () => ({ data: pathWith({ done }) }) } });
-  return renderAuthedPage(<HomePage />, makeMe(), { path: "/", entry: "/", destinations: [KANA_PATH, "/learn/:lessonId"] });
+const PLACEMENT_NONE = { enabled: true, available: false, questionCount: 15, passPercent: 80, sections: [], result: null };
+const PLACEMENT_OFFER = { ...PLACEMENT_NONE, available: true, sections: [{ id: "unit_hiragana", title: "Hiragana", levelName: "Hiragana" }] };
+
+function renderHome(done: number, { placement = PLACEMENT_NONE, path = pathWith({ done }) }: { placement?: object; path?: object } = {}) {
+  mockApi({ GET: { "/path": () => ({ data: path }), "/placement": () => ({ data: placement }) } });
+  return renderAuthedPage(<HomePage />, makeMe(), { path: "/", entry: "/", destinations: [KANA_PATH, "/learn/:lessonId", "/placement"] });
 }
 
 beforeEach(() => vi.clearAllMocks());
@@ -84,5 +87,49 @@ describe("HomePage: jalan masuk ke pengantar dan tabel kana", () => {
     const links = await screen.findAllByTestId("unit-kana-chart");
     expect(links).toHaveLength(1);
     expect(links[0]!.getAttribute("href")).toBe(`${KANA_PATH}?tab=hiragana`);
+  });
+});
+
+describe("HomePage: tes penempatan (AUTH-05)", () => {
+  it("selama tersedia: kartu tawaran menyebut bagian yang bisa dilewati dan membuka /placement", async () => {
+    renderHome(0, { placement: PLACEMENT_OFFER });
+
+    const card = await screen.findByTestId("placement-offer-card");
+    expect(card.textContent).toContain("Sudah bisa membaca Hiragana?");
+    expect(card.textContent).toContain("15 soal");
+    fireEvent.click(screen.getByRole("link", { name: "Ikut tes" }));
+    expect(screen.getByTestId("destination-path").textContent).toBe("/placement");
+  });
+
+  it("tidak tersedia: tanpa kartu tawaran", async () => {
+    renderHome(0);
+
+    await screen.findByTestId("kana-intro-card");
+    expect(screen.queryByTestId("placement-offer-card")).toBeNull();
+  });
+
+  it("status tes gagal dimuat: Beranda tetap tampil tanpa tawaran", async () => {
+    mockApi({ GET: { "/path": () => ({ data: pathWith({ done: 0 }) }), "/placement": () => ({ error: { message: "x" }, status: 500 }) } });
+    renderAuthedPage(<HomePage />, makeMe(), { path: "/", entry: "/" });
+
+    await screen.findByTestId("kana-intro-card");
+    expect(screen.queryByTestId("placement-offer-card")).toBeNull();
+  });
+
+  it("unit yang dilewati diberi tanda; pengantar huruf tidak ditawarkan lagi", async () => {
+    const base = pathWith({ done: 0 });
+    const [hiragana, kerja] = base.levels[0]!.units;
+    const path = {
+      ...base,
+      levels: [{ ...base.levels[0]!, units: [{ ...hiragana!, skipped: true }, { ...kerja!, unlocked: true, skipped: false, lessons: [lesson("k3_l1", "available")] }] }],
+      continueLessonId: "k3_l1",
+    };
+    renderHome(0, { path });
+
+    const chips = await screen.findAllByTestId("unit-skipped");
+    expect(chips).toHaveLength(1);
+    expect(chips[0]!.closest("div")!.textContent).toContain("Hiragana");
+    expect(chips[0]!.textContent).toContain("Dilewati lewat tes penempatan");
+    expect(screen.queryByTestId("kana-intro-card")).toBeNull();
   });
 });

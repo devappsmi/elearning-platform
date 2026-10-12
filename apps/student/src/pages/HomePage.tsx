@@ -10,10 +10,12 @@ import { Loading, Notice } from "../components/ui/Feedback";
 import { Icon } from "../components/ui/icons";
 import { ProgressBar } from "../components/ui/ProgressBar";
 import { KANA_CHART_PATH, KANA_PATH } from "../lib/kana";
+import { PLACEMENT_PATH, joinTitles } from "../lib/placement";
 
 type PathView = components["schemas"]["PathView"];
 type PathUnit = components["schemas"]["PathUnitView"];
 type PathLesson = components["schemas"]["PathLessonView"];
+type PlacementStatus = components["schemas"]["PlacementStatusView"];
 
 /** Warna tiap unit (berganti-ganti). `banner`: spanduk (teks putih ≥ 4,5:1); `node`+`edge`: bulatan pelajaran yang
  * tersedia dengan tepi "timbul"; `pulse`: warna denyut pada pelajaran yang sedang dikerjakan. Ditulis utuh untuk Tailwind. */
@@ -71,6 +73,7 @@ export function HomePage() {
   const { me } = useAuth();
   const [path, setPath] = useState<PathView | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [placement, setPlacement] = useState<PlacementStatus | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,6 +85,13 @@ export function HomePage() {
       }
       setPath(data);
     });
+    // Tawaran tes penempatan (AUTH-05) hanya pelengkap: kalau gagal dimuat, Beranda tetap tampil tanpa tawaran.
+    apiClient
+      .GET("/placement")
+      .then(({ data }) => {
+        if (!cancelled && data) setPlacement(data);
+      })
+      .catch(() => undefined);
     return () => {
       cancelled = true;
     };
@@ -94,6 +104,8 @@ export function HomePage() {
   const totalLessons = units.reduce((sum, unit) => sum + unit.totalLessons, 0);
   const doneLessons = units.reduce((sum, unit) => sum + unit.completedLessons, 0);
   const allDone = totalLessons > 0 && doneLessons >= totalLessons;
+  // Murid yang melewati unit huruf lewat tes penempatan tidak perlu disodori pengantar huruf lagi.
+  const skippedAny = units.some((unit) => unit.skipped);
   let unitIndex = 0; // hanya untuk menggilir warna spanduk; nomor yang tampil adalah `unit.order` (nomor dari penulis konten)
 
   return (
@@ -166,7 +178,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {doneLessons === 0 && units.some((unit) => unit.type === "kana") && (
+      {doneLessons === 0 && !skippedAny && units.some((unit) => unit.type === "kana") && (
         // Murid yang belum menyelesaikan satu pelajaran pun: kenalkan dulu jenis huruf dan tabelnya (evaluasi pengguna, Okt 2026).
         <Card tone="sky" padding="md" data-testid="kana-intro-card" className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <span aria-hidden="true" lang="ja" className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white text-3xl font-black text-sky-700 shadow-card">
@@ -180,6 +192,25 @@ export function HomePage() {
           </div>
           <Link to={KANA_PATH} className={buttonClasses({ variant: "secondary", size: "md", className: "shrink-0" })}>
             Baca pengantar
+          </Link>
+        </Card>
+      )}
+
+      {placement?.available && (
+        // Tes penempatan (AUTH-05): hanya selama tersedia -- belum pernah ikut dan belum ada pelajaran selesai.
+        <Card tone="amber" padding="md" data-testid="placement-offer-card" className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <span aria-hidden="true" className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white text-3xl shadow-card">
+            🧭
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-lg font-black text-slate-900">Sudah bisa membaca {joinTitles(placement.sections.map((s) => s.title))}?</p>
+            <p className="text-sm font-semibold text-slate-700">
+              Ikut tes penempatan ({placement.questionCount} soal). Kalau lulus, bagian itu dilewati dan kamu langsung mulai dari unit
+              berikutnya. Tes hanya sekali, sebelum pelajaran pertama.
+            </p>
+          </div>
+          <Link to={PLACEMENT_PATH} className={buttonClasses({ variant: "secondary", size: "md", className: "shrink-0" })}>
+            Ikut tes
           </Link>
         </Card>
       )}
@@ -235,6 +266,15 @@ function UnitPath({ unit, number, themeIndex, continueLessonId }: UnitPathProps)
           <div className="min-w-0">
             <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-white">Unit {number}</p>
             <h3 className="text-balance text-xl font-black leading-tight text-white">{unit.title}</h3>
+            {unit.skipped && (
+              <span
+                data-testid="unit-skipped"
+                className="mt-1 inline-flex items-center gap-1 rounded-full bg-black/25 px-2.5 py-0.5 text-xs font-extrabold text-white ring-1 ring-white/30"
+              >
+                <Icon name="check" className="h-3.5 w-3.5" strokeWidth={3} />
+                Dilewati lewat tes penempatan
+              </span>
+            )}
             {unit.type === "kana" && (
               <Link
                 to={KANA_CHART_PATH}

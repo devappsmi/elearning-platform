@@ -62,6 +62,8 @@ x-api-environment: &api-environment
   OPENAI_TTS_MODEL: ${OPENAI_TTS_MODEL:-gpt-4o-mini-tts}
   OPENAI_TTS_VOICE_DEFAULT: ${OPENAI_TTS_VOICE_DEFAULT:-nova}
   TUTOR_DAILY_QUOTA: ${TUTOR_DAILY_QUOTA:-20}
+  # Tes penempatan murid baru (docs/DEPLOY.md 6b). false = tidak ditawarkan; hasil yang sudah ada tetap berlaku.
+  PLACEMENT_TEST_ENABLED: ${PLACEMENT_TEST_ENABLED:-true}
   # Audio PELAJARAN (dibuat sekali lewat `db:seed`). TTS_PROVIDER: auto (bawaan; Azure bila AZURE_* terisi, kalau tidak
   # OpenAI bila OPENAI_API_KEY terisi) | openai | azure | none. Suara/arahan OpenAI kosong = bawaan di kode.
   TTS_PROVIDER: ${TTS_PROVIDER:-auto}

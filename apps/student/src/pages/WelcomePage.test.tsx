@@ -43,11 +43,15 @@ interface Options {
   me?: Me;
   path?: MockHandler;
   patchMe?: MockHandler;
+  placement?: MockHandler;
 }
 
-function renderWelcome({ me = makeMe(), path = () => ({ data: LEARNING_PATH }), patchMe }: Options = {}) {
-  mockApi({ GET: { [PATH]: path }, ...(patchMe ? { PATCH: { [ME]: patchMe } } : {}) });
-  return renderAuthedPage(<WelcomePage />, me, { path: "/welcome", entry: "/welcome", destinations: ["/"] });
+const PLACEMENT_NONE = { enabled: true, available: false, questionCount: 15, passPercent: 80, sections: [], result: null };
+const PLACEMENT_OFFER = { ...PLACEMENT_NONE, available: true, sections: [{ id: "u1", title: "Hiragana", levelName: "Hiragana" }] };
+
+function renderWelcome({ me = makeMe(), path = () => ({ data: LEARNING_PATH }), patchMe, placement = () => ({ data: PLACEMENT_NONE }) }: Options = {}) {
+  mockApi({ GET: { [PATH]: path, "/placement": placement }, ...(patchMe ? { PATCH: { [ME]: patchMe } } : {}) });
+  return renderAuthedPage(<WelcomePage />, me, { path: "/welcome", entry: "/welcome", destinations: ["/", "/placement"] });
 }
 
 function selectedGoal() {
@@ -270,5 +274,70 @@ describe("WelcomePage -- langkah 3: mulai", () => {
 
     expect(screen.getByRole("heading", { level: 1, name: "Jalur belajarmu" })).toBeTruthy();
     expect(progress()).toBe("Langkah 2 dari 3");
+  });
+});
+
+describe("WelcomePage -- tes penempatan (AUTH-05)", () => {
+  async function toStep(step: 2 | 3) {
+    next();
+    await screen.findByTestId("welcome-levels");
+    if (step === 3) {
+      next();
+      await screen.findByRole("heading", { level: 1, name: "Siap mulai!" });
+    }
+  }
+
+  it("selama tersedia, langkah 3 menawarkan tes; 'Mulai Belajar' tetap = mulai dari awal", async () => {
+    renderWelcome({ placement: () => ({ data: PLACEMENT_OFFER }) });
+    await toStep(3);
+
+    const offer = await screen.findByTestId("welcome-placement-offer");
+    expect(offer.textContent).toContain("Sudah bisa membaca Hiragana?");
+    expect(offer.textContent).toContain("15 soal");
+    fireEvent.click(screen.getByRole("link", { name: "Ikut tes penempatan" }));
+    expect(screen.getByTestId("destination-path").textContent).toBe("/placement");
+  });
+
+  it("tidak tersedia atau gagal dimuat: tanpa tawaran, langkah lain tetap jalan", async () => {
+    renderWelcome({ placement: () => ({ error: { message: "x" }, status: 500 }) });
+    await toStep(3);
+
+    expect(screen.queryByTestId("welcome-placement-offer")).toBeNull();
+    expect(screen.getByRole("button", { name: "Mulai Belajar" })).toBeTruthy();
+  });
+
+  it("sudah lulus tes: langkah 2 menyebut unit awal, level sebelumnya ditandai dilewati; ringkasan memakai level awal itu", async () => {
+    const result = {
+      takenAt: "2026-10-12T05:00:00.000Z",
+      correct: 14,
+      total: 15,
+      startUnit: { id: "u3", title: "Katakana Dasar", levelName: "Katakana" },
+      skippedUnits: [
+        { id: "u1", title: "u1", levelName: "Hiragana" },
+        { id: "u2", title: "u2", levelName: "Hiragana" },
+      ],
+    };
+    renderWelcome({ placement: () => ({ data: { ...PLACEMENT_NONE, result } }) });
+    await toStep(2);
+
+    expect((await screen.findByTestId("welcome-placed")).textContent).toContain("Katakana Dasar");
+    const [hiragana, katakana] = screen.getByTestId("welcome-levels").querySelectorAll("li");
+    expect(hiragana!.textContent).toContain("dilewati");
+    expect(hiragana!.textContent).not.toContain("mulai di sini");
+    expect(katakana!.textContent).toContain("mulai di sini");
+
+    next();
+    const summary = (await screen.findByText("Level awal")).closest("dl")?.textContent ?? "";
+    expect(summary).toContain("Katakana");
+    expect(screen.queryByTestId("welcome-placement-offer")).toBeNull();
+  });
+
+  it("sudah ikut tapi tidak lulus: tetap mulai dari awal jalur", async () => {
+    const result = { takenAt: "2026-10-12T05:00:00.000Z", correct: 3, total: 15, startUnit: { id: "u1", title: "u1", levelName: "Hiragana" }, skippedUnits: [] };
+    renderWelcome({ placement: () => ({ data: { ...PLACEMENT_NONE, result } }) });
+    await toStep(2);
+
+    expect(screen.queryByTestId("welcome-placed")).toBeNull();
+    expect(screen.getByTestId("welcome-levels").querySelector("li")!.textContent).toContain("mulai di sini");
   });
 });

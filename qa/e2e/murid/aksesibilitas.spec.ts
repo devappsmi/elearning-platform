@@ -17,6 +17,8 @@ const HALAMAN: Array<[string, string]> = [
   ["leaderboard", "/leaderboard"],
   ["profil", "/profile"],
   ["welcome", "/welcome"],
+  ["huruf-jepang", "/kana?tab=hiragana"],
+  ["tes-penempatan", "/placement"],
 ];
 
 test.describe("Aksesibilitas (axe)", { tag: "@a11y" }, () => {

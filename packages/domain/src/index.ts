@@ -22,6 +22,9 @@ export * from './path/pathLayout';
 export * from './path/unitPathLayout';
 export * from './path/unlockRules';
 
+// placement: tes penempatan AUTH-05 (seksi, soal, penilaian)
+export * from './placement/placementTest';
+
 // gamification: XP, streak, badge
 export * from './gamification/types';
 export * from './gamification/xpService';

@@ -10,6 +10,7 @@ import { ForgotPasswordDto, LoginDto, RefreshDto, RegisterDto, ResetPasswordDto,
 import { SearchDictionaryQueryDto } from "../dictionary/dto/search-dictionary.dto";
 import { ReviewFlashcardDto } from "../flashcards/dto/review-flashcard.dto";
 import { AnswerEventDto, SubmitAttemptDto } from "../lessons/dto/submit-attempt.dto";
+import { SubmitPlacementDto } from "../placement/dto/placement.dto";
 import { SubmitScenarioAttemptDto } from "../scenarios/dto/submit-scenario-attempt.dto";
 import { UpdateMeDto } from "../users/dto/update-me.dto";
 
@@ -377,6 +378,29 @@ describe("SubmitAttemptDto", () => {
 
 // Rujukan: apps/student/src/pages/ConversationPage.tsx ->
 // { mode: "TEST"|"PRACTICE", events: [{ lineIndex, optionIndex }], durationSec: Math.round(...) }
+describe("SubmitPlacementDto (PlacementPage, POST /placement/attempts)", () => {
+  const body = { testId: "4f6c7a0e-2b1d-4c3a-9e8f-1a2b3c4d5e6f", answers: [{ choiceText: "ka" }, { choiceText: null }, {}] };
+
+  it('payload PlacementPage lolos, termasuk "Belum tahu" (null atau tanpa choiceText)', async () => {
+    await expect(validate(SubmitPlacementDto, body)).resolves.toMatchObject(body);
+  });
+
+  it("testId harus UUID", async () => {
+    expect(await rejected(validate(SubmitPlacementDto, { ...body, testId: "tes-1" }))).toContain("testId");
+  });
+
+  it("choiceText harus string pendek; field tak dikenal ditolak", async () => {
+    expect(await rejected(validate(SubmitPlacementDto, { ...body, answers: [{ choiceText: 3 }] }))).toContain("choiceText");
+    expect(await rejected(validate(SubmitPlacementDto, { ...body, answers: [{ choiceText: "x".repeat(201) }] }))).toContain("choiceText");
+    expect(await rejected(validate(SubmitPlacementDto, { ...body, answers: [{ choiceText: "ka", correct: true }] }))).toContain("correct");
+  });
+
+  it("paling banyak 50 jawaban", async () => {
+    const answers = Array.from({ length: 51 }, () => ({ choiceText: "a" }));
+    expect(await rejected(validate(SubmitPlacementDto, { ...body, answers }))).toContain("answers");
+  });
+});
+
 describe("SubmitScenarioAttemptDto", () => {
   const body = { mode: "TEST", events: [{ lineIndex: 1, optionIndex: 0 }, { lineIndex: 3, optionIndex: 2 }], durationSec: 42 };
 

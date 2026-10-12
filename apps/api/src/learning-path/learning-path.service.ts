@@ -42,7 +42,9 @@ function toStubUnit(u: UnitRow): DomainUnit {
 /** LP-01/02: peta learning path lintas SELURUH level -- unit/lesson terkunci
  * berurutan (UnlockRules) memperlakukan semua unit lintas level sebagai SATU
  * urutan linear (lihat catatan di docs/PLAN.md soal kenapa unit percakapan
- * otomatis butuh Hiragana+Katakana tuntas transitif). */
+ * otomatis butuh Hiragana+Katakana tuntas transitif). Murid yang lulus tes
+ * penempatan (AUTH-05) mulai di `users.placement_start_unit_id`; unit
+ * sebelumnya ditandai `skipped`. */
 @Injectable()
 export class LearningPathService {
   constructor(
@@ -65,6 +67,7 @@ export class LearningPathService {
       where: { userId, completedAt: { not: null } },
       select: { lessonId: true, stars: true },
     });
+    const user = await this.prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { placementStartUnitId: true } });
     const starsByLessonId = new Map(completedProgress.map((p) => [p.lessonId, p.stars]));
 
     const flatUnits = levels.flatMap((lv) => lv.units.map((u) => toStubUnit(u)));
@@ -75,7 +78,13 @@ export class LearningPathService {
       }
     }
 
+    // AUTH-05: unit sebelum unit awal hasil tes penempatan dilewati -- terbuka, tapi bukan syarat (UnlockRules).
+    const startIndex = UnlockRules.startIndexOf(flatUnits, user.placementStartUnitId);
+
+    // "Lanjutkan Belajar": pelajaran tersedia pertama di luar unit yang dilewati; baru kalau tidak ada lagi, yang
+    // tersisa di unit yang dilewati (murid yang sudah menamatkan jalurnya masih bisa mengulas bagian itu).
     let continueLessonId: string | null = null;
+    let skippedContinueLessonId: string | null = null;
     let globalIndex = 0;
     const levelsOut: PathLevelView[] = [];
 
@@ -83,12 +92,16 @@ export class LearningPathService {
       const unitsOut: PathUnitView[] = [];
       for (const u of lv.units) {
         const domainUnit = flatUnits[globalIndex]!;
-        const unitUnlocked = UnlockRules.isUnitUnlocked(flatUnits, globalIndex, completedLessonKeys);
+        const skipped = globalIndex < startIndex;
+        const unitUnlocked = UnlockRules.isUnitUnlocked(flatUnits, globalIndex, completedLessonKeys, startIndex);
         const nodeStates = deriveNodeStates(domainUnit, unitUnlocked, completedLessonKeys);
 
         const lessonsOut: PathLessonView[] = u.lessons.map((l, i) => {
           const state = nodeStates[i]!;
-          if (continueLessonId === null && state === "available") continueLessonId = l.id;
+          if (state === "available") {
+            if (!skipped && continueLessonId === null) continueLessonId = l.id;
+            if (skipped && skippedContinueLessonId === null) skippedContinueLessonId = l.id;
+          }
           return { id: l.id, title: l.title, order: l.order, isCheckpoint: l.isCheckpoint, state, stars: starsByLessonId.get(l.id) ?? null };
         });
 
@@ -98,6 +111,7 @@ export class LearningPathService {
           order: u.order,
           type: u.type === "CONVERSATION" ? "conversation" : "kana",
           unlocked: unitUnlocked,
+          skipped,
           completedLessons: completedLessonCount(domainUnit, completedLessonKeys),
           totalLessons: u.lessons.length,
           lessons: lessonsOut,
@@ -108,6 +122,6 @@ export class LearningPathService {
     }
 
     const streak = await this.gamification.currentStreak(userId);
-    return { levels: levelsOut, continueLessonId, streak };
+    return { levels: levelsOut, continueLessonId: continueLessonId ?? skippedContinueLessonId, streak };
   }
 }

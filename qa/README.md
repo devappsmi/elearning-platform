@@ -7,7 +7,7 @@ Folder ini **berdiri sendiri**: bukan bagian dari pnpm workspace, tidak ikut `pn
 
 | Yang Anda butuhkan | Berkas | Dijalankan oleh |
 |---|---|---|
-| **Kasus uji manual dan lembar kerja** (260 kasus, bug, perangkat, QC rilis, cakupan fitur) | `manual/Buku-Kasus-Uji-QA.xlsx` | Penguji (Excel, LibreOffice, atau Google Sheets) |
+| **Kasus uji manual dan lembar kerja** (266 kasus, bug, perangkat, QC rilis, cakupan fitur) | `manual/Buku-Kasus-Uji-QA.xlsx` | Penguji (Excel, LibreOffice, atau Google Sheets) |
 | Uji browser otomatis: aplikasi murid (komputer dan ponsel), aplikasi admin, aksesibilitas | `e2e/` (jalankan `npm test`) | Siapa pun yang bisa membuka terminal |
 | Uji asap API dan situs (cepat, tanpa browser) | `api/smoke.mjs` (`npm run test:api`) | Siapa pun; ideal tepat setelah deploy |
 | Ekspor isi pelajaran untuk diperiksa pengajar + pemeriksaan otomatis salah ketik | `content/export-konten.mjs` (`npm run konten`) | Siapa pun; hasilnya untuk pengajar |
@@ -19,8 +19,9 @@ kolom **Otomatis** di buku menunjukkan skrip mana yang menjalankan kasus yang sa
 
 > **Apa yang sudah diverifikasi kit ini.** Seluruh skrip dijalankan terhadap aplikasi di lingkungan pengembangan (satu komputer, layanan AI **tiruan**): uji browser 134 uji = 132 lulus
 > (termasuk 1 yang memang ditandai "diharapkan gagal", lihat bagian 8), 2 dilewati (kartu flashcard belum jatuh tempo, uji rekam suara yang opsional), 0 gagal; uji asap API 26 dari 26 lulus.
-> Putaran terakhir (12 Okt 2026, API **tanpa** kunci AI, `QA_AI=auto`): 135 uji = 129 lulus (termasuk yang "diharapkan gagal"), 6 dilewati (kartu flashcard belum
-> jatuh tempo, murid uji belum punya XP minggu ini di peringkat, 3 uji balasan AI karena AI belum aktif, uji rekam suara opsional), 0 gagal.
+> Putaran terakhir (12 Okt 2026, API **tanpa** kunci AI, `QA_AI=auto`): 139 uji = 132 lulus (termasuk yang "diharapkan gagal"), 7 dilewati (akun tes penempatan sudah
+> terpakai oleh putaran sebelumnya yang lulus, kartu flashcard belum jatuh tempo, murid uji belum punya XP minggu ini di peringkat, 3 uji balasan AI karena AI belum
+> aktif, uji rekam suara opsional), 0 gagal; dua pindaian axe yang ditambahkan sesudahnya (Huruf Jepang, tes penempatan) lulus.
 > **Belum pernah dijalankan di server penguji Anda**, dengan AI/suara/email sungguhan, di Safari, Firefox, atau ponsel sungguhan. Itu bagian pekerjaan Anda.
 
 ## 2. Persiapan (sekali saja)
@@ -44,6 +45,7 @@ cp .env.example .env         # lalu isi qa/.env (lihat di bawah). Berkas .env ti
 | `QA_STUDENT_*`, `QA_ADMIN_*` | Email dan password akun uji (lihat 2.2). |
 | `QA_STUDENT2_*` | Murid uji **kedua**: dipakai uji admin yang mengubah akun (pindah kelas, nonaktifkan, reset). Kosongkan bila tidak ada; uji itu dilewati. |
 | `QA_LOCKOUT_*` | Murid **khusus** uji penguncian akun. Setelah uji itu akun terkunci 15 menit. Kosongkan bila tidak ada; uji itu dilewati. |
+| `QA_MURID_BARU_*` | Murid **baru** khusus uji tes penempatan (`TC-AK-33`): belum pernah ikut tes dan belum menyelesaikan pelajaran. Tes hanya bisa diambil sekali, jadi akun ini **terpakai** setelah satu putaran (putaran berikutnya melewati uji itu dengan pesan); buat akun baru atau lihat resep di 6. Kosongkan bila tidak ada; uji itu dilewati. |
 | `QA_AI` | `auto` (bawaan): uji yang memakai AI dilewati bila server belum punya kunci AI. `on`: gagal bila AI belum aktif. `off`: lewati semua uji AI. |
 | `QA_AI_SUARA` | `1` untuk juga menjalankan uji rekam suara dengan mikrofon palsu Chromium. |
 | `QA_LESSON_ID` | Pelajaran yang dimainkan uji belajar (bawaan `l1`, pelajaran pertama yang selalu terbuka). |
@@ -59,7 +61,7 @@ cp .env.example .env         # lalu isi qa/.env (lihat di bawah). Berkas .env ti
 # di server (tanpa Docker: pnpm --filter api run admin:create / student:create dengan variabel yang sama)
 docker compose run --rm -e ADMIN_EMAIL=qa-admin@contoh.id -e ADMIN_PASSWORD -e ADMIN_NAME="QA Admin" tools pnpm run admin:create
 docker compose run --rm -e STUDENT_EMAIL=qa-murid@contoh.id -e STUDENT_PASSWORD -e STUDENT_NAME="QA Murid" -e CLASS_NAME="Kelas Uji QA" tools pnpm run student:create
-# ulangi untuk murid kedua (qa-murid2) dan murid penguncian (qa-murid-kunci) di kelas yang sama
+# ulangi untuk murid kedua (qa-murid2), murid penguncian (qa-murid-kunci), dan murid baru tes penempatan (qa-murid-baru-1) di kelas yang sama
 ```
 
 Rekomendasi: ketiga murid uji berada di satu kelas khusus (mis. "Kelas Uji QA"), dan murid uji utama dibuat **baru** sebelum putaran uji agar jalur "murid baru" (pelajaran lain masih terkunci) teruji.
@@ -68,7 +70,7 @@ Setelah selesai, nonaktifkan akun uji di halaman detail Murid (admin). Murid uji
 ### 2.3 Periksa persiapan
 
 ```bash
-npm run test:api             # 20 pemeriksaan hanya-baca, selesai kurang dari satu menit
+npm run test:api             # 21 pemeriksaan hanya-baca, selesai kurang dari satu menit
 npm run typecheck            # memastikan skrip sendiri tidak rusak
 ```
 
@@ -101,7 +103,7 @@ Catatan penting:
 ## 4. Menjalankan kasus uji manual
 
 1. Buka `manual/Buku-Kasus-Uji-QA.xlsx`. Baca lembar **Petunjuk**, isi lembar **Lingkungan**.
-2. Kerjakan lembar **Kasus Uji** dari prioritas P1. Filter kolom **Otomatis** = "Tidak (manual)" untuk melihat kasus yang HARUS dikerjakan manual (115 kasus). Kasus yang sudah ada skripnya juga boleh dijalankan manual; isi kolom Hasil sesuai laporan skrip bila Anda mempercayainya.
+2. Kerjakan lembar **Kasus Uji** dari prioritas P1. Filter kolom **Otomatis** = "Tidak (manual)" untuk melihat kasus yang HARUS dikerjakan manual (118 kasus). Kasus yang sudah ada skripnya juga boleh dijalankan manual; isi kolom Hasil sesuai laporan skrip bila Anda mempercayainya.
 3. Catat tiap kegagalan di **Log Bug** (atau memakai `checklists/Template-Laporan-Bug.md` untuk tiket), isi ID Bug di kasus uji.
 4. Isi **Perangkat** setelah mencoba alur inti di tiap perangkat/browser. Safari, Firefox, dan ponsel sungguhan **tidak** tercakup skrip otomatis.
 5. Lembar **Ringkasan** menghitung otomatis. Lembar **QC Rilis** adalah daftar periksa akhir; **Temuan Awal** adalah hal yang ditemukan tim saat menyusun kit ini dan perlu keputusan.
@@ -136,6 +138,13 @@ docker compose exec -T postgres psql -U <user> -d <database> -c \
 
 # Menguji jatah AI habis dengan cepat: turunkan jatah (TC-AI-15), lalu mulai ulang API
 #   di .env server:  TUTOR_DAILY_QUOTA=2     docker compose up -d api
+
+# Tes penempatan: izinkan murid uji (yang belum menyelesaikan pelajaran) mengerjakannya lagi (TC-AK-33/34/36)
+docker compose exec -T postgres psql -U <user> -d <database> -c \
+  "UPDATE users SET placement_taken_at = NULL, placement_correct = NULL, placement_total = NULL, placement_start_unit_id = NULL WHERE email = 'qa-murid-baru-1@contoh.id';"
+
+# Tes penempatan dimatikan (TC-AK-35), lalu nyalakan lagi dengan true
+#   di .env server:  PLACEMENT_TEST_ENABLED=false     docker compose up -d api
 ```
 
 ## 7. Menyiapkan ulang murid uji
@@ -144,6 +153,9 @@ Uji otomatis dan manual menumpuk kemajuan murid uji utama (pelajaran lulus, XP, 
 
 - Buat murid uji **baru** dengan `student:create` (email baru) dan ganti `QA_STUDENT_EMAIL`/`QA_STUDENT_PASSWORD` di `.env`; atau
 - nonaktifkan akun lama di admin dan buat akun baru dengan nama yang sama berurutan (`qa-murid-2`, `qa-murid-3`).
+
+Murid tes penempatan (`QA_MURID_BARU_*`) terpakai setelah satu putaran `TC-AK-33`: buat akun baru (`qa-murid-baru-2`, dst.) atau kosongkan hasil tesnya
+dengan resep di 6 (hanya selama akun itu belum menyelesaikan pelajaran).
 
 ## 8. Uji yang ditandai "diharapkan gagal" (temuan diketahui)
 

@@ -190,7 +190,7 @@ await uji("TC-API-07", "Login salah ditolak 401 dan pesannya sama untuk email ya
 });
 
 await uji("TC-API-08", "Rute murid tanpa token ditolak 401", async () => {
-  const rute = ["/me", "/path", `/lessons/${cfg.pelajaran}`, "/scenarios", "/dictionary?q=a", "/flashcards/due", "/leaderboard", "/tutor/quota"];
+  const rute = ["/me", "/path", `/lessons/${cfg.pelajaran}`, "/scenarios", "/dictionary?q=a", "/flashcards/due", "/leaderboard", "/tutor/quota", "/placement"];
   const bocor = [];
   for (const alamat of rute) {
     const r = await minta("GET", `${cfg.api}${alamat}`);
@@ -276,6 +276,28 @@ await uji("TC-API-16", "Katalog dan jatah Ngobrol dengan AI dapat dibaca", async
   pastikan(jatah.status === 200 && adaKunci(jatah.body, "limit", "used", "remaining", "resetsAt"), `GET /tutor/quota menjawab ${jatah.status} tanpa limit/used/remaining/resetsAt`);
   pastikan(jatah.body.used + jatah.body.remaining === jatah.body.limit, "used + remaining tidak sama dengan limit");
   return `jatah ${jatah.body.remaining}/${jatah.body.limit}`;
+});
+
+await uji("TC-API-27", "Status tes penempatan konsisten; jawaban untuk tes yang tidak ada ditolak tanpa mengubah apa pun", async () => {
+  if (!sesi.murid) lewati("Login murid gagal (TC-API-06).");
+  const t = sesi.murid.accessToken;
+  const r = await minta("GET", `${cfg.api}/placement`, { token: t });
+  pastikan(r.status === 200, `GET /placement menjawab ${r.status}`);
+  pastikan(adaKunci(r.body, "enabled", "available", "questionCount", "passPercent", "sections", "result"), "Jawaban /placement kehilangan field");
+  const s = r.body;
+  pastikan(!s.available || (s.enabled && s.result === null && s.sections.length > 0), "available=true padahal fitur mati, sudah ada hasil, atau tanpa bagian yang bisa dilewati");
+  if (s.result) pastikan(adaKunci(s.result, "takenAt", "correct", "total", "startUnit", "skippedUnits"), "Hasil tes kehilangan field");
+  const path = await minta("GET", `${cfg.api}/path`, { token: t });
+  const unit = path.body?.levels?.flatMap((l) => l.units) ?? [];
+  pastikan(unit.every((u) => typeof u.skipped === "boolean"), "Unit di /path tidak memuat penanda skipped");
+  const dilewati = unit.filter((u) => u.skipped).map((u) => u.id);
+  pastikan(sama(dilewati, (s.result?.skippedUnits ?? []).map((u) => u.id)), `Unit dilewati di /path (${dilewati}) tidak sama dengan hasil tes`);
+  // UUID sah tapi tidak pernah dibuat: 410 (fitur menyala) atau 403 (dimatikan); tidak ada yang tersimpan.
+  const palsu = await minta("POST", `${cfg.api}/placement/attempts`, { token: t, json: { testId: "00000000-0000-4000-8000-000000000000", answers: [] } });
+  pastikan([403, 410].includes(palsu.status), `Jawaban untuk tes yang tidak ada menjawab ${palsu.status}, seharusnya 410 (atau 403 bila dimatikan)`);
+  const sesudah = (await minta("GET", `${cfg.api}/placement`, { token: t })).body;
+  pastikan(sama(sesudah?.result ?? null, s.result), "Status tes berubah setelah jawaban palsu");
+  return `menyala=${s.enabled}, tersedia=${s.available}, ${s.result ? `sudah ikut (${s.result.correct}/${s.result.total})` : "belum ikut"}`;
 });
 
 await uji("TC-API-17", "Login admin memberi token dan /admin/auth/me benar", async () => {
