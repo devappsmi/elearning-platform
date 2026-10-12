@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { LessonSession } from "@elearning/domain";
 import type { Lesson, Unit } from "@elearning/domain";
 import { apiClient } from "../auth/api-client";
+import { ExercisePrompt } from "../components/ExercisePrompt";
 import { NotesPanel, NotesToggle } from "../components/LessonNotes";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
@@ -172,30 +173,6 @@ function FeedbackBanner({ feedback, onNext }: { feedback: { correct: boolean; co
   );
 }
 
-/** Soal: satu-dua karakter (mis. sebuah huruf kana) tampil sebagai lambang besar di ubin berwarna; selebihnya teks tebal. */
-function Prompt({ text, sub, small }: { text: string; sub?: string | null; small?: boolean }) {
-  const glyph = !small && Array.from(text).length <= 2;
-  return (
-    <div className="space-y-2 text-center">
-      <p
-        lang={langOf(text)}
-        className={
-          glyph
-            ? "mx-auto grid h-32 w-32 place-items-center rounded-[2rem] bg-gradient-to-br from-secondary-100 via-tertiary-100 to-pink-100 text-7xl font-black text-secondary-800 shadow-inner ring-1 ring-secondary-200"
-            : `text-balance font-black leading-snug text-slate-900 [word-break:auto-phrase] ${small ? "text-xl md:text-2xl" : "text-2xl md:text-3xl"}`
-        }
-      >
-        {text}
-      </p>
-      {sub && (
-        <p lang={langOf(sub)} className="text-balance text-base font-bold text-slate-600 [word-break:auto-phrase]">
-          {sub}
-        </p>
-      )}
-    </div>
-  );
-}
-
 function ChooseExercise({
   session,
   onAnswer,
@@ -213,7 +190,7 @@ function ChooseExercise({
 
   return (
     <Card data-testid="choose-exercise" padding="lg" className="space-y-6">
-      <Prompt text={current.prompt} sub={current.promptSub} />
+      <ExercisePrompt text={current.prompt} sub={current.promptSub} />
       <div className="grid grid-cols-2 gap-3">
         {current.options.map((opt, i) => {
           const answered = feedback !== null;
@@ -274,7 +251,7 @@ function AssembleExercise({
 
   return (
     <Card data-testid="assemble-exercise" padding="lg" className="space-y-5">
-      <Prompt text={current.prompt} sub={current.promptSub} small />
+      <ExercisePrompt text={current.prompt} sub={current.promptSub} small />
 
       <div className="flex min-h-16 flex-wrap items-center gap-2 rounded-2xl border-2 border-dashed border-secondary-300 bg-secondary-50/60 p-3">
         {picked.length === 0 && <span className="px-1 text-sm font-bold text-slate-500">Ketuk kata di bawah untuk menyusun jawabanmu</span>}

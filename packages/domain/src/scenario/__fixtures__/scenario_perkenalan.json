@@ -15,7 +15,7 @@
       "speaker": "new_student",
       "type": "choice",
       "options": [
-        { "jp": "はじめまして。よろしくお願いします。", "correct": true },
+        { "jp": "はじめまして。よろしくお願いします。", "furigana": "はじめまして。よろしくお{願|ねが}いします。", "correct": true },
         {
           "jp": "さようなら。",
           "correct": false,
@@ -26,6 +26,7 @@
     {
       "speaker": "classmate",
       "jp": "お名前は何ですか。",
+      "furigana": "お{名前|なまえ}は{何|なん}ですか。",
       "romaji": "onamae wa nan desu ka.",
       "id": "Siapa nama Anda?"
     },
@@ -33,9 +34,10 @@
       "speaker": "new_student",
       "type": "choice",
       "options": [
-        { "jp": "わたしの名前はアニです。", "correct": true },
+        { "jp": "わたしの名前はアニです。", "furigana": "わたしの{名前|なまえ}はアニです。", "correct": true },
         {
           "jp": "わたしは名前です。",
+          "furigana": "わたしは{名前|なまえ}です。",
           "correct": false,
           "feedback_id": "Pola yang benar: 「わたしの名前は〜です」(nama saya adalah ~), bukan 「わたしは名前です」."
         }
@@ -44,6 +46,7 @@
     {
       "speaker": "classmate",
       "jp": "よろしくお願いします、アニさん。",
+      "furigana": "よろしくお{願|ねが}いします、アニさん。",
       "romaji": "yoroshiku onegaishimasu, ani-san.",
       "id": "Senang berkenalan denganmu, Ani."
     }

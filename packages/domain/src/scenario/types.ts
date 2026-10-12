@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { grammarNoteSchema, type GrammarNote } from '../content/types';
+import { furiganaProblem, parseFurigana, type RubySegment } from '../text/furigana';
 
 /** Skema + tipe konten skenario percakapan (CONV-01/02, PRD §6.4). BEDA dari
  * content/types.ts: itu port dari app lama (webapp/src/domain/content), ini
@@ -22,17 +23,39 @@ import { grammarNoteSchema, type GrammarNote } from '../content/types';
 // ContentService-equivalent (ScenariosService) yang mengisi URL sungguhan
 // lewat lookup AudioAsset SETELAH parse -- lihat scenarios.service.ts.
 
+// `furigana` (opsional, tidak ada di contoh CONV-02): teks Jepang yang sama dengan tanda {kanji|bacaan}, lihat
+// text/furigana.ts. Ditambahkan setelah evaluasi pengguna Okt 2026 (furigana opsional = syarat aksesibilitas PRD);
+// tanda yang tidak cocok dengan `jp` ditolak saat parse, jadi tidak bisa lolos ke layar.
+const furiganaField = z.string().nullish();
+function checkFurigana(v: { jp: string; furigana?: string | null }, ctx: z.RefinementCtx): void {
+  const problem = v.furigana ? furiganaProblem(v.furigana, v.jp) : null;
+  if (problem) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['furigana'], message: problem });
+}
+function furiganaOf(marked: string | null | undefined): { furigana?: RubySegment[] } {
+  return marked ? { furigana: parseFurigana(marked) } : {};
+}
+
 export const dialogueOptionSchema = z
   .object({
     jp: z.string(),
+    furigana: furiganaField,
     correct: z.boolean(),
     feedback_id: z.string().nullish(),
   })
+  .superRefine(checkFurigana)
   .transform(
-    (o): DialogueOption => ({ jp: o.jp, correct: o.correct, feedbackId: o.feedback_id ?? undefined, audio: '' }),
+    (o): DialogueOption => ({
+      jp: o.jp,
+      ...furiganaOf(o.furigana),
+      correct: o.correct,
+      feedbackId: o.feedback_id ?? undefined,
+      audio: '',
+    }),
   );
 export interface DialogueOption {
   jp: string;
+  /** Teks `jp` yang dipecah per kanji berbacaan; tidak ada = konten belum memberi furigana. */
+  furigana?: RubySegment[];
   correct: boolean;
   feedbackId?: string;
   audio: string;
@@ -42,19 +65,31 @@ const narrationLineSchema = z
   .object({
     speaker: z.string(),
     jp: z.string(),
+    furigana: furiganaField,
     romaji: z.string(),
     // Field literal "id" di CONV-02 (terjemahan Bahasa Indonesia baris ini) --
     // ditransformasi ke `meaning` di sini, meniru pola meaning_id->meaning di
     // content/types.ts, supaya tidak rancu dengan `scenario_id`/id entitas lain.
     id: z.string(),
   })
+  .superRefine(checkFurigana)
   .transform(
-    (l): NarrationLine => ({ kind: 'narration', speaker: l.speaker, jp: l.jp, romaji: l.romaji, meaning: l.id, audio: '' }),
+    (l): NarrationLine => ({
+      kind: 'narration',
+      speaker: l.speaker,
+      jp: l.jp,
+      ...furiganaOf(l.furigana),
+      romaji: l.romaji,
+      meaning: l.id,
+      audio: '',
+    }),
   );
 export interface NarrationLine {
   kind: 'narration';
   speaker: string;
   jp: string;
+  /** Lihat DialogueOption.furigana. */
+  furigana?: RubySegment[];
   romaji: string;
   meaning: string;
   audio: string;

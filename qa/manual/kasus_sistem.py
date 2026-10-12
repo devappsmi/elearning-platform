@@ -37,7 +37,8 @@ KASUS = [
     K("TC-KT-01", A_KT, "Murid", "P1", "Hiragana: kana, romaji, dan urutan pengenalan huruf benar",
       "Jalankan npm run konten untuk membuat berkas pemeriksaan (reports/konten). Pemeriksa paham kana.",
       ["Buka reports/konten/kosakata.csv di Excel, saring Unit = unit_hiragana.", "Periksa tiap baris: kana dan romaji sesuai tabel hiragana baku.", "Isi kolom \"Hasil periksa\" dan \"Komentar\"."],
-      "104 kana benar. Konvensi khusus (mis. ぢ = dji, づ = dzu) konsisten dan disepakati. Catat setiap salah ketik dengan ID barisnya.",
+      "104 kana benar. ぢ dan づ ditulis ji dan zu (sama dengan じ/ず, seperti di kamus), dan soal tidak pernah menawarkan じ dan ぢ (atau ず dan づ) "
+      "bersamaan. Catat setiap salah ketik dengan ID barisnya.",
       "MT-01"),
     K("TC-KT-02", A_KT, "Murid", "P1", "Unit 3 (Percakapan di Tempat Kerja): kosakata dan kalimat benar secara bahasa",
       "Berkas reports/konten (kosakata.csv, kalimat.csv). Pemeriksa: pengajar bahasa Jepang.",

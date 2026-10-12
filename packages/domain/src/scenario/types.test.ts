@@ -39,8 +39,47 @@ describe('scenarioContentSchema terhadap __fixtures__/scenario_perkenalan.json',
     const scenario = scenarioContentSchema.parse(raw);
     const line = scenario.lines[1];
     if (line?.kind !== 'choice') throw new Error('expected choice');
-    expect(line.options[0]).toEqual({ jp: 'はじめまして。よろしくお願いします。', correct: true, feedbackId: undefined, audio: '' });
+    expect(line.options[0]).toEqual({
+      jp: 'はじめまして。よろしくお願いします。',
+      furigana: [{ text: 'はじめまして。よろしくお' }, { text: '願', reading: 'ねが' }, { text: 'いします。' }],
+      correct: true,
+      feedbackId: undefined,
+      audio: '',
+    });
     expect(line.options[1]?.correct).toBe(false);
     expect(line.options[1]?.feedbackId).toContain('さようなら');
+  });
+
+  test('furigana: kalimat berkanji dipecah per kanji berbacaan, kalimat tanpa kanji tidak diberi furigana', () => {
+    const scenario = scenarioContentSchema.parse(raw);
+    const first = scenario.lines[0];
+    const question = scenario.lines[2];
+    if (first?.kind !== 'narration' || question?.kind !== 'narration') throw new Error('expected narration');
+    expect(first.furigana).toBeUndefined();
+    expect(question.furigana).toEqual([
+      { text: 'お' },
+      { text: '名前', reading: 'なまえ' },
+      { text: 'は' },
+      { text: '何', reading: 'なん' },
+      { text: 'ですか。' },
+    ]);
+  });
+});
+
+describe('scenarioContentSchema: furigana yang tidak cocok ditolak', () => {
+  const raw = JSON.parse(readFileSync(join(__dirname, '__fixtures__/scenario_perkenalan.json'), 'utf-8'));
+
+  test('baris narasi yang furigananya mengubah kalimat', () => {
+    const broken = structuredClone(raw);
+    broken.lines[2].furigana = 'お{名前|なまえ}はなんですか。';
+    const result = scenarioContentSchema.safeParse(broken);
+    expect(result.success).toBe(false);
+    expect(JSON.stringify(result.error?.issues)).toContain('teks Jepangnya');
+  });
+
+  test('opsi jawaban dengan bacaan romaji', () => {
+    const broken = structuredClone(raw);
+    broken.lines[3].options[0].furigana = 'わたしの{名前|namae}はアニです。';
+    expect(scenarioContentSchema.safeParse(broken).success).toBe(false);
   });
 });

@@ -41,5 +41,6 @@ export * from './shared/dates';
 export * from './shared/math';
 export * from './shared/random';
 
-// text: normalisasi teks Jepang + kemiripan string
+// text: normalisasi teks Jepang + kemiripan string, furigana
 export * from './text/japaneseText';
+export * from './text/furigana';

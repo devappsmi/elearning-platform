@@ -56,6 +56,39 @@ test.describe("Katalog dan layar pengantar", () => {
     await page.getByRole("link", { name: "Tutup percakapan" }).click();
     await expect(page).toHaveURL(/\/conversation$/);
   });
+
+  test("[TC-PC-12] bantuan membaca: di Latihan romaji dan arti tersembunyi sampai tombolnya ditekan, di Tes tidak ada; furigana di atas kanji", async ({ page }) => {
+    // PRD CONV-03/04. Tidak menyelesaikan sesi, jadi tidak ada hasil yang tersimpan.
+    await page.goto(ALAMAT);
+    await startScenario(page, "latihan");
+    const baris = page.getByTestId("narration-line");
+    await expect(baris).toBeVisible();
+    await expect(baris.getByTestId("line-romaji")).toHaveCount(0);
+    await expect(baris.getByTestId("line-meaning")).toHaveCount(0);
+    await expect(page.getByTestId("toggle-romaji")).toHaveAttribute("aria-pressed", "false");
+    await page.getByTestId("toggle-romaji").click();
+    await expect(baris.getByTestId("line-romaji")).not.toBeEmpty();
+    await page.getByTestId("toggle-meaning").click();
+    await expect(baris.getByTestId("line-meaning")).not.toBeEmpty();
+
+    // Baris berikutnya: opsi jawaban. Yang memuat kanji (お願いします) diberi furigana bila konten di server sudah di-seed ulang.
+    await baris.getByTestId("next-button").click();
+    await expect(page.getByTestId("choice-line")).toBeVisible();
+    const furigana = page.getByTestId("choice-option").locator("rt");
+    await expect(furigana.first(), "Furigana belum ada: jalankan db:seed di server setelah deploy").toBeVisible();
+    await page.getByTestId("toggle-furigana").click();
+    await expect(furigana).toHaveCount(0);
+
+    await page.goto(ALAMAT);
+    await startScenario(page, "tes");
+    await expect(page.getByTestId("narration-line")).toBeVisible();
+    await expect(page.getByTestId("toggle-furigana")).toBeVisible();
+    await expect(page.getByTestId("toggle-romaji")).toHaveCount(0);
+    await expect(page.getByTestId("toggle-meaning")).toHaveCount(0);
+    await expect(page.getByTestId("line-romaji")).toHaveCount(0);
+    await expect(page.getByTestId("line-meaning")).toHaveCount(0);
+    await page.getByRole("link", { name: "Tutup percakapan" }).click();
+  });
 });
 
 test.describe.serial("Memainkan skenario Perkenalan Diri", () => {

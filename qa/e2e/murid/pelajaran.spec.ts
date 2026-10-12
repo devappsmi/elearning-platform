@@ -195,11 +195,24 @@ test.describe.serial("Mengerjakan satu pelajaran dari awal sampai lulus", () => 
   test("[TC-NL-02] streak mulai dihitung dan XP masuk ke peringkat mingguan", async () => {
     await expect(page.getByText(/^Streak\s*\d+\s*hari$/)).toBeVisible();
     const streak = Number(/(\d+)/.exec(await page.getByText(/^Streak\s*\d+\s*hari$/).innerText())![1]);
-    expect(streak, "Setelah belajar hari ini streak minimal 1").toBeGreaterThanOrEqual(1);
+    if (hasil1.xp + hasil2.xp > 0) {
+      expect(streak, "Setelah mendapat XP hari ini streak minimal 1").toBeGreaterThanOrEqual(1);
+    } else {
+      // PRD GAM-02: hanya hari dengan XP > 0 yang menambah streak. Akun ini sudah pernah lulus pelajaran ini, jadi putaran
+      // ini tidak memberi XP dan streak boleh 0 bila hari ini belum ada XP lain. Dulu tes ini gagal di hari seperti itu.
+      test.info().annotations.push({ type: "catatan", description: `Streak ${streak} tidak diperiksa: putaran ini tidak memberi XP (pelajaran sudah pernah lulus).` });
+    }
 
     await page.goto("/leaderboard");
     await expect(page.getByRole("heading", { name: "Peringkat Minggu Ini" })).toBeVisible();
+    const kosong = page.getByText(/^Belum ada aktivitas XP minggu ini/);
+    await expect(kosong.or(page.locator("main ol li, main table tbody tr").first())).toBeVisible();
     const barisku = page.locator("li, tr").filter({ hasText: "(kamu)" }).first();
+    if (hasil1.xp + hasil2.xp === 0 && (await barisku.count()) === 0) {
+      // Peringkat mingguan hanya memuat murid yang mendapat XP minggu ini (dimulai Senin); putaran ini tidak memberi XP.
+      test.info().annotations.push({ type: "catatan", description: "Murid uji belum punya XP minggu ini, jadi belum tampil di peringkat mingguan." });
+      return;
+    }
     await expect(barisku).toBeVisible();
     const teks = (await barisku.innerText()).replace(/\s+/g, " ");
     const xp = /(\d+)\s*XP/.exec(teks) ? Number(/(\d+)\s*XP/.exec(teks)![1]) : Number([...teks.matchAll(/\d+/g)].pop()![0]);

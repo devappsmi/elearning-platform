@@ -115,7 +115,8 @@ KASUS = [
     K("TC-NL-02", A_NL, "Murid", "P1", "Streak mulai dihitung dan XP masuk ke peringkat mingguan",
       "Murid baru yang baru lulus pelajaran pertama.",
       ["Lihat kartu Streak di Beranda.", "Buka Leaderboard dan cari baris bertanda (kamu)."],
-      "Streak minimal 1 hari. Baris murid di Leaderboard menampilkan XP yang sama dengan XP yang didapat (mis. 30 XP).",
+      "Streak minimal 1 hari. Baris murid di Leaderboard menampilkan XP yang sama dengan XP yang didapat (mis. 30 XP). "
+      "Catatan: hanya hari dengan XP > 0 yang menambah streak (PRD GAM-02), jadi mengulang pelajaran yang sudah lulus tidak menambah streak.",
       "GM-01, GM-02, NL-03"),
     K("TC-NL-03", A_NL, "Murid", "P1", "Mengulang pelajaran yang sudah lulus: tanpa XP baru, skor terbaik tidak turun",
       "Pelajaran yang sudah lulus 100%.",
@@ -194,10 +195,14 @@ KASUS = [
       ["Tekan X di pojok kiri atas."],
       "Murid kembali ke daftar Percakapan tanpa hasil tersimpan.",
       "PC-02"),
-    K("TC-PC-12", A_PC, "Murid", "P2", "Baris narasi menampilkan teks Jepang, romaji, dan arti",
-      "Skenario terbuka.",
-      ["Mulai Latihan dan baca tiap baris narasi (teman bicara)."],
-      "Setiap baris narasi menampilkan nama pembicara, kalimat Jepang besar, romaji, dan arti Indonesia; tombol Lanjut (Selesai di baris terakhir).",
+    K("TC-PC-12", A_PC, "Murid", "P2", "Bantuan membaca: romaji dan arti tersembunyi sampai diminta, furigana di atas kanji",
+      "Skenario terbuka; konten sudah di-seed ulang setelah deploy (furigana).",
+      ["Mulai Latihan dan baca baris narasi pertama.", "Tekan tombol Romaji lalu Arti di atas kartu.",
+       "Lanjut ke baris berikutnya; periksa kalimat berkanji (お名前, お願いします).", "Matikan tombol Furigana.",
+       "Tutup, lalu Mulai Tes."],
+      "Latihan: tiap baris narasi menampilkan nama pembicara dan kalimat Jepang besar; romaji dan arti Indonesia baru tampil setelah tombolnya "
+      "ditekan, dan pilihan itu bertahan di baris berikutnya. Kanji diberi furigana (mis. なまえ di atas 名前) dan hilang bila tombol Furigana dimatikan. "
+      "Tes: hanya ada tombol Furigana dengan keterangan \"Mode Tes: tanpa romaji dan arti.\"; romaji dan arti tidak pernah tampil (PRD CONV-03/04).",
       "PC-03"),
     K("TC-PC-13", A_PC, "Murid", "P3", "Urutan opsi jawaban tidak diacak",
       "Skenario terbuka.",

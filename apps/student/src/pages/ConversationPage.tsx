@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ScenarioSession, TEST_MODE_MAX_MISTAKES } from "@elearning/domain";
 import type { ScenarioAnswerFeedback, ScenarioContent, ScenarioLine, ScenarioMode } from "@elearning/domain";
 import { apiClient } from "../auth/api-client";
+import { JapaneseText } from "../components/JapaneseText";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { Chip } from "../components/ui/Chip";
@@ -13,6 +14,12 @@ import { ProgressBar } from "../components/ui/ProgressBar";
 
 type ScenarioDetail = { id: string; titleJp: string; titleId: string; level: string; content: ScenarioContent };
 type AnswerEvent = { lineIndex: number; optionIndex: number };
+
+/** Bantuan membaca yang dinyalakan murid. PRD CONV-03: romaji dan terjemahan tersembunyi secara bawaan dan bisa
+ * ditampilkan lewat tombol (mode Latihan); CONV-04: mode Tes tanpa keduanya. Furigana (syarat aksesibilitas PRD,
+ * "furigana opsional") menyala secara bawaan di kedua mode karena hanya membantu membaca kanji, tidak menerjemahkan. */
+type LineDisplay = { furigana: boolean; romaji: boolean; meaning: boolean };
+const DEFAULT_DISPLAY: LineDisplay = { furigana: true, romaji: false, meaning: false };
 
 type PageState =
   | { status: "loading" }
@@ -53,6 +60,8 @@ export function ConversationPage() {
   const modeRef = useRef<ScenarioMode>("practice");
   const startedAtRef = useRef(0);
   const [state, setState] = useState<PageState>({ status: "loading" });
+  const [mode, setMode] = useState<ScenarioMode>("practice");
+  const [display, setDisplay] = useState<LineDisplay>(DEFAULT_DISPLAY);
   const [version, setVersion] = useState(0);
   const bump = () => setVersion((v) => v + 1);
 
@@ -84,6 +93,8 @@ export function ConversationPage() {
     eventsRef.current = [];
     modeRef.current = mode;
     startedAtRef.current = Date.now();
+    setMode(mode);
+    setDisplay(DEFAULT_DISPLAY);
     setState({ status: "active" });
   }
 
@@ -162,13 +173,23 @@ export function ConversationPage() {
         </Link>
         <ProgressBar className="flex-1" size="lg" tone="pink" value={Math.round(session.progress * 100)} label="Kemajuan percakapan" />
       </div>
+      <DisplayToggles mode={mode} display={display} onChange={setDisplay} />
 
       {line.kind === "narration" ? (
-        <NarrationLineView key={index} line={line} isLastLine={index === session.scenario.lines.length - 1} onNext={handleNext} />
+        <NarrationLineView
+          key={index}
+          line={line}
+          showFurigana={display.furigana}
+          showRomaji={mode === "practice" && display.romaji}
+          showMeaning={mode === "practice" && display.meaning}
+          isLastLine={index === session.scenario.lines.length - 1}
+          onNext={handleNext}
+        />
       ) : (
         <ChoiceLineView
           key={index}
           line={line}
+          showFurigana={display.furigana}
           feedback={session.pendingFeedback}
           isFinished={session.isFinished}
           isLastLine={index === session.scenario.lines.length - 1}
@@ -255,21 +276,70 @@ function Speaker({ name, tone = "sky" }: { name: string; tone?: "sky" | "seconda
   );
 }
 
+/** Tombol bantuan membaca di atas kartu dialog (berlaku untuk seluruh sesi). Mode Tes hanya punya Furigana. */
+function DisplayToggles({ mode, display, onChange }: { mode: ScenarioMode; display: LineDisplay; onChange: (next: LineDisplay) => void }) {
+  const items: { key: keyof LineDisplay; label: string }[] = [
+    { key: "furigana", label: "Furigana" },
+    ...(mode === "practice"
+      ? [
+          { key: "romaji" as const, label: "Romaji" },
+          { key: "meaning" as const, label: "Arti" },
+        ]
+      : []),
+  ];
+  return (
+    <div role="group" aria-label="Bantuan membaca" data-testid="display-toggles" className="flex flex-wrap items-center gap-2">
+      <span className="text-xs font-extrabold uppercase tracking-wider text-slate-600">Tampilkan</span>
+      {items.map(({ key, label }) => (
+        <button
+          key={key}
+          type="button"
+          aria-pressed={display[key]}
+          data-testid={`toggle-${key}`}
+          onClick={() => onChange({ ...display, [key]: !display[key] })}
+          className={`rounded-full border-2 px-3 py-1 text-sm font-extrabold transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300 ${
+            display[key] ? "border-secondary-600 bg-secondary-600 text-white" : "border-slate-200 bg-white text-slate-700 hover:border-secondary-300"
+          }`}
+        >
+          {label}
+        </button>
+      ))}
+      {mode === "test" && <span className="text-xs font-bold text-slate-600">Mode Tes: tanpa romaji dan arti.</span>}
+    </div>
+  );
+}
+
 function NarrationLineView({
   line,
+  showFurigana,
+  showRomaji,
+  showMeaning,
   isLastLine,
   onNext,
 }: {
   line: Extract<ScenarioLine, { kind: "narration" }>;
+  showFurigana: boolean;
+  showRomaji: boolean;
+  showMeaning: boolean;
   isLastLine: boolean;
   onNext: () => void;
 }) {
   return (
     <Card data-testid="narration-line" tone="sky" padding="lg" className="space-y-3">
       <Speaker name={line.speaker} />
-      <p className="text-3xl font-black leading-snug text-slate-900">{line.jp}</p>
-      <p className="text-base font-extrabold text-secondary-700">{line.romaji}</p>
-      <p className="text-base font-semibold text-slate-700">{line.meaning}</p>
+      <p lang="ja" data-testid="line-jp" className={`text-3xl font-black text-slate-900 ${showFurigana && line.furigana ? "leading-[1.9]" : "leading-snug"}`}>
+        <JapaneseText text={line.jp} furigana={line.furigana} showFurigana={showFurigana} />
+      </p>
+      {showRomaji && (
+        <p data-testid="line-romaji" className="text-base font-extrabold text-secondary-700">
+          {line.romaji}
+        </p>
+      )}
+      {showMeaning && (
+        <p data-testid="line-meaning" className="text-base font-semibold text-slate-700">
+          {line.meaning}
+        </p>
+      )}
       <Button data-testid="next-button" size="lg" onClick={onNext} className="mt-2">
         {isLastLine ? "Selesai" : "Lanjut"}
       </Button>
@@ -279,6 +349,7 @@ function NarrationLineView({
 
 function ChoiceLineView({
   line,
+  showFurigana,
   feedback,
   isFinished,
   isLastLine,
@@ -286,6 +357,7 @@ function ChoiceLineView({
   onNext,
 }: {
   line: Extract<ScenarioLine, { kind: "choice" }>;
+  showFurigana: boolean;
   feedback: ScenarioAnswerFeedback | null;
   isFinished: boolean;
   isLastLine: boolean;
@@ -320,14 +392,15 @@ function ChoiceLineView({
               type="button"
               data-testid="choice-option"
               data-text={opt.jp}
+              lang="ja"
               disabled={answered}
               onClick={() => {
                 setChosen(i);
                 onAnswer(i);
               }}
-              className={`block w-full rounded-2xl border-2 border-b-4 px-4 py-3.5 text-left text-lg font-extrabold transition duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300 disabled:cursor-not-allowed ${tone}`}
+              className={`block w-full rounded-2xl border-2 border-b-4 px-4 py-3.5 text-left text-lg font-extrabold transition duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-secondary-300 disabled:cursor-not-allowed ${showFurigana && opt.furigana ? "leading-[1.9]" : ""} ${tone}`}
             >
-              {opt.jp}
+              <JapaneseText text={opt.jp} furigana={opt.furigana} showFurigana={showFurigana} />
             </button>
           );
         })}

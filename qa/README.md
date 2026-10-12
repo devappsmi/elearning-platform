@@ -19,6 +19,8 @@ kolom **Otomatis** di buku menunjukkan skrip mana yang menjalankan kasus yang sa
 
 > **Apa yang sudah diverifikasi kit ini.** Seluruh skrip dijalankan terhadap aplikasi di lingkungan pengembangan (satu komputer, layanan AI **tiruan**): uji browser 134 uji = 132 lulus
 > (termasuk 1 yang memang ditandai "diharapkan gagal", lihat bagian 8), 2 dilewati (kartu flashcard belum jatuh tempo, uji rekam suara yang opsional), 0 gagal; uji asap API 26 dari 26 lulus.
+> Putaran terakhir (12 Okt 2026, API **tanpa** kunci AI, `QA_AI=auto`): 135 uji = 129 lulus (termasuk yang "diharapkan gagal"), 6 dilewati (kartu flashcard belum
+> jatuh tempo, murid uji belum punya XP minggu ini di peringkat, 3 uji balasan AI karena AI belum aktif, uji rekam suara opsional), 0 gagal.
 > **Belum pernah dijalankan di server penguji Anda**, dengan AI/suara/email sungguhan, di Safari, Firefox, atau ponsel sungguhan. Itu bagian pekerjaan Anda.
 
 ## 2. Persiapan (sekali saja)
@@ -99,7 +101,7 @@ Catatan penting:
 ## 4. Menjalankan kasus uji manual
 
 1. Buka `manual/Buku-Kasus-Uji-QA.xlsx`. Baca lembar **Petunjuk**, isi lembar **Lingkungan**.
-2. Kerjakan lembar **Kasus Uji** dari prioritas P1. Filter kolom **Otomatis** = "Tidak (manual)" untuk melihat kasus yang HARUS dikerjakan manual (116 kasus). Kasus yang sudah ada skripnya juga boleh dijalankan manual; isi kolom Hasil sesuai laporan skrip bila Anda mempercayainya.
+2. Kerjakan lembar **Kasus Uji** dari prioritas P1. Filter kolom **Otomatis** = "Tidak (manual)" untuk melihat kasus yang HARUS dikerjakan manual (115 kasus). Kasus yang sudah ada skripnya juga boleh dijalankan manual; isi kolom Hasil sesuai laporan skrip bila Anda mempercayainya.
 3. Catat tiap kegagalan di **Log Bug** (atau memakai `checklists/Template-Laporan-Bug.md` untuk tiket), isi ID Bug di kasus uji.
 4. Isi **Perangkat** setelah mencoba alur inti di tiap perangkat/browser. Safari, Firefox, dan ponsel sungguhan **tidak** tercakup skrip otomatis.
 5. Lembar **Ringkasan** menghitung otomatis. Lembar **QC Rilis** adalah daftar periksa akhir; **Temuan Awal** adalah hal yang ditemukan tim saat menyusun kit ini dan perlu keputusan.

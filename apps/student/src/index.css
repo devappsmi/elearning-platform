@@ -33,6 +33,11 @@
   h3 {
     @apply text-slate-900;
   }
+
+  /* Furigana: bacaan kecil di atas kanji (components/JapaneseText.tsx). Abu-abu gelap supaya tetap kontras walau kecil. */
+  rt {
+    @apply text-[0.45em] font-bold text-slate-600;
+  }
 }
 
 /* Pengguna yang meminta gerakan dikurangi: semua animasi/transisi praktis dimatikan. */
