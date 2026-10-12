@@ -7,7 +7,7 @@ Folder ini **berdiri sendiri**: bukan bagian dari pnpm workspace, tidak ikut `pn
 
 | Yang Anda butuhkan | Berkas | Dijalankan oleh |
 |---|---|---|
-| **Kasus uji manual dan lembar kerja** (258 kasus, bug, perangkat, QC rilis, cakupan fitur) | `manual/Buku-Kasus-Uji-QA.xlsx` | Penguji (Excel, LibreOffice, atau Google Sheets) |
+| **Kasus uji manual dan lembar kerja** (260 kasus, bug, perangkat, QC rilis, cakupan fitur) | `manual/Buku-Kasus-Uji-QA.xlsx` | Penguji (Excel, LibreOffice, atau Google Sheets) |
 | Uji browser otomatis: aplikasi murid (komputer dan ponsel), aplikasi admin, aksesibilitas | `e2e/` (jalankan `npm test`) | Siapa pun yang bisa membuka terminal |
 | Uji asap API dan situs (cepat, tanpa browser) | `api/smoke.mjs` (`npm run test:api`) | Siapa pun; ideal tepat setelah deploy |
 | Ekspor isi pelajaran untuk diperiksa pengajar + pemeriksaan otomatis salah ketik | `content/export-konten.mjs` (`npm run konten`) | Siapa pun; hasilnya untuk pengajar |

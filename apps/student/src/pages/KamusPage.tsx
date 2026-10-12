@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import type { components } from "@elearning/api-client";
 import { apiClient } from "../auth/api-client";
+import { buttonClasses } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import type { CardTone } from "../components/ui/Card";
 import { Chip } from "../components/ui/Chip";
 import { Notice } from "../components/ui/Feedback";
 import { Icon } from "../components/ui/icons";
 import { PageHeader } from "../components/ui/PageHeader";
+import { KANA_CHART_PATH } from "../lib/kana";
 
 type DictionaryEntry = components["schemas"]["DictionaryEntryDto"];
 
@@ -62,7 +65,17 @@ export function KamusPage() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <PageHeader title="Kamus" subtitle="Cari kata dalam kana, romaji, kanji, atau bahasa Indonesia." emoji="📖" tone="emerald" />
+      <PageHeader
+        title="Kamus"
+        subtitle="Cari kata dalam kana, romaji, kanji, atau bahasa Indonesia."
+        emoji="📖"
+        tone="emerald"
+        aside={
+          <Link to={KANA_CHART_PATH} data-testid="open-kana-chart" className={buttonClasses({ variant: "secondary", size: "sm", className: "shrink-0" })}>
+            Tabel kana
+          </Link>
+        }
+      />
 
       <Card tone="emerald" padding="sm" className="mb-6">
         <label htmlFor="dictionary-search" className="block text-sm font-extrabold text-slate-800">

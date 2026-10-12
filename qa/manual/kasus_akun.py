@@ -256,4 +256,18 @@ KASUS = [
       ["Buka Beranda."],
       "Tombol Lanjutkan Belajar hilang dan muncul kalimat \"Hebat! Semua pelajaran sudah selesai\".",
       "BR-02", "Opsional: butuh akun yang menamatkan 18 pelajaran."),
+    K("TC-BR-15", A_BR, "Murid", "P2", "Murid baru melihat kartu pengantar huruf Jepang",
+      "Murid yang belum menyelesaikan satu pelajaran pun (mis. dibuat dengan student:create).",
+      ["Buka Beranda.", "Tekan Baca pengantar.", "Kembali, selesaikan satu pelajaran, lalu buka Beranda lagi."],
+      "Sebelum ada pelajaran selesai, di bawah sambutan muncul kartu \"Baru mulai belajar huruf Jepang?\" yang membuka halaman Huruf Jepang. "
+      "Setelah satu pelajaran selesai, kartu itu tidak muncul lagi.",
+      "", "Ditambahkan setelah evaluasi pengguna Okt 2026."),
+    K("TC-BR-16", A_BR, "Murid", "P2", "Halaman Huruf Jepang: pengantar dan tabel hiragana/katakana",
+      "Sudah masuk.",
+      ["Di Beranda, tekan \"Lihat tabel huruf\" di spanduk unit Hiragana.", "Buka tab Pengantar, Hiragana, dan Katakana.",
+       "Buka Kamus lalu tekan \"Tabel kana\"."],
+      "Pengantar menjelaskan hiragana, katakana, dan kanji dengan contoh kalimat berfurigana. Tabel hiragana memuat 104 huruf per baris konsonan "
+      "(46 dasar, 25 dakuten, 33 youon) dengan romaji; huruf yang bunyinya tidak berpola (shi, chi, tsu, fu, wo, n, ji, zu) disorot kuning. "
+      "Tab Katakana memuat bentuk katakana dengan romaji sama. Dari Kamus, tombol Tabel kana membuka tabel hiragana. Tidak ada gulir ke samping di HP.",
+      "", "Ditambahkan setelah evaluasi pengguna Okt 2026."),
 ]

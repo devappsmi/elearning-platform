@@ -10,6 +10,7 @@ import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import { WelcomePage } from "./pages/WelcomePage";
 import { KamusPage } from "./pages/KamusPage";
+import { KanaPage } from "./pages/KanaPage";
 import { LeaderboardPage } from "./pages/LeaderboardPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { ConversationCatalogPage } from "./pages/ConversationCatalogPage";
@@ -18,6 +19,7 @@ import { ConversationResultPage } from "./pages/ConversationResultPage";
 import { FlashcardsPage } from "./pages/FlashcardsPage";
 import { TutorPage } from "./pages/TutorPage";
 import { TUTOR_PATH } from "./lib/tutor-chat";
+import { KANA_PATH } from "./lib/kana";
 
 /**
  * SEMUA rute murid sungguhan (tidak ada lagi StubPage): alur belajar (7c),
@@ -53,6 +55,7 @@ export const router = createBrowserRouter([
             element: <ConversationResultPage />,
           },
           { path: "/dictionary", element: <KamusPage /> },
+          { path: KANA_PATH, element: <KanaPage /> },
           { path: "/flashcards", element: <FlashcardsPage /> },
           { path: "/leaderboard", element: <LeaderboardPage /> },
           { path: "/profile", element: <ProfilePage /> },

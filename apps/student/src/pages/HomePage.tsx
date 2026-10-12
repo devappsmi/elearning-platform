@@ -5,9 +5,11 @@ import type { components } from "@elearning/api-client";
 import { apiClient } from "../auth/api-client";
 import { useAuth } from "../auth/AuthContext";
 import { buttonClasses } from "../components/ui/Button";
+import { Card } from "../components/ui/Card";
 import { Loading, Notice } from "../components/ui/Feedback";
 import { Icon } from "../components/ui/icons";
 import { ProgressBar } from "../components/ui/ProgressBar";
+import { KANA_CHART_PATH, KANA_PATH } from "../lib/kana";
 
 type PathView = components["schemas"]["PathView"];
 type PathUnit = components["schemas"]["PathUnitView"];
@@ -164,6 +166,24 @@ export function HomePage() {
         </div>
       </section>
 
+      {doneLessons === 0 && units.some((unit) => unit.type === "kana") && (
+        // Murid yang belum menyelesaikan satu pelajaran pun: kenalkan dulu jenis huruf dan tabelnya (evaluasi pengguna, Okt 2026).
+        <Card tone="sky" padding="md" data-testid="kana-intro-card" className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <span aria-hidden="true" lang="ja" className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white text-3xl font-black text-sky-700 shadow-card">
+            あ
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-lg font-black text-slate-900">Baru mulai belajar huruf Jepang?</p>
+            <p className="text-sm font-semibold text-slate-700">
+              Baca pengantar singkat tentang hiragana, katakana, dan kanji, lalu lihat tabel hiragana sebelum pelajaran pertama.
+            </p>
+          </div>
+          <Link to={KANA_PATH} className={buttonClasses({ variant: "secondary", size: "md", className: "shrink-0" })}>
+            Baca pengantar
+          </Link>
+        </Card>
+      )}
+
       {path.levels.length === 0 && <Notice tone="info">Belum ada pelajaran untuk kelasmu.</Notice>}
 
       {path.levels.map((level) => (
@@ -215,6 +235,15 @@ function UnitPath({ unit, number, themeIndex, continueLessonId }: UnitPathProps)
           <div className="min-w-0">
             <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-white">Unit {number}</p>
             <h3 className="text-balance text-xl font-black leading-tight text-white">{unit.title}</h3>
+            {unit.type === "kana" && (
+              <Link
+                to={KANA_CHART_PATH}
+                data-testid="unit-kana-chart"
+                className="mt-1 inline-block text-sm font-extrabold text-white underline decoration-white/60 underline-offset-4 hover:decoration-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                Lihat tabel huruf
+              </Link>
+            )}
           </div>
           <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-black/20 px-3 py-1 text-sm font-extrabold ring-1 ring-white/30">
             {!unit.unlocked && <Icon name="lock" className="h-4 w-4" />}

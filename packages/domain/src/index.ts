@@ -44,3 +44,4 @@ export * from './shared/random';
 // text: normalisasi teks Jepang + kemiripan string, furigana
 export * from './text/japaneseText';
 export * from './text/furigana';
+export * from './text/kanaChart';
