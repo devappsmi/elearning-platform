@@ -3,6 +3,9 @@
  * packages/domain/src/. Lihat README/plan untuk pemetaan lengkap
  * source -> destination. */
 
+// auth: kebijakan password AUTH-02 (dipakai bersama server + form murid)
+export * from './auth/passwordPolicy';
+
 // content: skema zod + tipe konten (Unit/Lesson/Exercise/Vocab/Sentence)
 export * from './content/types';
 
@@ -19,6 +22,9 @@ export * from './path/pathLayout';
 export * from './path/unitPathLayout';
 export * from './path/unlockRules';
 
+// placement: tes penempatan AUTH-05 (seksi, soal, penilaian)
+export * from './placement/placementTest';
+
 // gamification: XP, streak, badge
 export * from './gamification/types';
 export * from './gamification/xpService';
@@ -29,10 +35,16 @@ export * from './gamification/badgeCatalog';
 // srs: statistik repetisi kata/kalimat
 export * from './srs/wordRepetitionService';
 
+// scenario: skema + sesi latihan percakapan ber-template (CONV-01..04)
+export * from './scenario/types';
+export * from './scenario/scenarioSession';
+
 // shared: utilitas tanggal, angka, RNG
 export * from './shared/dates';
 export * from './shared/math';
 export * from './shared/random';
 
-// text: normalisasi teks Jepang + kemiripan string
+// text: normalisasi teks Jepang + kemiripan string, furigana
 export * from './text/japaneseText';
+export * from './text/furigana';
+export * from './text/kanaChart';

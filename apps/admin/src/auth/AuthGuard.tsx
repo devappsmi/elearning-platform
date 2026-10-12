@@ -1,23 +1,50 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { apiClient, tokenStorage } from "./api-client";
+import { AuthContext, type Me } from "./AuthContext";
+
+type GuardState = { status: "checking" } | { status: "unauthenticated" } | { status: "authenticated"; me: Me };
 
 /**
- * STUB — there is no real AdminAuthModule yet (backend auth endpoints
- * don't exist in this pass), so this only checks for a placeholder token
- * in localStorage. It does NOT validate/decode the token, refresh it, or
- * react to expiry. Replace with real token-refresh-aware logic once the
- * API's AdminAuthModule exists and this app talks to `/admin/auth/*` for
- * real.
- *
- * Namespaced as `admin_access_token` (distinct from the student app's
- * `access_token`) — student and admin auth are designed to be completely
- * separate per the plan, so a leaked student token must never work here.
- */
+ * BUKAN cuma cek localStorage kosong/tidak (seperti stub sebelum pass ini) --
+ * panggil GET /admin/auth/me SUNGGUHAN (endpoint baru Milestone 10 lanjutan,
+ * lihat admin-auth.controller.ts). Persis pola AuthGuard apps/student --
+ * lihat catatan lengkap di sana. */
 export function AuthGuard() {
-  const token = localStorage.getItem("admin_access_token");
+  const [state, setState] = useState<GuardState>({ status: "checking" });
+  const location = useLocation();
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
+  useEffect(() => {
+    let cancelled = false;
+    if (!tokenStorage.getAccessToken() && !tokenStorage.getRefreshToken()) {
+      setState({ status: "unauthenticated" });
+      return;
+    }
+    apiClient.GET("/admin/auth/me").then(({ data, error }) => {
+      if (cancelled) return;
+      setState(error || !data ? { status: "unauthenticated" } : { status: "authenticated", me: data });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (state.status === "checking") {
+    return <div className="p-6 text-sm text-gray-500">Memuat...</div>;
   }
 
-  return <Outlet />;
+  if (state.status === "unauthenticated") {
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  }
+
+  function logout() {
+    tokenStorage.clear();
+    setState({ status: "unauthenticated" });
+  }
+
+  return (
+    <AuthContext.Provider value={{ me: state.me, logout }}>
+      <Outlet />
+    </AuthContext.Provider>
+  );
 }

@@ -1,0 +1,2708 @@
+{
+  "id": "unit_kerja_3",
+  "order": 3,
+  "title": "Percakapan di Tempat Kerja",
+  "description": "Unit 3 · N4–N3 — 11 pola kalimat untuk percakapan di tempat kerja.",
+  "type": "conversation",
+  "grammar_notes": [
+    { "id": "k3_l1_g", "title": "Keadaan Sedang Berlangsung (～ている)", "body_md": "Pola: ～ている (te iru)\n\nRangkaian bentuk:\n- 始める → 始めている → 始めているところです\n  Mulai → Sedang mulai → Baru saja (sedang) mulai\n- 降ります → 降り続いて → 降り続いている\n  Turun (hujan) → Turun terus → Sedang turun terus\n- 乗る → 乗っている → 乗っているはずだ\n  Naik (kendaraan) → Sedang naik → Seharusnya sedang naik\n- 対応する → 対応している → 対応している最中です\n  Melayani → Sedang melayani → Tengah sedang melayani\n- 続く → 続いている\n  Berlanjut → Sedang terus berlanjut\n\nContoh kalimat:\n- ちょうど今、会議が始めているところです。\n  Tepat sekarang, rapatnya baru saja mulai.\n- さっきから、ずっと雨が降り続いている\n  Dari tadi, hujan sedang turun terus menerus\n- 今頃、彼は飛行機に乗っているはずだ\n  Kira-kira sekarang, dia, seharusnya sedang naik pesawat\n- ただいま、お客様と対応している最中です。\n  Saat ini, saya tengah sedang melayani tamu.\n- このころ、毎日残業が続いている。\n  Akhir-akhir ini setiap hari lemburnya sedang terus berlanjut.", "lesson_id": "k3_l1" },
+    { "id": "k3_l2_g", "title": "Keadaan Sudah Dilakukan (～てある)", "body_md": "Pola: ～てある (te aru)\n\nRangkaian bentuk:\n- 置きます → 置いてあります\n  Letakkan → Sudah diletakkan (oleh seseorang)\n- 書く → 書いてあります\n  Tulis → sudah dituliskan (oleh seseorang)\n- 入れる → 入れてあります\n  Masukkan → Sudah dimasukkan (oleh seseorang)\n- お客様 → お客様用の\n  Tamu → (diperuntukkan) Untuk tamu\n- 貼る → 貼ってあります → 貼ってありました\n  Tempel → Sudah ditempelkan → (Sebelumnya) sudah ditempelkan\n- 並べる → 並べてあります\n  Susun barisan → sudah dibariskan\n\nContoh kalimat:\n- 資料が机の上に置いてあります。\n  Dokumennya sudah diletakkan di atas meja.\n- 新しいルールがホワイトボードに書いてあります。\n  Peraturan barunya sudah dituliskan di papan tulis.\n- お客様用の飲み物が冷蔵庫に入れてあります。\n  Minuman untuk tamu sudah dimasukkan ke kulkas.\n- パスワードはメモに貼ってありました。\n  Kata sandi (sebelumnya) sudah ditempelkan di memo.\n- 椅子が全部会場に並べてあります。\n  Kursinya semua sudah dibariskan di tempat acara.", "lesson_id": "k3_l2" },
+    { "id": "k3_l3_g", "title": "Keadaan Segera Dilakukan (～するところ)", "body_md": "Pola: ～するところ (suru tokoro)\n\nRangkaian bentuk:\n- 出かける → 出かけるところ → 出かけるところです\n  Keluar rumah → Baru mau segera keluar rumah → Baru mau segera keluar rumah (formal)\n- 始める → 始めている → 始めているところです\n  Mulai → Sedang mulai → Sedang mau segera mulai\n- します → しようとした → しようとしたところです\n  Melakukan → Sudah mau melakukan → Sudah mau segera melakukan\n- 入る → 入るところ → 入るところでした\n  Masuk → Baru mau segera masuk → (Tadi) Baru mau segera masuk\n- する → するところです\n  Melakukan → Baru mau segera melakukan\n\nContoh kalimat:\n- これから出かけるところです。\n  Saya sekarang baru mau segera keluar rumah.\n- 今、ご飯を食べ始めているところです。\n  Sekarang, saya sedang mau segera mulai makan (nasi).\n- ちょうど先生に質問しようとしたところです。\n  Tepat sudah mau segera bertanya ke sensei.\n- 今からお風呂に入るところでした。\n  Saya tadi baru mau segera mandi berendam.\n- 電車が出発するところです。急いでください。\n  Keretanya baru mau segera berangkat. Tolong bergegas.", "lesson_id": "k3_l3" },
+    { "id": "k3_l4_g", "title": "Membiasakan diri/Berusaha (～ようにしている)", "body_md": "Pola: ～ようにしている (you ni site iru)\n\nRangkaian bentuk:\n- 守る → 守るように → 守るようにしています\n  Jaga → Agar/Supaya terjaga → Berusaha agar terjaga\n- 食べる → 食べるように → 食べるようにしています\n  Makan → Agar makan → Membiasakan makan\n- 健康 → 健康のために\n  Kesehatan → Demi kesehatan\n- 見る → 見ない → 見ないように → 見ないようにしています\n  Lihat → Tidak lihat/nonton → Agar/Supaya tidak lihat/nonton → Berusaha tidak lihat/nonton\n- 遅い → 遅くまで\n  Larut/Lambat → Sampai larut\n- 崩す → 崩さない → 崩さないように\n  Merusak → Tidak merusak → Agar/Supaya tidak merusak\n- 寝る → 寝るように → 寝るようにしています\n  Tidur → Agar/Supaya tidur → Berusaha tidur\n- 使います → 使いすぎない → 使いすぎないように\n  Pakai → Tidak terlalu banyak pakai → Agar/Supaya tidak terlalu banyak pakai\n- 必要 → 必要なもの → 必要なものだけ\n  Perlu → Barang yang perlu → Barang yang perlu saja\n- 買う → 買うように → 買うようにしています\n  Beli → Agar/Supaya beli → Berusaha beli\n\nContoh kalimat:\n- 毎日、時間を守るようにしています。\n  Setiap hari, saya berusaha agar tepat waktu.\n- 健康のために、毎日野菜を食べるようにしています。\n  Demi kesehatan, setiap hari saya membiasakan makan sayur mayur.\n- 夜遅くまでテレビを見ないようにしています。\n  Saya berusaha tidak nonton TV sampai larut malam.\n- 体調をくずさないように、十分に寝るようにしています。\n  Supaya tidak merusak kondisi fisik, saya berusaha tidur dengan cukup.\n- お金を使いすぎないように、必要なものだけ買うようにしています。\n  Agar tidak terlalu banyak pakai uang, saya berusaha beli barang yang perlu saja.", "lesson_id": "k3_l4" },
+    { "id": "k3_l5_g", "title": "Keputusan/Ketentuan (～ことになる)", "body_md": "Pola: ～ことになる (koto ni naru)\n\nRangkaian bentuk:\n- 行く → 行くことになる\n  Pergi → Memutuskan untuk pergi\n- 引っ越しする → 引っ越しすることになります\n  Pindah rumah → Memutuskan untuk pindah rumah\n- 中止する → 中止することになりました\n  Dihentikan → Sudah diputuskan untuk dihentikan\n- 値上げする → 値上げすることになりました\n  Menaikkan harga → Sudah diputuskan menaikkan harga\n- 落とします → 落としません\n  Menurunkan → Tidak menurunkan\n- 発売する → 発売することになります\n  Menjual → ditentukan akan menjual\n\nContoh kalimat:\n- 今度の日曜日、友達とピックニックに行くことになる。\n  Hari minggu ini, saya memutuskan untuk pergi piknik dengan teman.\n- 来年の四月、引っ越しすることになります。\n  Tahun depan bulan April, saya memutuskan untuk pindah rumah.\n- このプロジェクトは中止することになりました。\n  Proyek ini sudah diputuskan untuk dihentikan.\n- 値上げすることになりましたが、品質は落としません。\n  Sudah diputuskan menaikkan harga tapi, kami tidak menurunkan mutu.\n- 来月、新製品を発売することになります。\n  Bulan depan, ditentukan akan dijual produk baru.", "lesson_id": "k3_l5" },
+    { "id": "k3_l6_g", "title": "Peraturan/Kebiasaan (～ことになっている)", "body_md": "Pola: ～ことになっている (koto ni natte iru)\n\nRangkaian bentuk:\n- 三時 → 三時から → 三時からことになっています\n  Jam 3 → Dari jam 3 → Sudah jadi peraturan dari jam 3\n- 提出 → 提出こと → 提出ことになっています\n  Serahkan → Penyerahannya → Sudah jadi peraturan penyerahannya\n- 電話をします → 電話をしてはいけない\n  Menelepon → Tidak boleh menelepon\n- 行う → 行うこと → 行うことになっています\n  Adakan → Pengadaan → Sudah jadi kebiasaan diadakan\n- 一方通行 → 一方通行だった\n  Jalanan 1 arah → (Saat itu) jalanan 1 arah\n\nContoh kalimat:\n- このホテルは、チェックインが午後三時からことになっています。\n  Hotel ini, check-in nya sudah jadi peraturan dari jam 3 sore\n- 社員は５日までに経費精算を提出ことになっています。\n  Sudah jadi peraturan karyawan menyerahkan perhitungan pengeluaran paling lambat tanggal 5.\n- 日本では、電車の中で電話をしてはいけないことになっています。\n  Di Jepang, sudah jadi kebiasaan tidak boleh menelepon di dalam kereta.\n- 雨天の場合はイベントは室内で行うことになっています。\n  Jika (dalam hal) hari hujan, sudah jadi kebiasaan Event diadakan di dalam ruangan.\n- 昔はこの道は一方通行だったことになっていました。\n  Dulu, jalan ini sudah jadi peraturan (saat itu) jalanan 1 arah.", "lesson_id": "k3_l6" },
+    { "id": "k3_l7_g", "title": "Rupanya/Sepertinya (～よう/～みたい)", "body_md": "Pola: ～よう/～みたい (you/mitai)\n\nRangkaian bentuk:\n- 降る → 降っている → 降っているようです/降っているみたいです\n  Turun → Sedang turun → Rupanya/Sepertinya sedang turun\n- 会議中 → 会議中のようです/会議中みたいです\n  Sedang rapat → Sepertinya sedang rapat\n- 風邪 → 風邪を引いた → 風邪を引いたようです/風邪を引いたみたいです\n  Flu → Sudah terserang flu → Rupanya sudah terserang flu\n- 辛い → 辛いようです/辛いみたいです\n  Pedas → Rupanya/Sepertinya pedas\n- 難しい → 難しいようです/難しいみたいです\n  Susah → Rupanya/Sepertinya susah\n\nContoh kalimat:\n- 外は雨が降っているようです。 / 外は雨が降っているみたいです。\n  Di luar rupanya/sepertinya sedang turun hujan.\n- 部長はまだ会議中のようです。 / 部長はまだ会議中みたいです。\n  Manager sepertinya masih sedang rapat.\n- 彼は風邪を引いたようです。 / 彼は風邪を引いたみたいです。\n  Dia rupanya sudah terserang flu.\n- この料理は少し辛いようです。\n  Masakan ini rupanya/sepertinya sedikit pedas.\n- この問題は思ったより難しいようです。 / この問題は思ったより難しいみたいです。\n  Soal ini rupanya/sepertinya lebih susah dari yang saya duga.", "lesson_id": "k3_l7" },
+    { "id": "k3_l8_g", "title": "Kelihatannya (～そう)", "body_md": "Pola: ～そう (sou)\n\nRangkaian bentuk:\n- おいしい → おいしそうです\n  Enak → Kelihatannya enak\n- 暗い → 暗くなって → 暗くなってきました\n  Gelap → Jadi gelap → Sudah mulai jadi gelap\n- 降ります → 降りそうです\n  Turun → Kelihatannya mau turun\n- 得意 → 得意そうです\n  Mahir → Kelihatannya mahir\n- 疲れる → 疲れている → 疲れているそうです\n  Lelah → Sedang/Sudah lelah → Kelihatannya sudah lelah\n- 忙しい → 忙しくて\n  Sibuk → Sibuk dan,\n- 見つかります → 見つかりそう → 見つかりそうにない\n  Menemukan → Kelihatannya menemukan → Kelihatannya tidak ditemukan\n\nContoh kalimat:\n- このケーキはとてもおいしそうです。\n  Kue ini kelihatannya sangat enak.\n- 暗くなってきました。雨が降りそうです。\n  Sudah mulai gelap. Kelihatannya mau turun hujan.\n- あの人は背が高くてスポーツが得意そうです。\n  Orang itu perawakannya tinggi dan kelihatannya mahir sport.\n- 彼女は毎日忙しくて疲れているそうです。\n  Dia setiap hari sibuk dan kelihatannya sedang/sudah lelah.\n- この問題は複雑で答えがみつかりそうにない。\n  Soal ini rumit dan jawabannya kelihatannya tidak ditemukan.", "lesson_id": "k3_l8" },
+    { "id": "k3_l9_g", "title": "Katanya (～だそう)", "body_md": "Pola: ～だそう (da sou)\n\nRangkaian bentuk:\n- 降ります → 降る → 降るそうだ\n  Turun (formal) → Turun (bentuk kamus) → Katanya turun\n- おいしい → おいしいそうだ\n  Enak → Katanya enak\n- 休みます → 休んでいます → 休んでいる\n  Istirahat → Sedang istirahat (formal) → Sedang istirahat (bentuk kamus)\n- 感動的 → 感動的だそうだ\n  Mengharukan → Katanya mengharukan\n- 大変 → 大変だそうだ\n  Berat/Sulit → Katanya berat/sulit\n\nContoh kalimat:\n- 明日は雨が降るそうだ。\n  Besok, katanya turun hujan.\n- あのレストランはとてもおいしいそうだ。\n  Restoran itu katanya sangat enak.\n- 山田さんは病気で会社を休んでいるそうだ。\n  Katanya Yamada san karena sakit sedang tidak masuk kantor.\n- あの映画はとても感動的だそうだ。\n  Film itu katanya sangat mengharukan.\n- この仕事は大変だそうだ。\n  Katanya pekerjaan ini berat/sulit.", "lesson_id": "k3_l9" },
+    { "id": "k3_l10_g", "title": "Konon katanya (～らしい)", "body_md": "Pola: ～らしい (rashii)\n\nRangkaian bentuk:\n- 結婚する → 結婚するらしい\n  Menikah → Konon katanya menikah\n- 始まる → 始まるらしい\n  Mulai → konon katanya mulai\n- おいしい → おいしいらしい\n  Enak → konon katanya enak\n- 建てる → 建てられる → 建てられたらしい\n  Berdiri → Didirikan → Konon katanya sudah didirikan\n- 住む → 住んでいる → 住んでいた\n  Tinggal → Sudah tinggal → (Saat itu) sudah tinggal\n\nContoh kalimat:\n- 田中さんは来月結婚するらしい。\n  Tanaka san konon katanya menikah bulan depan.\n- 来週から試験が始まるらしい。\n  Konon katanya ulangannya mulai dari minggu depan.\n- あのレストランはとてもおいしいらしい。\n  Restoran itu konon katanya sangat enak.\n- このお寺は五百年前に建てられたらしい\n  Kuil ini konon katanya sudah didirikan 500 tahun lalu\n- 彼は十年間日本に住んでいたらしい。\n  Dia konon katanya sudah tinggal di Jepang selama 10 tahun.", "lesson_id": "k3_l10" },
+    { "id": "k3_l11_g", "title": "Karakteristik (～らしい)", "body_md": "Pola: ～らしい (rashii)\n\nRangkaian bentuk:\n- 男 → 男らしい → 男らしい人です\n  Laki-laki → Layak sebagai laki-laki → Layak sebagai seorang laki-laki\n- 責任感 → 責任感が強い → 責任感が強くて\n  Rasa tanggung jawab → Rasa tanggung jawabnya kuat → …\n- 子供 → 子供らしく\n  Anak-anak → Layaknya anak-anak\n- 遊びます → 遊んでいます → 外で遊んでいます\n  Bermain → Sedang bermain → Sedang bermain di luar\n- 天気 → 温かい天気 → 温かい天気ですね\n  Cuaca → Cuacanya hangat → Cuacanya hangat ya\n- 春 → 春らしい\n  Musim semi → Layaknya musim semi\n- 若者 → 若者らしい → 若者らしいデザインですね\n  Anak muda → Layaknya anak muda → Desain layaknya anak muda ya\n- 話し方 → 話し方をします\n  Cara bicara → Berbicara dengan cara\n\nContoh kalimat:\n- 彼は責任感が強くて、とても男らしい人です。\n  Dia rasa tanggung jawabnya kuat, sangat layak sebagai seorang laki-laki.\n- 子供たちは子供らしく、元気に外で遊んでいます。\n  Anak-anak layaknya anak-anak, sedang bermain di luar dengan ceria.\n- 今日は春らしい温かい天気ですね\n  Hari ini, cuacanya hangat layaknya musim semi ya\n- この服は若者らしいデザインですね。\n  Baju ini desainnya layaknya/sangat anak muda ya.\n- 彼は医者らしい落ち着いた話し方をします。\n  Dia berbicara dengan cara yang tenang layaknya seorang dokter.", "lesson_id": "k3_l11" }
+  ],
+  "vocab": [
+    { "id": "k3v_hajimeru", "surface": "始める", "kana": "はじめる", "romaji": "hajimeru", "meaning_id": "Mulai", "image": null, "audio": "" },
+    { "id": "k3v_furimasu", "surface": "降ります", "kana": "ふります", "romaji": "furimasu", "meaning_id": "Turun (hujan)", "image": null, "audio": "" },
+    { "id": "k3v_noru", "surface": "乗る", "kana": "のる", "romaji": "noru", "meaning_id": "Naik (kendaraan)", "image": null, "audio": "" },
+    { "id": "k3v_tai_ou_suru", "surface": "対応する", "kana": "たいおうする", "romaji": "tai’ou suru", "meaning_id": "Melayani", "image": null, "audio": "" },
+    { "id": "k3v_tsuzuku", "surface": "続く", "kana": "つづく", "romaji": "tsuzuku", "meaning_id": "Berlanjut", "image": null, "audio": "" },
+    { "id": "k3v_okimasu", "surface": "置きます", "kana": "おきます", "romaji": "okimasu", "meaning_id": "Letakkan", "image": null, "audio": "" },
+    { "id": "k3v_kaku", "surface": "書く", "kana": "かく", "romaji": "kaku", "meaning_id": "Tulis", "image": null, "audio": "" },
+    { "id": "k3v_ireru", "surface": "入れる", "kana": "いれる", "romaji": "ireru", "meaning_id": "Masukkan", "image": null, "audio": "" },
+    { "id": "k3v_okyaku_sama", "surface": "お客様", "kana": "おきゃくさま", "romaji": "okyaku sama", "meaning_id": "Tamu", "image": null, "audio": "" },
+    { "id": "k3v_haru", "surface": "貼る", "kana": "はる", "romaji": "haru", "meaning_id": "Tempel", "image": null, "audio": "" },
+    { "id": "k3v_naraberu", "surface": "並べる", "kana": "ならべる", "romaji": "naraberu", "meaning_id": "Susun barisan", "image": null, "audio": "" },
+    { "id": "k3v_dekakeru", "surface": "出かける", "kana": "でかける", "romaji": "dekakeru", "meaning_id": "Keluar rumah", "image": null, "audio": "" },
+    { "id": "k3v_shimasu", "surface": "します", "kana": "します", "romaji": "shimasu", "meaning_id": "Melakukan", "image": null, "audio": "" },
+    { "id": "k3v_hairu", "surface": "入る", "kana": "はいる", "romaji": "hairu", "meaning_id": "Masuk", "image": null, "audio": "" },
+    { "id": "k3v_suru", "surface": "する", "kana": "する", "romaji": "suru", "meaning_id": "Melakukan", "image": null, "audio": "" },
+    { "id": "k3v_mamoru", "surface": "守る", "kana": "まもる", "romaji": "mamoru", "meaning_id": "Jaga", "image": null, "audio": "" },
+    { "id": "k3v_taberu", "surface": "食べる", "kana": "たべる", "romaji": "taberu", "meaning_id": "Makan", "image": null, "audio": "" },
+    { "id": "k3v_kenkou", "surface": "健康", "kana": "けんこう", "romaji": "kenkou", "meaning_id": "Kesehatan", "image": null, "audio": "" },
+    { "id": "k3v_miru", "surface": "見る", "kana": "みる", "romaji": "miru", "meaning_id": "Lihat", "image": null, "audio": "" },
+    { "id": "k3v_osoi", "surface": "遅い", "kana": "おそい", "romaji": "osoi", "meaning_id": "Larut/Lambat", "image": null, "audio": "" },
+    { "id": "k3v_kuzusu", "surface": "崩す", "kana": "くずす", "romaji": "kuzusu", "meaning_id": "Merusak", "image": null, "audio": "" },
+    { "id": "k3v_neru", "surface": "寝る", "kana": "ねる", "romaji": "neru", "meaning_id": "Tidur", "image": null, "audio": "" },
+    { "id": "k3v_tsukaimasu", "surface": "使います", "kana": "つかいます", "romaji": "tsukaimasu", "meaning_id": "Pakai", "image": null, "audio": "" },
+    { "id": "k3v_hitsuyou", "surface": "必要", "kana": "ひつよう", "romaji": "hitsuyou", "meaning_id": "Perlu", "image": null, "audio": "" },
+    { "id": "k3v_kau", "surface": "買う", "kana": "かう", "romaji": "kau", "meaning_id": "Beli", "image": null, "audio": "" },
+    { "id": "k3v_iku", "surface": "行く", "kana": "いく", "romaji": "iku", "meaning_id": "Pergi", "image": null, "audio": "" },
+    { "id": "k3v_hikkoshi_suru", "surface": "引っ越しする", "kana": "ひっこしする", "romaji": "hikkoshi suru", "meaning_id": "Pindah rumah", "image": null, "audio": "" },
+    { "id": "k3v_chuushi_suru", "surface": "中止する", "kana": "ちゅうしする", "romaji": "chuushi suru", "meaning_id": "Dihentikan", "image": null, "audio": "" },
+    { "id": "k3v_ne_age_suru", "surface": "値上げする", "kana": "ねあげする", "romaji": "ne’age suru", "meaning_id": "Menaikkan harga", "image": null, "audio": "" },
+    { "id": "k3v_otoshimasu", "surface": "落とします", "kana": "おとします", "romaji": "otoshimasu", "meaning_id": "Menurunkan", "image": null, "audio": "" },
+    { "id": "k3v_hatsubai_suru", "surface": "発売する", "kana": "はつばいする", "romaji": "hatsubai suru", "meaning_id": "Menjual", "image": null, "audio": "" },
+    { "id": "k3v_sanji", "surface": "三時", "kana": "さんじ", "romaji": "sanji", "meaning_id": "Jam 3", "image": null, "audio": "" },
+    { "id": "k3v_teishutsu", "surface": "提出", "kana": "ていしゅつ", "romaji": "teishutsu", "meaning_id": "Serahkan", "image": null, "audio": "" },
+    { "id": "k3v_denwa_o_shimasu", "surface": "電話をします", "kana": "でんわをします", "romaji": "denwa o shimasu", "meaning_id": "Menelepon", "image": null, "audio": "" },
+    { "id": "k3v_okonau", "surface": "行う", "kana": "おこなう", "romaji": "okonau", "meaning_id": "Adakan", "image": null, "audio": "" },
+    { "id": "k3v_ippou_tsuukou", "surface": "一方通行", "kana": "いっぽうつうこう", "romaji": "ippou tsuukou", "meaning_id": "Jalanan 1 arah", "image": null, "audio": "" },
+    { "id": "k3v_furu", "surface": "降る", "kana": "ふる", "romaji": "furu", "meaning_id": "Turun", "image": null, "audio": "" },
+    { "id": "k3v_kaigi_chuu", "surface": "会議中", "kana": "かいぎちゅう", "romaji": "kaigi chuu", "meaning_id": "Sedang rapat", "image": null, "audio": "" },
+    { "id": "k3v_kaze", "surface": "風邪", "kana": "かぜ", "romaji": "kaze", "meaning_id": "Flu", "image": null, "audio": "" },
+    { "id": "k3v_karai", "surface": "辛い", "kana": "からい", "romaji": "karai", "meaning_id": "Pedas", "image": null, "audio": "" },
+    { "id": "k3v_muzukashii", "surface": "難しい", "kana": "むずかしい", "romaji": "muzukashii", "meaning_id": "Susah", "image": null, "audio": "" },
+    { "id": "k3v_oishii", "surface": "おいしい", "kana": "おいしい", "romaji": "oishii", "meaning_id": "Enak", "image": null, "audio": "" },
+    { "id": "k3v_kurai", "surface": "暗い", "kana": "くらい", "romaji": "kurai", "meaning_id": "Gelap", "image": null, "audio": "" },
+    { "id": "k3v_tokui", "surface": "得意", "kana": "とくい", "romaji": "tokui", "meaning_id": "Mahir", "image": null, "audio": "" },
+    { "id": "k3v_tsukareru", "surface": "疲れる", "kana": "つかれる", "romaji": "tsukareru", "meaning_id": "Lelah", "image": null, "audio": "" },
+    { "id": "k3v_isogashii", "surface": "忙しい", "kana": "いそがしい", "romaji": "isogashii", "meaning_id": "Sibuk", "image": null, "audio": "" },
+    { "id": "k3v_mitsukarimasu", "surface": "見つかります", "kana": "みつかります", "romaji": "mitsukarimasu", "meaning_id": "Menemukan", "image": null, "audio": "" },
+    { "id": "k3v_yasumimasu", "surface": "休みます", "kana": "やすみます", "romaji": "yasumimasu", "meaning_id": "Istirahat", "image": null, "audio": "" },
+    { "id": "k3v_kandou_teki", "surface": "感動的", "kana": "かんどうてき", "romaji": "kandou teki", "meaning_id": "Mengharukan", "image": null, "audio": "" },
+    { "id": "k3v_taihen", "surface": "大変", "kana": "たいへん", "romaji": "taihen", "meaning_id": "Berat/Sulit", "image": null, "audio": "" },
+    { "id": "k3v_kekkon_suru", "surface": "結婚する", "kana": "けっこんする", "romaji": "kekkon suru", "meaning_id": "Menikah", "image": null, "audio": "" },
+    { "id": "k3v_hajimaru", "surface": "始まる", "kana": "はじまる", "romaji": "hajimaru", "meaning_id": "Mulai", "image": null, "audio": "" },
+    { "id": "k3v_tateru", "surface": "建てる", "kana": "たてる", "romaji": "tateru", "meaning_id": "Berdiri", "image": null, "audio": "" },
+    { "id": "k3v_sumu", "surface": "住む", "kana": "すむ", "romaji": "sumu", "meaning_id": "Tinggal", "image": null, "audio": "" },
+    { "id": "k3v_otoko", "surface": "男", "kana": "おとこ", "romaji": "otoko", "meaning_id": "Laki-laki", "image": null, "audio": "" },
+    { "id": "k3v_sekininkan", "surface": "責任感", "kana": "せきにんかん", "romaji": "sekininkan", "meaning_id": "Rasa tanggung jawab", "image": null, "audio": "" },
+    { "id": "k3v_kodomo", "surface": "子供", "kana": "こども", "romaji": "kodomo", "meaning_id": "Anak-anak", "image": null, "audio": "" },
+    { "id": "k3v_asobimasu", "surface": "遊びます", "kana": "あそびます", "romaji": "asobimasu", "meaning_id": "Bermain", "image": null, "audio": "" },
+    { "id": "k3v_tenki", "surface": "天気", "kana": "てんき", "romaji": "tenki", "meaning_id": "Cuaca", "image": null, "audio": "" },
+    { "id": "k3v_haru_2", "surface": "春", "kana": "はる", "romaji": "haru", "meaning_id": "Musim semi", "image": null, "audio": "" },
+    { "id": "k3v_wakamono", "surface": "若者", "kana": "わかもの", "romaji": "wakamono", "meaning_id": "Anak muda", "image": null, "audio": "" },
+    { "id": "k3v_hanashi_kata", "surface": "話し方", "kana": "はなしかた", "romaji": "hanashi kata", "meaning_id": "Cara bicara", "image": null, "audio": "" }
+  ],
+  "sentences": [
+    {
+      "id": "k3s_1_1_1",
+      "surface": "会議が始めているところです",
+      "kana": "かいぎがはじめているところです",
+      "romaji": "kaigi ga hajimete iru tokoro desu",
+      "meaning_id": "Rapatnya baru saja mulai",
+      "words": [
+        { "surface": "会議が", "kana": "かいぎが" },
+        { "surface": "始めている", "kana": "はじめている" },
+        { "surface": "ところです", "kana": "ところです" }
+      ],
+      "assemble_tokens": ["会議が","始めている","ところです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_1_2",
+      "surface": "ちょうど今、会議が始めているところです。",
+      "kana": "ちょうどいま、かいぎがはじめているところです。",
+      "romaji": "choudo ima, kaigi ga hajimete iru tokoro desu.",
+      "meaning_id": "Tepat sekarang, rapatnya baru saja mulai.",
+      "words": [
+        { "surface": "ちょうど今、", "kana": "ちょうどいま、" },
+        { "surface": "会議が", "kana": "かいぎが" },
+        { "surface": "始めている", "kana": "はじめている" },
+        { "surface": "ところです。", "kana": "ところです。" }
+      ],
+      "assemble_tokens": ["ちょうど今、","会議が","始めている","ところです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_2_1",
+      "surface": "雨が降り続いている",
+      "kana": "あめがふりつづいている",
+      "romaji": "ame ga furi tsuzuite iru",
+      "meaning_id": "Hujan sedang turun terus",
+      "words": [
+        { "surface": "雨が", "kana": "あめが" },
+        { "surface": "降り続いて", "kana": "ふりつづいて" },
+        { "surface": "いる", "kana": "いる" }
+      ],
+      "assemble_tokens": ["雨が","降り続いて","いる"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_2_2",
+      "surface": "ずっと雨が降り続いている",
+      "kana": "ずっとあめがふりつづいている",
+      "romaji": "zutto ame ga furi tsuzuite iru",
+      "meaning_id": "Hujan sedang turun terus menerus",
+      "words": [
+        { "surface": "ずっと", "kana": "ずっと" },
+        { "surface": "雨が", "kana": "あめが" },
+        { "surface": "降り続いて", "kana": "ふりつづいて" },
+        { "surface": "いる", "kana": "いる" }
+      ],
+      "assemble_tokens": ["ずっと","雨が","降り続いて","いる"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_2_3",
+      "surface": "さっきから、ずっと雨が降り続いている",
+      "kana": "さっきから、ずっとあめがふりつづいている",
+      "romaji": "sakki kara, zutto ame ga furi tsuzuite iru",
+      "meaning_id": "Dari tadi, hujan sedang turun terus menerus",
+      "words": [
+        { "surface": "さっきから、", "kana": "さっきから、" },
+        { "surface": "ずっと", "kana": "ずっと" },
+        { "surface": "雨が", "kana": "あめが" },
+        { "surface": "降り続いて", "kana": "ふりつづいて" },
+        { "surface": "いる", "kana": "いる" }
+      ],
+      "assemble_tokens": ["さっきから、","ずっと","雨が","降り続いて","いる"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_3_1",
+      "surface": "飛行機に乗っているはずだ",
+      "kana": "ひこうきにのっているはずだ",
+      "romaji": "hikouki ni notte iru hazu da",
+      "meaning_id": "Seharusnya sedang naik pesawat",
+      "words": [
+        { "surface": "飛行機に", "kana": "ひこうきに" },
+        { "surface": "乗っている", "kana": "のっている" },
+        { "surface": "はずだ", "kana": "はずだ" }
+      ],
+      "assemble_tokens": ["飛行機に","乗っている","はずだ"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_3_2",
+      "surface": "彼は飛行機に乗っているはずだ",
+      "kana": "かれはひこうきにのっているはずだ",
+      "romaji": "kare wa hikouki ni notte iru hazu da",
+      "meaning_id": "Dia, seharusnya sedang naik pesawat",
+      "words": [
+        { "surface": "彼は", "kana": "かれは" },
+        { "surface": "飛行機に", "kana": "ひこうきに" },
+        { "surface": "乗っている", "kana": "のっている" },
+        { "surface": "はずだ", "kana": "はずだ" }
+      ],
+      "assemble_tokens": ["彼は","飛行機に","乗っている","はずだ"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_3_3",
+      "surface": "今頃、彼は飛行機に乗っているはずだ",
+      "kana": "いまごろ、かれはひこうきにのっているはずだ",
+      "romaji": "ima goro, kare wa hikouki ni notte iru hazu da",
+      "meaning_id": "Kira-kira sekarang, dia, seharusnya sedang naik pesawat",
+      "words": [
+        { "surface": "今頃、", "kana": "いまごろ、" },
+        { "surface": "彼は", "kana": "かれは" },
+        { "surface": "飛行機に", "kana": "ひこうきに" },
+        { "surface": "乗っている", "kana": "のっている" },
+        { "surface": "はずだ", "kana": "はずだ" }
+      ],
+      "assemble_tokens": ["今頃、","彼は","飛行機に","乗っている","はずだ"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_4_1",
+      "surface": "お客様と対応している最中です",
+      "kana": "おきゃくさまとたいおうしているさいちゅうです",
+      "romaji": "okyaku sama to tai’ou shite iru saichuu desu",
+      "meaning_id": "Tengah sedang melayani tamu",
+      "words": [
+        { "surface": "お客様と", "kana": "おきゃくさまと" },
+        { "surface": "対応している", "kana": "たいおうしている" },
+        { "surface": "最中です", "kana": "さいちゅうです" }
+      ],
+      "assemble_tokens": ["お客様と","対応している","最中です"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_4_2",
+      "surface": "ただいま、お客様と対応している最中です。",
+      "kana": "ただいま、おきゃくさまとたいおうしているさいちゅうです。",
+      "romaji": "tadaima, okyaku sama to tai’ou shite iru saichuu desu.",
+      "meaning_id": "Saat ini, saya tengah sedang melayani tamu.",
+      "words": [
+        { "surface": "ただいま、", "kana": "ただいま、" },
+        { "surface": "お客様と", "kana": "おきゃくさまと" },
+        { "surface": "対応している", "kana": "たいおうしている" },
+        { "surface": "最中です。", "kana": "さいちゅうです。" }
+      ],
+      "assemble_tokens": ["ただいま、","お客様と","対応している","最中です。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_5_1",
+      "surface": "残業が続いている",
+      "kana": "ざんぎょうがつづいている",
+      "romaji": "zan’gyou ga tsuzuite iru",
+      "meaning_id": "Lemburnya sedang terus berlanjut",
+      "words": [
+        { "surface": "残業が", "kana": "ざんぎょうが" },
+        { "surface": "続いている", "kana": "つづいている" }
+      ],
+      "assemble_tokens": ["残業が","続いている"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_5_2",
+      "surface": "毎日残業が続いている",
+      "kana": "まいにちざんぎょうがつづいている",
+      "romaji": "mainichi zan’gyou ga tsuzuite iru",
+      "meaning_id": "Setiap hari lemburnya sedang terus berlanjut",
+      "words": [
+        { "surface": "毎日", "kana": "毎日" },
+        { "surface": "残業が", "kana": "残業が" },
+        { "surface": "続いている", "kana": "つづいている" }
+      ],
+      "assemble_tokens": ["毎日","残業が","続いている"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_1_5_3",
+      "surface": "このころ、毎日残業が続いている。",
+      "kana": "このころ、まいにちざんぎょうがつづいている。",
+      "romaji": "kono koro mainichi zan’gyou ga tsuzuite iru.",
+      "meaning_id": "Akhir-akhir ini setiap hari lemburnya sedang terus berlanjut.",
+      "words": [
+        { "surface": "このころ、", "kana": "このころ、" },
+        { "surface": "毎日", "kana": "毎日" },
+        { "surface": "残業が", "kana": "残業が" },
+        { "surface": "続いている。", "kana": "つづいている。" }
+      ],
+      "assemble_tokens": ["このころ、","毎日","残業が","続いている。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_1_1",
+      "surface": "机の上に置いてあります",
+      "kana": "つくえのうえにおいてあります",
+      "romaji": "tsukue no ue ni oite arimasu",
+      "meaning_id": "Sudah diletakkan di atas meja",
+      "words": [
+        { "surface": "机の上に", "kana": "つくえのうえに" },
+        { "surface": "置いてあります", "kana": "おいてあります" }
+      ],
+      "assemble_tokens": ["机の上に","置いてあります"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_1_2",
+      "surface": "資料が机の上に置いてあります。",
+      "kana": "しりょうがつくえのうえにおいてあります。",
+      "romaji": "shiryou ga tsukue no ue ni oite arimasu.",
+      "meaning_id": "Dokumennya sudah diletakkan di atas meja.",
+      "words": [
+        { "surface": "資料が", "kana": "しりょうが" },
+        { "surface": "机の上に", "kana": "つくえのうえに" },
+        { "surface": "置いてあります。", "kana": "おいてあります。" }
+      ],
+      "assemble_tokens": ["資料が","机の上に","置いてあります。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_2_1",
+      "surface": "ホワイトボードに書いてあります",
+      "kana": "ホワイトボードにかいてあります",
+      "romaji": "howaitobōdo ni kaite arimasu",
+      "meaning_id": "Sudah dituliskan di papan tulis",
+      "words": [
+        { "surface": "ホワイトボードに", "kana": "ホワイトボードに" },
+        { "surface": "書いてあります", "kana": "かいてあります" }
+      ],
+      "assemble_tokens": ["ホワイトボードに","書いてあります"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_2_2",
+      "surface": "ルールがホワイトボードに書いてあります",
+      "kana": "ルールがホワイトボードにかいてあります",
+      "romaji": "rūru ga howaitobōdo ni kaite arimasu",
+      "meaning_id": "Peraturannya sudah dituliskan di papan tulis",
+      "words": [
+        { "surface": "ルールが", "kana": "ルールが" },
+        { "surface": "ホワイトボードに", "kana": "ホワイトボードに" },
+        { "surface": "書いてあります", "kana": "かいてあります" }
+      ],
+      "assemble_tokens": ["ルールが","ホワイトボードに","書いてあります"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_2_3",
+      "surface": "新しいルールがホワイトボードに書いてあります。",
+      "kana": "あたらしいルールがホワイトボードにかいてあります。",
+      "romaji": "atarashii rūru ga howaitobōdo ni kaite arimasu.",
+      "meaning_id": "Peraturan barunya sudah dituliskan di papan tulis.",
+      "words": [
+        { "surface": "新しい", "kana": "あたらしい" },
+        { "surface": "ルールが", "kana": "ルールが" },
+        { "surface": "ホワイトボードに", "kana": "ホワイトボードに" },
+        { "surface": "書いてあります。", "kana": "かいてあります。" }
+      ],
+      "assemble_tokens": ["新しい","ルールが","ホワイトボードに","書いてあります。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_3_1",
+      "surface": "冷蔵庫に入れてあります",
+      "kana": "れいぞうこにいれてあります",
+      "romaji": "reizouko ni irete arimasu",
+      "meaning_id": "Sudah dimasukkan ke kulkas",
+      "words": [
+        { "surface": "冷蔵庫に", "kana": "れいぞうこに" },
+        { "surface": "入れてあります", "kana": "いれてあります" }
+      ],
+      "assemble_tokens": ["冷蔵庫に","入れてあります"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_3_2",
+      "surface": "飲み物が冷蔵庫に入れてあります",
+      "kana": "のみものがれいぞうこにいれてあります",
+      "romaji": "nomimono ga reizouko ni irete arimasu",
+      "meaning_id": "Minuman sudah dimasukkan ke kulkas",
+      "words": [
+        { "surface": "飲み物が", "kana": "のみものが" },
+        { "surface": "冷蔵庫に", "kana": "れいぞうこに" },
+        { "surface": "入れてあります", "kana": "いれてあります" }
+      ],
+      "assemble_tokens": ["飲み物が","冷蔵庫に","入れてあります"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_3_3",
+      "surface": "お客様用の飲み物が冷蔵庫に入れてあります。",
+      "kana": "おきゃくさまようののみものがれいぞうこにいれてあります。",
+      "romaji": "okyaku sama you no nomimono ga reizouko ni irete arimasu.",
+      "meaning_id": "Minuman untuk tamu sudah dimasukkan ke kulkas.",
+      "words": [
+        { "surface": "お客様", "kana": "お客様" },
+        { "surface": "用の", "kana": "用の" },
+        { "surface": "飲み物が", "kana": "のみものが" },
+        { "surface": "冷蔵庫に", "kana": "れいぞうこに" },
+        { "surface": "入れてあります。", "kana": "いれてあります。" }
+      ],
+      "assemble_tokens": ["お客様","用の","飲み物が","冷蔵庫に","入れてあります。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_4_1",
+      "surface": "メモに貼ってありました",
+      "kana": "メモにはってありました",
+      "romaji": "memo ni hatte arimashita",
+      "meaning_id": "(Sebelumnya) Sudah ditempelkan di memo",
+      "words": [
+        { "surface": "メモに", "kana": "メモに" },
+        { "surface": "貼ってありました", "kana": "はってありました" }
+      ],
+      "assemble_tokens": ["メモに","貼ってありました"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_4_2",
+      "surface": "パスワードはメモに貼ってありました。",
+      "kana": "パスワードはメモにはってありました。",
+      "romaji": "paswādo wa memo ni hatte arimashita.",
+      "meaning_id": "Kata sandi (sebelumnya) sudah ditempelkan di memo.",
+      "words": [
+        { "surface": "パスワードは", "kana": "パスワードは" },
+        { "surface": "メモに", "kana": "メモに" },
+        { "surface": "貼ってありました。", "kana": "はってありました。" }
+      ],
+      "assemble_tokens": ["パスワードは","メモに","貼ってありました。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_5_1",
+      "surface": "会場に並べてあります",
+      "kana": "かいじょうにならべてあります",
+      "romaji": "kaijyou ni narabete arimasu",
+      "meaning_id": "Sudah dibariskan di tempat acara",
+      "words": [
+        { "surface": "会場に", "kana": "かいじょうに" },
+        { "surface": "並べてあります", "kana": "ならべてあります" }
+      ],
+      "assemble_tokens": ["会場に","並べてあります"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_5_2",
+      "surface": "全部会場に並べてあります",
+      "kana": "ぜんぶかいじょうにならべてあります",
+      "romaji": "zenbu kaijyou ni narabete arimasu",
+      "meaning_id": "Semua sudah dibariskan di tempat acara",
+      "words": [
+        { "surface": "全部", "kana": "全部" },
+        { "surface": "会場に", "kana": "会場に" },
+        { "surface": "並べてあります", "kana": "ならべてあります" }
+      ],
+      "assemble_tokens": ["全部","会場に","並べてあります"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_2_5_3",
+      "surface": "椅子が全部会場に並べてあります。",
+      "kana": "いすがぜんぶかいじょうにならべてあります。",
+      "romaji": "isu ga zenbu kaijyou ni narabete arimasu.",
+      "meaning_id": "Kursinya semua sudah dibariskan di tempat acara.",
+      "words": [
+        { "surface": "椅子が", "kana": "いすが" },
+        { "surface": "全部", "kana": "全部" },
+        { "surface": "会場に", "kana": "会場に" },
+        { "surface": "並べてあります。", "kana": "ならべてあります。" }
+      ],
+      "assemble_tokens": ["椅子が","全部","会場に","並べてあります。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_1_1",
+      "surface": "これから出かけるところです。",
+      "kana": "これからでかけるところです。",
+      "romaji": "kore kara dekakeru tokoro desu.",
+      "meaning_id": "Saya sekarang baru mau segera keluar rumah.",
+      "words": [
+        { "surface": "これから", "kana": "これから" },
+        { "surface": "出かける", "kana": "でかける" },
+        { "surface": "ところ", "kana": "ところ" },
+        { "surface": "です。", "kana": "です。" }
+      ],
+      "assemble_tokens": ["これから","出かける","ところ","です。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_2_1",
+      "surface": "食べ始めているところです",
+      "kana": "たべはじめているところです",
+      "romaji": "tabe hajimete iru tokoro desu",
+      "meaning_id": "Sedang mau segera mulai makan",
+      "words": [
+        { "surface": "食べ", "kana": "たべ" },
+        { "surface": "始めている", "kana": "はじめている" },
+        { "surface": "ところです", "kana": "ところです" }
+      ],
+      "assemble_tokens": ["食べ","始めている","ところです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_2_2",
+      "surface": "ご飯を食べ始めているところです",
+      "kana": "ごはんをたべはじめているところです",
+      "romaji": "gohan o tabe hajimete iru tokoro desu",
+      "meaning_id": "Sedang mau segera mulai makan nasi",
+      "words": [
+        { "surface": "ご飯を", "kana": "ごはんを" },
+        { "surface": "食べ", "kana": "たべ" },
+        { "surface": "始めている", "kana": "はじめている" },
+        { "surface": "ところです", "kana": "ところです" }
+      ],
+      "assemble_tokens": ["ご飯を","食べ","始めている","ところです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_2_3",
+      "surface": "今、ご飯を食べ始めているところです。",
+      "kana": "いま、ごはんをたべはじめているところです。",
+      "romaji": "ima, gohan o tabe hajimete iru tokoro desu",
+      "meaning_id": "Sekarang, saya sedang mau segera mulai makan (nasi).",
+      "words": [
+        { "surface": "今、", "kana": "いま、" },
+        { "surface": "ご飯を", "kana": "ごはんを" },
+        { "surface": "食べ", "kana": "たべ" },
+        { "surface": "始めている", "kana": "はじめている" },
+        { "surface": "ところです。", "kana": "ところです。" }
+      ],
+      "assemble_tokens": ["今、","ご飯を","食べ","始めている","ところです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_3_1",
+      "surface": "質問しようとしたところです",
+      "kana": "しつもんしようとしたところです",
+      "romaji": "shitsumon shiyou to shita tokoro desu",
+      "meaning_id": "Sudah mau segera bertanya",
+      "words": [
+        { "surface": "質問", "kana": "しつもん" },
+        { "surface": "しようとした", "kana": "しようとした" },
+        { "surface": "ところです", "kana": "ところです" }
+      ],
+      "assemble_tokens": ["質問","しようとした","ところです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_3_2",
+      "surface": "先生に質問しようとしたところです",
+      "kana": "せんせいにしつもんしようとしたところです",
+      "romaji": "sensei ni shitsumon shiyou to shita tokoro desu",
+      "meaning_id": "Sudah mau segera bertanya ke sensei",
+      "words": [
+        { "surface": "先生に", "kana": "せんせいに" },
+        { "surface": "質問", "kana": "しつもん" },
+        { "surface": "しようとした", "kana": "しようとした" },
+        { "surface": "ところです", "kana": "ところです" }
+      ],
+      "assemble_tokens": ["先生に","質問","しようとした","ところです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_3_3",
+      "surface": "ちょうど先生に質問しようとしたところです。",
+      "kana": "ちょうどせんせいにしつもんしようとしたところです。",
+      "romaji": "choudo sensei ni shitsumon shiyou to shita tokoro desu.",
+      "meaning_id": "Tepat sudah mau segera bertanya ke sensei.",
+      "words": [
+        { "surface": "ちょうど", "kana": "ちょうど" },
+        { "surface": "先生に", "kana": "せんせいに" },
+        { "surface": "質問", "kana": "しつもん" },
+        { "surface": "しようとした", "kana": "しようとした" },
+        { "surface": "ところです。", "kana": "ところです。" }
+      ],
+      "assemble_tokens": ["ちょうど","先生に","質問","しようとした","ところです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_4_1",
+      "surface": "お風呂に入るところでした",
+      "kana": "おふろにはいるところでした",
+      "romaji": "ofuro ni hairu tokoro deshita",
+      "meaning_id": "(Tadi) Baru mau segera mandi berendam",
+      "words": [
+        { "surface": "お風呂に", "kana": "おふろに" },
+        { "surface": "入る", "kana": "はいる" },
+        { "surface": "ところ", "kana": "ところ" },
+        { "surface": "でした", "kana": "でした" }
+      ],
+      "assemble_tokens": ["お風呂に","入る","ところ","でした"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_4_2",
+      "surface": "今からお風呂に入るところでした。",
+      "kana": "いまからおふろにはいるところでした。",
+      "romaji": "ima kara ofuro ni hairu tokoro deshita.",
+      "meaning_id": "Saya tadi baru mau segera mandi berendam.",
+      "words": [
+        { "surface": "今から", "kana": "いまから" },
+        { "surface": "お風呂に", "kana": "おふろに" },
+        { "surface": "入る", "kana": "はいる" },
+        { "surface": "ところ", "kana": "ところ" },
+        { "surface": "でした。", "kana": "でした。" }
+      ],
+      "assemble_tokens": ["今から","お風呂に","入る","ところ","でした。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_5_1",
+      "surface": "出発するところです",
+      "kana": "しゅっぱつするところです",
+      "romaji": "shuppatsu suru tokoro desu",
+      "meaning_id": "Baru mau segera berangkat",
+      "words": [
+        { "surface": "出発", "kana": "しゅっぱつ" },
+        { "surface": "する", "kana": "する" },
+        { "surface": "ところです", "kana": "ところです" }
+      ],
+      "assemble_tokens": ["出発","する","ところです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_5_2",
+      "surface": "電車が出発するところです。",
+      "kana": "でんしゃがしゅっぱつするところです。",
+      "romaji": "densha ga shuppatsu suru tokoro desu.",
+      "meaning_id": "Keretanya baru mau segera berangkat.",
+      "words": [
+        { "surface": "電車が", "kana": "でんしゃが" },
+        { "surface": "出発", "kana": "しゅっぱつ" },
+        { "surface": "する", "kana": "する" },
+        { "surface": "ところです。", "kana": "ところです。" }
+      ],
+      "assemble_tokens": ["電車が","出発","する","ところです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_5_3",
+      "surface": "急いでください。",
+      "kana": "いそいでください。",
+      "romaji": "isoide kudasai.",
+      "meaning_id": "Tolong bergegas.",
+      "words": [
+        { "surface": "急いで", "kana": "いそいで" },
+        { "surface": "ください。", "kana": "ください。" }
+      ],
+      "assemble_tokens": ["急いで","ください。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_3_5_4",
+      "surface": "電車が出発するところです。急いでください。",
+      "kana": "でんしゃがしゅっぱつするところです。いそいでください。",
+      "romaji": "densha ga shuppatsu suru tokoro desu. isoide kudasai.",
+      "meaning_id": "Keretanya baru mau segera berangkat. Tolong bergegas.",
+      "words": [
+        { "surface": "電車が", "kana": "でんしゃが" },
+        { "surface": "出発", "kana": "しゅっぱつ" },
+        { "surface": "する", "kana": "する" },
+        { "surface": "ところです。", "kana": "ところです。" },
+        { "surface": "急いで", "kana": "いそいで" },
+        { "surface": "ください。", "kana": "ください。" }
+      ],
+      "assemble_tokens": ["電車が","出発","する","ところです。","急いで","ください。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_1_1",
+      "surface": "時間を守るようにしています",
+      "kana": "じかんをまもるようにしています",
+      "romaji": "jikan o mamoru you ni shite imasu",
+      "meaning_id": "Berusaha agar tepat waktu",
+      "words": [
+        { "surface": "時間を", "kana": "じかんを" },
+        { "surface": "守る", "kana": "まもる" },
+        { "surface": "ように", "kana": "ように" },
+        { "surface": "しています", "kana": "しています" }
+      ],
+      "assemble_tokens": ["時間を","守る","ように","しています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_1_2",
+      "surface": "毎日、時間を守るようにしています。",
+      "kana": "まいにち、じかんをまもるようにしています。",
+      "romaji": "mainichi, jikan o mamoru you ni shite imasu.",
+      "meaning_id": "Setiap hari, saya berusaha agar tepat waktu.",
+      "words": [
+        { "surface": "毎日、", "kana": "まいにち、" },
+        { "surface": "時間を", "kana": "じかんを" },
+        { "surface": "守る", "kana": "まもる" },
+        { "surface": "ように", "kana": "ように" },
+        { "surface": "しています。", "kana": "しています。" }
+      ],
+      "assemble_tokens": ["毎日、","時間を","守る","ように","しています。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_2_1",
+      "surface": "野菜を食べるようにしています",
+      "kana": "やさいをたべるようにしています",
+      "romaji": "yasai o taberu you ni shite imasu",
+      "meaning_id": "Membiasakan makan sayur mayur",
+      "words": [
+        { "surface": "野菜を", "kana": "やさいを" },
+        { "surface": "食べる", "kana": "たべる" },
+        { "surface": "ように", "kana": "ように" },
+        { "surface": "しています", "kana": "しています" }
+      ],
+      "assemble_tokens": ["野菜を","食べる","ように","しています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_2_2",
+      "surface": "毎日野菜を食べるようにしています",
+      "kana": "まいにちやさいをたべるようにしています",
+      "romaji": "mainichi yasai o taberu you ni shite imasu",
+      "meaning_id": "Setiap hari saya membiasakan makan sayur mayur",
+      "words": [
+        { "surface": "毎日", "kana": "毎日" },
+        { "surface": "野菜を", "kana": "野菜を" },
+        { "surface": "食べる", "kana": "たべる" },
+        { "surface": "ように", "kana": "ように" },
+        { "surface": "しています", "kana": "しています" }
+      ],
+      "assemble_tokens": ["毎日","野菜を","食べる","ように","しています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_2_3",
+      "surface": "健康のために、毎日野菜を食べるようにしています。",
+      "kana": "けんこうのために、まいにちやさいをたべるようにしています。",
+      "romaji": "kenkou no tame ni, mainichi yasai o taberu you ni shite imasu.",
+      "meaning_id": "Demi kesehatan, setiap hari saya membiasakan makan sayur mayur.",
+      "words": [
+        { "surface": "健康", "kana": "けんこう" },
+        { "surface": "のために、", "kana": "のために、" },
+        { "surface": "毎日", "kana": "毎日" },
+        { "surface": "野菜を", "kana": "野菜を" },
+        { "surface": "食べる", "kana": "たべる" },
+        { "surface": "ように", "kana": "ように" },
+        { "surface": "しています。", "kana": "しています。" }
+      ],
+      "assemble_tokens": ["健康","のために、","毎日","野菜を","食べる","ように","しています。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_3_1",
+      "surface": "テレビを見ないようにしています",
+      "kana": "テレビをみないようにしています",
+      "romaji": "terebi o minai you ni shite imasu",
+      "meaning_id": "Berusaha tidak nonton TV",
+      "words": [
+        { "surface": "テレビを", "kana": "テレビを" },
+        { "surface": "見ない", "kana": "みない" },
+        { "surface": "ように", "kana": "ように" },
+        { "surface": "しています", "kana": "しています" }
+      ],
+      "assemble_tokens": ["テレビを","見ない","ように","しています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_3_2",
+      "surface": "夜遅くまで",
+      "kana": "よるおそくまで",
+      "romaji": "yoru osoku made",
+      "meaning_id": "Sampai larut malam",
+      "words": [
+        { "surface": "夜", "kana": "夜" },
+        { "surface": "遅くまで", "kana": "遅くまで" }
+      ],
+      "assemble_tokens": ["夜","遅くまで"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_3_3",
+      "surface": "夜遅くまでテレビを見ないようにしています。",
+      "kana": "よるおそくまでテレビをみないようにしています。",
+      "romaji": "yoru osoku made terebi o minai you ni shite imasu.",
+      "meaning_id": "Saya berusaha tidak nonton TV sampai larut malam.",
+      "words": [
+        { "surface": "夜", "kana": "夜" },
+        { "surface": "遅くまで", "kana": "遅くまで" },
+        { "surface": "テレビを", "kana": "テレビを" },
+        { "surface": "見ない", "kana": "みない" },
+        { "surface": "ように", "kana": "ように" },
+        { "surface": "しています。", "kana": "しています。" }
+      ],
+      "assemble_tokens": ["夜","遅くまで","テレビを","見ない","ように","しています。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_4_1",
+      "surface": "体調をくずさないように",
+      "kana": "たいちょうをくずさないように",
+      "romaji": "taichou o kuzusanai you ni",
+      "meaning_id": "Agar/Supaya tidak merusak kondisi fisik",
+      "words": [
+        { "surface": "体調を", "kana": "たいちょうを" },
+        { "surface": "くずさないように", "kana": "くずさないように" }
+      ],
+      "assemble_tokens": ["体調を","くずさないように"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_4_2",
+      "surface": "十分に寝るようにしています",
+      "kana": "じゅうぶんにねるようにしています",
+      "romaji": "jyuubun ni neru you ni shite imasu",
+      "meaning_id": "Berusaha tidur dengan cukup",
+      "words": [
+        { "surface": "十分に", "kana": "じゅうぶんに" },
+        { "surface": "寝る", "kana": "ねる" },
+        { "surface": "ように", "kana": "ように" },
+        { "surface": "しています", "kana": "しています" }
+      ],
+      "assemble_tokens": ["十分に","寝る","ように","しています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_4_3",
+      "surface": "体調をくずさないように、十分に寝るようにしています。",
+      "kana": "たいちょうをくずさないように、じゅうぶんにねるようにしています。",
+      "romaji": "taichou o kuzusanai you ni, jyuubun ni neru you ni shite imasu.",
+      "meaning_id": "Supaya tidak merusak kondisi fisik, saya berusaha tidur dengan cukup.",
+      "words": [
+        { "surface": "体調を", "kana": "たいちょうを" },
+        { "surface": "くずさないように、", "kana": "くずさないように、" },
+        { "surface": "十分に", "kana": "じゅうぶんに" },
+        { "surface": "寝る", "kana": "ねる" },
+        { "surface": "ように", "kana": "ように" },
+        { "surface": "しています。", "kana": "しています。" }
+      ],
+      "assemble_tokens": ["体調を","くずさないように、","十分に","寝る","ように","しています。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_5_1",
+      "surface": "お金を使いすぎないように",
+      "kana": "おかねをつかいすぎないように",
+      "romaji": "okane o tsukai suginai you ni",
+      "meaning_id": "Agar/Supaya tidak terlalu banyak pakai uang",
+      "words": [
+        { "surface": "お金を", "kana": "おかねを" },
+        { "surface": "使いすぎない", "kana": "つかいすぎない" },
+        { "surface": "ように", "kana": "ように" }
+      ],
+      "assemble_tokens": ["お金を","使いすぎない","ように"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_5_2",
+      "surface": "必要なものだけ買うようにしています",
+      "kana": "ひつようなものだけかうようにしています",
+      "romaji": "hitsuyou na mono dake kau you ni shite imasu",
+      "meaning_id": "Berusaha beli barang yang perlu saja",
+      "words": [
+        { "surface": "必要", "kana": "ひつよう" },
+        { "surface": "なもの", "kana": "なもの" },
+        { "surface": "だけ", "kana": "だけ" },
+        { "surface": "買う", "kana": "かう" },
+        { "surface": "ように", "kana": "ように" },
+        { "surface": "しています", "kana": "しています" }
+      ],
+      "assemble_tokens": ["必要","なもの","だけ","買う","ように","しています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_4_5_3",
+      "surface": "お金を使いすぎないように、必要なものだけ買うようにしています。",
+      "kana": "おかねをつかいすぎないように、ひつようなものだけかうようにしています。",
+      "romaji": "okane o tsukai suginai you ni, hitsuyou na mono dake kau you ni shite imasu.",
+      "meaning_id": "Agar tidak terlalu banyak pakai uang, saya berusaha beli barang yang perlu saja.",
+      "words": [
+        { "surface": "お金を", "kana": "おかねを" },
+        { "surface": "使いすぎない", "kana": "つかいすぎない" },
+        { "surface": "ように、", "kana": "ように、" },
+        { "surface": "必要", "kana": "ひつよう" },
+        { "surface": "なもの", "kana": "なもの" },
+        { "surface": "だけ", "kana": "だけ" },
+        { "surface": "買う", "kana": "かう" },
+        { "surface": "ように", "kana": "ように" },
+        { "surface": "しています。", "kana": "しています。" }
+      ],
+      "assemble_tokens": ["お金を","使いすぎない","ように、","必要","なもの","だけ","買う","ように","しています。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_1_1",
+      "surface": "ピックニックに行くことになる",
+      "kana": "ピックニックにいくことになる",
+      "romaji": "pikkunikku ni iku koto ni naru",
+      "meaning_id": "Memutuskan untuk pergi piknik",
+      "words": [
+        { "surface": "ピックニックに", "kana": "ピックニックに" },
+        { "surface": "行く", "kana": "いく" },
+        { "surface": "ことになる", "kana": "ことになる" }
+      ],
+      "assemble_tokens": ["ピックニックに","行く","ことになる"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_1_2",
+      "surface": "友達とピックニックに行くことになる",
+      "kana": "ともだちとピックニックにいくことになる",
+      "romaji": "tomodachi to pikkunikku ni iku koto ni naru",
+      "meaning_id": "Memutuskan untuk pergi piknik dengan teman",
+      "words": [
+        { "surface": "友達と", "kana": "ともだちと" },
+        { "surface": "ピックニックに", "kana": "ピックニックに" },
+        { "surface": "行く", "kana": "いく" },
+        { "surface": "ことになる", "kana": "ことになる" }
+      ],
+      "assemble_tokens": ["友達と","ピックニックに","行く","ことになる"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_1_3",
+      "surface": "今度の日曜日、友達とピックニックに行くことになる。",
+      "kana": "こんどのにちようび、ともだちとピックニックにいくことになる。",
+      "romaji": "kondo no nichiyoubi, tomodachi to pikkunikku ni iku koto ni naru.",
+      "meaning_id": "Hari minggu ini, saya memutuskan untuk pergi piknik dengan teman.",
+      "words": [
+        { "surface": "今度の日曜日、", "kana": "こんどのにちようび、" },
+        { "surface": "友達と", "kana": "ともだちと" },
+        { "surface": "ピックニックに", "kana": "ピックニックに" },
+        { "surface": "行く", "kana": "いく" },
+        { "surface": "ことになる。", "kana": "ことになる。" }
+      ],
+      "assemble_tokens": ["今度の日曜日、","友達と","ピックニックに","行く","ことになる。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_2_1",
+      "surface": "四月、引っ越しすることになります",
+      "kana": "しがつ、ひっこしすることになります",
+      "romaji": "shigatsu, hikkoshi suru koto ni narimasu",
+      "meaning_id": "Bulan April, saya memutuskan untuk pindah rumah",
+      "words": [
+        { "surface": "四月、", "kana": "しがつ、" },
+        { "surface": "引っ越しする", "kana": "ひっこしする" },
+        { "surface": "ことになります", "kana": "ことになります" }
+      ],
+      "assemble_tokens": ["四月、","引っ越しする","ことになります"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_2_2",
+      "surface": "来年の四月、引っ越しすることになります。",
+      "kana": "らいねんのしがつ、ひっこしすることになります。",
+      "romaji": "rainen no shigatsu, hikkoshi suru koto ni narimasu.",
+      "meaning_id": "Tahun depan bulan April, saya memutuskan untuk pindah rumah.",
+      "words": [
+        { "surface": "来年の", "kana": "らいねんの" },
+        { "surface": "四月、", "kana": "しがつ、" },
+        { "surface": "引っ越しする", "kana": "ひっこしする" },
+        { "surface": "ことになります。", "kana": "ことになります。" }
+      ],
+      "assemble_tokens": ["来年の","四月、","引っ越しする","ことになります。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_3_1",
+      "surface": "プロジェクトは中止することになりました",
+      "kana": "プロジェクトはちゅうしすることになりました",
+      "romaji": "purojekuto wa chuushi suru koto ni narimashita",
+      "meaning_id": "Proyek sudah diputuskan untuk dihentikan",
+      "words": [
+        { "surface": "プロジェクトは", "kana": "プロジェクトは" },
+        { "surface": "中止する", "kana": "ちゅうしする" },
+        { "surface": "ことになりました", "kana": "ことになりました" }
+      ],
+      "assemble_tokens": ["プロジェクトは","中止する","ことになりました"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_3_2",
+      "surface": "このプロジェクトは中止することになりました。",
+      "kana": "このプロジェクトはちゅうしすることになりました。",
+      "romaji": "kono purojekuto wa chuushi suru koto ni narimashita.",
+      "meaning_id": "Proyek ini sudah diputuskan untuk dihentikan.",
+      "words": [
+        { "surface": "この", "kana": "この" },
+        { "surface": "プロジェクトは", "kana": "プロジェクトは" },
+        { "surface": "中止する", "kana": "ちゅうしする" },
+        { "surface": "ことになりました。", "kana": "ことになりました。" }
+      ],
+      "assemble_tokens": ["この","プロジェクトは","中止する","ことになりました。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_4_1",
+      "surface": "値上げすることになりましたが",
+      "kana": "ねあげすることになりましたが",
+      "romaji": "ne’age suru koto ni narimashita ga",
+      "meaning_id": "Sudah diputuskan menaikkan harga tapi,",
+      "words": [
+        { "surface": "値上げする", "kana": "ねあげする" },
+        { "surface": "ことになりましたが", "kana": "ことになりましたが" }
+      ],
+      "assemble_tokens": ["値上げする","ことになりましたが"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_4_2",
+      "surface": "品質は落としません",
+      "kana": "ひんしつはおとしません",
+      "romaji": "hinshitsu wa otoshimasen",
+      "meaning_id": "Tidak menurunkan mutu",
+      "words": [
+        { "surface": "品質は", "kana": "ひんしつは" },
+        { "surface": "落としません", "kana": "おとしません" }
+      ],
+      "assemble_tokens": ["品質は","落としません"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_4_3",
+      "surface": "値上げすることになりましたが、品質は落としません。",
+      "kana": "ねあげすることになりましたが、ひんしつはおとしません。",
+      "romaji": "ne’age suru koto ni narimashita ga, hinshitsu wa otoshimasen",
+      "meaning_id": "Sudah diputuskan menaikkan harga tapi, kami tidak menurunkan mutu.",
+      "words": [
+        { "surface": "値上げする", "kana": "ねあげする" },
+        { "surface": "ことになりましたが、", "kana": "ことになりましたが、" },
+        { "surface": "品質は", "kana": "ひんしつは" },
+        { "surface": "落としません。", "kana": "おとしません。" }
+      ],
+      "assemble_tokens": ["値上げする","ことになりましたが、","品質は","落としません。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_5_1",
+      "surface": "新製品を発売することになります",
+      "kana": "しんせいひんをはつばいすることになります",
+      "romaji": "shinseihin o hatsubai suru koto ni narimasu",
+      "meaning_id": "Ditentukan akan dijual produk baru",
+      "words": [
+        { "surface": "新製品を", "kana": "しんせいひんを" },
+        { "surface": "発売する", "kana": "はつばいする" },
+        { "surface": "ことになります", "kana": "ことになります" }
+      ],
+      "assemble_tokens": ["新製品を","発売する","ことになります"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_5_5_2",
+      "surface": "来月、新製品を発売することになります。",
+      "kana": "らいげつ、しんせいひんをはつばいすることになります。",
+      "romaji": "raigetu, shinseihin o hatsubai suru koto ni narimasu.",
+      "meaning_id": "Bulan depan, ditentukan akan dijual produk baru.",
+      "words": [
+        { "surface": "来月、", "kana": "らいげつ、" },
+        { "surface": "新製品を", "kana": "しんせいひんを" },
+        { "surface": "発売する", "kana": "はつばいする" },
+        { "surface": "ことになります。", "kana": "ことになります。" }
+      ],
+      "assemble_tokens": ["来月、","新製品を","発売する","ことになります。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_1_1",
+      "surface": "午後三時からことになっています",
+      "kana": "ごごさんじからことになっています",
+      "romaji": "gogo sanji kara koto ni natte imasu",
+      "meaning_id": "Sudah jadi peraturan dari jam 3 sore",
+      "words": [
+        { "surface": "午後", "kana": "午後" },
+        { "surface": "三時", "kana": "三時" },
+        { "surface": "から", "kana": "から" },
+        { "surface": "ことになっています", "kana": "ことになっています" }
+      ],
+      "assemble_tokens": ["午後","三時","から","ことになっています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_1_2",
+      "surface": "チェックインが午後三時からことになっています",
+      "kana": "チェックインがごごさんじからことになっています",
+      "romaji": "check in ga gogo sanji kara koto ni natte imasu",
+      "meaning_id": "Checkin-nya sudah jadi peraturan, dari jam 3 sore",
+      "words": [
+        { "surface": "チェックインが", "kana": "チェックインが" },
+        { "surface": "午後", "kana": "午後" },
+        { "surface": "三時", "kana": "三時" },
+        { "surface": "から", "kana": "から" },
+        { "surface": "ことになっています", "kana": "ことになっています" }
+      ],
+      "assemble_tokens": ["チェックインが","午後","三時","から","ことになっています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_1_3",
+      "surface": "このホテルは、チェックインが午後三時からことになっています。",
+      "kana": "このホテルは、チェックインがごごさんじからことになっています。",
+      "romaji": "kono hoteru wa, check in ga gogo sanji kara koto ni natte imasu.",
+      "meaning_id": "Hotel ini, check-in nya sudah jadi peraturan dari jam 3 sore",
+      "words": [
+        { "surface": "このホテルは、", "kana": "このホテルは、" },
+        { "surface": "チェックインが", "kana": "チェックインが" },
+        { "surface": "午後", "kana": "午後" },
+        { "surface": "三時", "kana": "三時" },
+        { "surface": "から", "kana": "から" },
+        { "surface": "ことになっています。", "kana": "ことになっています。" }
+      ],
+      "assemble_tokens": ["このホテルは、","チェックインが","午後","三時","から","ことになっています。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_2_1",
+      "surface": "経費計算を提出ことになっています",
+      "kana": "けいひけいさんをていしゅつことになっています",
+      "romaji": "keihi keisan o teishutsu koto ni natte imasu",
+      "meaning_id": "Sudah jadi peraturan menyerahkan perhitungan pengeluaran",
+      "words": [
+        { "surface": "経費計算を", "kana": "けいひけいさんを" },
+        { "surface": "提出", "kana": "ていしゅつ" },
+        { "surface": "こと", "kana": "こと" },
+        { "surface": "になっています", "kana": "になっています" }
+      ],
+      "assemble_tokens": ["経費計算を","提出","こと","になっています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_2_2",
+      "surface": "５日までに経費精算を提出ことになっています",
+      "kana": "いつかまでにけいひせいさんをていしゅつことになっています",
+      "romaji": "itsuka made ni keihi seisan o teishutsu koto ni natte imasu",
+      "meaning_id": "Sudah jadi peraturan menyerahkan perhitungan pengeluaran paling lambat tanggal 5",
+      "words": [
+        { "surface": "５日までに", "kana": "いつかまでに" },
+        { "surface": "経費精算を", "kana": "けいひせいさんを" },
+        { "surface": "提出", "kana": "ていしゅつ" },
+        { "surface": "こと", "kana": "こと" },
+        { "surface": "になっています", "kana": "になっています" }
+      ],
+      "assemble_tokens": ["５日までに","経費精算を","提出","こと","になっています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_2_3",
+      "surface": "社員は５日までに経費精算を提出ことになっています。",
+      "kana": "しゃいんはいつかまでにけいひせいさんをていしゅつことになっています。",
+      "romaji": "shain wa itsuka made ni keihi seisan o teishutsu koto ni natte imasu",
+      "meaning_id": "Sudah jadi peraturan karyawan menyerahkan perhitungan pengeluaran paling lambat tanggal 5.",
+      "words": [
+        { "surface": "社員は", "kana": "しゃいんは" },
+        { "surface": "５日までに", "kana": "いつかまでに" },
+        { "surface": "経費精算を", "kana": "けいひせいさんを" },
+        { "surface": "提出", "kana": "ていしゅつ" },
+        { "surface": "こと", "kana": "こと" },
+        { "surface": "になっています。", "kana": "になっています。" }
+      ],
+      "assemble_tokens": ["社員は","５日までに","経費精算を","提出","こと","になっています。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_3_1",
+      "surface": "電話をしてはいけないことになっています",
+      "kana": "でんわをしてはいけないことになっています",
+      "romaji": "denwa o shite wa ikenai koto ni natte imasu",
+      "meaning_id": "Sudah jadi kebiasaan tidak boleh menelepon",
+      "words": [
+        { "surface": "電話をしてはいけない", "kana": "でんわをしてはいけない" },
+        { "surface": "ことになっています", "kana": "ことになっています" }
+      ],
+      "assemble_tokens": ["電話をしてはいけない","ことになっています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_3_2",
+      "surface": "電車の中で電話をしてはいけないことになっています",
+      "kana": "でんしゃのなかででんわをしてはいけないことになっています",
+      "romaji": "densha no naka de denwa o shite wa ikenai koto ni natte imasu",
+      "meaning_id": "Sudah jadi kebiasaan tidak boleh menelepon di dalam kereta",
+      "words": [
+        { "surface": "電車の中で", "kana": "でんしゃのなかで" },
+        { "surface": "電話をしてはいけない", "kana": "でんわをしてはいけない" },
+        { "surface": "ことになっています", "kana": "ことになっています" }
+      ],
+      "assemble_tokens": ["電車の中で","電話をしてはいけない","ことになっています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_3_3",
+      "surface": "日本では、電車の中で電話をしてはいけないことになっています。",
+      "kana": "にほんでは、でんしゃのなかででんわをしてはいけないことになっています。",
+      "romaji": "nihon dewa, densha no naka de denwa o shite wa ikenai koto ni natte imasu.",
+      "meaning_id": "Di Jepang, sudah jadi kebiasaan tidak boleh menelepon di dalam kereta.",
+      "words": [
+        { "surface": "日本では、", "kana": "にほんでは、" },
+        { "surface": "電車の中で", "kana": "でんしゃのなかで" },
+        { "surface": "電話をしてはいけない", "kana": "でんわをしてはいけない" },
+        { "surface": "ことになっています。", "kana": "ことになっています。" }
+      ],
+      "assemble_tokens": ["日本では、","電車の中で","電話をしてはいけない","ことになっています。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_4_1",
+      "surface": "室内で行うことになっています",
+      "kana": "しつないでおこなうことになっています",
+      "romaji": "shitsunai de okonau koto ni natte imasu",
+      "meaning_id": "Sudah jadi kebiasaan diadakan di dalam ruangan",
+      "words": [
+        { "surface": "室内で", "kana": "しつないで" },
+        { "surface": "行う", "kana": "おこなう" },
+        { "surface": "こと", "kana": "こと" },
+        { "surface": "になっています", "kana": "になっています" }
+      ],
+      "assemble_tokens": ["室内で","行う","こと","になっています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_4_2",
+      "surface": "イベントは室内で行うことになっています",
+      "kana": "イベントはしつないでおこなうことになっています",
+      "romaji": "ibento wa shitsunai de okonau koto ni natte imasu",
+      "meaning_id": "Sudah jadi kebiasaan Event diadakan di dalam ruangan",
+      "words": [
+        { "surface": "イベントは", "kana": "イベントは" },
+        { "surface": "室内で", "kana": "しつないで" },
+        { "surface": "行う", "kana": "おこなう" },
+        { "surface": "こと", "kana": "こと" },
+        { "surface": "になっています", "kana": "になっています" }
+      ],
+      "assemble_tokens": ["イベントは","室内で","行う","こと","になっています"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_4_3",
+      "surface": "雨天の場合はイベントは室内で行うことになっています。",
+      "kana": "うてんのばあいはイベントはしつないでおこなうことになっています。",
+      "romaji": "uten no baai wa ibento wa shitsunai de okonau koto ni natte imasu.",
+      "meaning_id": "Jika (dalam hal) hari hujan, sudah jadi kebiasaan Event diadakan di dalam ruangan.",
+      "words": [
+        { "surface": "雨天の場合は", "kana": "うてんのばあいは" },
+        { "surface": "イベントは", "kana": "イベントは" },
+        { "surface": "室内で", "kana": "しつないで" },
+        { "surface": "行う", "kana": "おこなう" },
+        { "surface": "こと", "kana": "こと" },
+        { "surface": "になっています。", "kana": "になっています。" }
+      ],
+      "assemble_tokens": ["雨天の場合は","イベントは","室内で","行う","こと","になっています。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_5_1",
+      "surface": "一方通行だったことになっていました",
+      "kana": "いっぽうつうこうだったことになっていました",
+      "romaji": "ippou tsuukou datta koto ni natte imashita",
+      "meaning_id": "Sudah jadi peraturan (saat itu) jalanan 1 arah",
+      "words": [
+        { "surface": "一方通行", "kana": "いっぽうつうこう" },
+        { "surface": "だった", "kana": "だった" },
+        { "surface": "ことになっていました", "kana": "ことになっていました" }
+      ],
+      "assemble_tokens": ["一方通行","だった","ことになっていました"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_5_2",
+      "surface": "この道は一方通行だったことになっていました",
+      "kana": "このみちはいっぽうつうこうだったことになっていました",
+      "romaji": "kono michi wa ippou tsuukou datta koto ni natte imashita",
+      "meaning_id": "Jalan ini sudah jadi peraturan (saat itu) jalanan 1 arah",
+      "words": [
+        { "surface": "この道は", "kana": "このみちは" },
+        { "surface": "一方通行", "kana": "いっぽうつうこう" },
+        { "surface": "だった", "kana": "だった" },
+        { "surface": "ことになっていました", "kana": "ことになっていました" }
+      ],
+      "assemble_tokens": ["この道は","一方通行","だった","ことになっていました"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_6_5_3",
+      "surface": "昔はこの道は一方通行だったことになっていました。",
+      "kana": "むかしはこのみちはいっぽうつうこうだったことになっていました。",
+      "romaji": "mukashi wa kono michi wa ippou tsuukou datta koto ni natte imashita.",
+      "meaning_id": "Dulu, jalan ini sudah jadi peraturan (saat itu) jalanan 1 arah.",
+      "words": [
+        { "surface": "昔は", "kana": "むかしは" },
+        { "surface": "この道は", "kana": "このみちは" },
+        { "surface": "一方通行", "kana": "いっぽうつうこう" },
+        { "surface": "だった", "kana": "だった" },
+        { "surface": "ことになっていました。", "kana": "ことになっていました。" }
+      ],
+      "assemble_tokens": ["昔は","この道は","一方通行","だった","ことになっていました。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_1_1_a",
+      "surface": "雨が降っているようです",
+      "kana": "あめがふっているようです",
+      "romaji": "ame ga futte iru you desu",
+      "meaning_id": "Rupanya/Sepertinya sedang turun hujan",
+      "words": [
+        { "surface": "雨が", "kana": "あめが" },
+        { "surface": "降っている", "kana": "ふっている" },
+        { "surface": "ようです", "kana": "ようです" }
+      ],
+      "assemble_tokens": ["雨が","降っている","ようです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_1_1_b",
+      "surface": "雨が降っているみたいです",
+      "kana": "あめがふっているみたいです",
+      "romaji": "ame ga futte iru mitai desu",
+      "meaning_id": "Rupanya/Sepertinya sedang turun hujan",
+      "words": [
+        { "surface": "雨が", "kana": "あめが" },
+        { "surface": "降っている", "kana": "ふっている" },
+        { "surface": "みたいです", "kana": "みたいです" }
+      ],
+      "assemble_tokens": ["雨が","降っている","みたいです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_1_2_a",
+      "surface": "外は雨が降っているようです。",
+      "kana": "そとはあめがふっているようです。",
+      "romaji": "soto wa ame ga futte iru you desu.",
+      "meaning_id": "Di luar rupanya/sepertinya sedang turun hujan.",
+      "words": [
+        { "surface": "外は", "kana": "そとは" },
+        { "surface": "雨が", "kana": "あめが" },
+        { "surface": "降っている", "kana": "ふっている" },
+        { "surface": "ようです。", "kana": "ようです。" }
+      ],
+      "assemble_tokens": ["外は","雨が","降っている","ようです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_1_2_b",
+      "surface": "外は雨が降っているみたいです。",
+      "kana": "そとはあめがふっているみたいです。",
+      "romaji": "soto wa ame ga futte iru mitai desu.",
+      "meaning_id": "Di luar rupanya/sepertinya sedang turun hujan.",
+      "words": [
+        { "surface": "外は", "kana": "そとは" },
+        { "surface": "雨が", "kana": "あめが" },
+        { "surface": "降っている", "kana": "ふっている" },
+        { "surface": "みたいです。", "kana": "みたいです。" }
+      ],
+      "assemble_tokens": ["外は","雨が","降っている","みたいです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_2_1_a",
+      "surface": "まだ会議中のようです",
+      "kana": "まだかいぎちゅうのようです",
+      "romaji": "mada kaigichuu no you desu",
+      "meaning_id": "Sepertinya masih sedang rapat",
+      "words": [
+        { "surface": "まだ", "kana": "まだ" },
+        { "surface": "会議中", "kana": "かいぎちゅう" },
+        { "surface": "のようです", "kana": "のようです" }
+      ],
+      "assemble_tokens": ["まだ","会議中","のようです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_2_1_b",
+      "surface": "まだ会議中みたいです",
+      "kana": "まだかいぎちゅうみたいです",
+      "romaji": "mada kaigichuu mitai desu",
+      "meaning_id": "Sepertinya masih sedang rapat",
+      "words": [
+        { "surface": "まだ", "kana": "まだ" },
+        { "surface": "会議中", "kana": "かいぎちゅう" },
+        { "surface": "みたいです", "kana": "みたいです" }
+      ],
+      "assemble_tokens": ["まだ","会議中","みたいです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_2_2_a",
+      "surface": "部長はまだ会議中のようです。",
+      "kana": "ぶちょうはまだかいぎちゅうのようです。",
+      "romaji": "buchou wa mada kaigichuu no you desu.",
+      "meaning_id": "Manager sepertinya masih sedang rapat.",
+      "words": [
+        { "surface": "部長は", "kana": "ぶちょうは" },
+        { "surface": "まだ", "kana": "まだ" },
+        { "surface": "会議中", "kana": "かいぎちゅう" },
+        { "surface": "のようです。", "kana": "のようです。" }
+      ],
+      "assemble_tokens": ["部長は","まだ","会議中","のようです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_2_2_b",
+      "surface": "部長はまだ会議中みたいです。",
+      "kana": "ぶちょうはまだかいぎちゅうみたいです。",
+      "romaji": "buchou wa mada kaigichuu mitai desu.",
+      "meaning_id": "Manager sepertinya masih sedang rapat.",
+      "words": [
+        { "surface": "部長は", "kana": "ぶちょうは" },
+        { "surface": "まだ", "kana": "まだ" },
+        { "surface": "会議中", "kana": "かいぎちゅう" },
+        { "surface": "みたいです。", "kana": "みたいです。" }
+      ],
+      "assemble_tokens": ["部長は","まだ","会議中","みたいです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_3_1_a",
+      "surface": "彼は風邪を引いたようです。",
+      "kana": "かれはかぜをひいたようです。",
+      "romaji": "kare wa kaze o hiita you desu",
+      "meaning_id": "Dia rupanya sudah terserang flu.",
+      "words": [
+        { "surface": "彼は", "kana": "かれは" },
+        { "surface": "風邪を", "kana": "かぜを" },
+        { "surface": "引いた", "kana": "ひいた" },
+        { "surface": "ようです。", "kana": "ようです。" }
+      ],
+      "assemble_tokens": ["彼は","風邪を","引いた","ようです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_3_1_b",
+      "surface": "彼は風邪を引いたみたいです。",
+      "kana": "かれはかぜをひいたみたいです。",
+      "romaji": "kare wa kaze o hiita mitai desu.",
+      "meaning_id": "Dia rupanya sudah terserang flu.",
+      "words": [
+        { "surface": "彼は", "kana": "かれは" },
+        { "surface": "風邪を", "kana": "かぜを" },
+        { "surface": "引いた", "kana": "ひいた" },
+        { "surface": "みたいです。", "kana": "みたいです。" }
+      ],
+      "assemble_tokens": ["彼は","風邪を","引いた","みたいです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_4_1_a",
+      "surface": "少し辛いようです",
+      "kana": "すこしからいようです",
+      "romaji": "sukoshi karai you desu",
+      "meaning_id": "Rupanya/Sepertinya sedikit pedas",
+      "words": [
+        { "surface": "少し", "kana": "すこし" },
+        { "surface": "辛い", "kana": "からい" },
+        { "surface": "ようです", "kana": "ようです" }
+      ],
+      "assemble_tokens": ["少し","辛い","ようです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_4_1_b",
+      "surface": "少し辛いみたいです",
+      "kana": "すこしからいみたいです",
+      "romaji": "sukoshi karai mitai desu",
+      "meaning_id": "Rupanya/Sepertinya sedikit pedas",
+      "words": [
+        { "surface": "少し", "kana": "すこし" },
+        { "surface": "辛い", "kana": "からい" },
+        { "surface": "みたいです", "kana": "みたいです" }
+      ],
+      "assemble_tokens": ["少し","辛い","みたいです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_4_2",
+      "surface": "この料理は少し辛いようです。",
+      "kana": "このりょうりはすこしからいようです。",
+      "romaji": "kono ryouri wa sukoshi karai you desu.",
+      "meaning_id": "Masakan ini rupanya/sepertinya sedikit pedas.",
+      "words": [
+        { "surface": "この料理は", "kana": "このりょうりは" },
+        { "surface": "少し", "kana": "すこし" },
+        { "surface": "辛い", "kana": "からい" },
+        { "surface": "ようです。", "kana": "ようです。" }
+      ],
+      "assemble_tokens": ["この料理は","少し","辛い","ようです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_5_1_a",
+      "surface": "思ったより難しいようです",
+      "kana": "おもったよりむずかしいようです",
+      "romaji": "omotta yori muzukashii you desu",
+      "meaning_id": "Rupanya/Sepertinya lebih susah dari yang saya duga",
+      "words": [
+        { "surface": "思ったより", "kana": "おもったより" },
+        { "surface": "難しい", "kana": "むずかしい" },
+        { "surface": "ようです", "kana": "ようです" }
+      ],
+      "assemble_tokens": ["思ったより","難しい","ようです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_5_1_b",
+      "surface": "思ったより難しいみたいです",
+      "kana": "おもったよりむずかしいみたいです",
+      "romaji": "omotta yori muzukashii mitai desu",
+      "meaning_id": "Rupanya/Sepertinya lebih susah dari yang saya duga",
+      "words": [
+        { "surface": "思ったより", "kana": "おもったより" },
+        { "surface": "難しい", "kana": "むずかしい" },
+        { "surface": "みたいです", "kana": "みたいです" }
+      ],
+      "assemble_tokens": ["思ったより","難しい","みたいです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_5_2_a",
+      "surface": "この問題は思ったより難しいようです。",
+      "kana": "このもんだいはおもったよりむずかしいようです。",
+      "romaji": "kono mondai wa omotta yori muzukashii you desu.",
+      "meaning_id": "Soal ini rupanya/sepertinya lebih susah dari yang saya duga.",
+      "words": [
+        { "surface": "この問題は", "kana": "このもんだいは" },
+        { "surface": "思ったより", "kana": "おもったより" },
+        { "surface": "難しい", "kana": "むずかしい" },
+        { "surface": "ようです。", "kana": "ようです。" }
+      ],
+      "assemble_tokens": ["この問題は","思ったより","難しい","ようです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_7_5_2_b",
+      "surface": "この問題は思ったより難しいみたいです。",
+      "kana": "このもんだいはおもったよりむずかしいみたいです。",
+      "romaji": "kono mondai wa omotta yori muzukashii mitai desu.",
+      "meaning_id": "Soal ini rupanya/sepertinya lebih susah dari yang saya duga.",
+      "words": [
+        { "surface": "この問題は", "kana": "このもんだいは" },
+        { "surface": "思ったより", "kana": "おもったより" },
+        { "surface": "難しい", "kana": "むずかしい" },
+        { "surface": "みたいです。", "kana": "みたいです。" }
+      ],
+      "assemble_tokens": ["この問題は","思ったより","難しい","みたいです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_1_1",
+      "surface": "とてもおいしそうです",
+      "kana": "とてもおいしそうです",
+      "romaji": "totemo oishisou desu",
+      "meaning_id": "Kelihatannya sangat enak",
+      "words": [
+        { "surface": "とても", "kana": "とても" },
+        { "surface": "おいしそうです", "kana": "おいしそうです" }
+      ],
+      "assemble_tokens": ["とても","おいしそうです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_1_2",
+      "surface": "このケーキはとてもおいしそうです。",
+      "kana": "このケーキはとてもおいしそうです。",
+      "romaji": "kono kēki wa totemo oishisou desu.",
+      "meaning_id": "Kue ini kelihatannya sangat enak.",
+      "words": [
+        { "surface": "このケーキは", "kana": "このケーキは" },
+        { "surface": "とても", "kana": "とても" },
+        { "surface": "おいしそうです。", "kana": "おいしそうです。" }
+      ],
+      "assemble_tokens": ["このケーキは","とても","おいしそうです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_2_1",
+      "surface": "雨が降りそうです",
+      "kana": "あめがふりそうです",
+      "romaji": "ame ga furisou desu",
+      "meaning_id": "Kelihatannya mau turun hujan",
+      "words": [
+        { "surface": "雨が", "kana": "あめが" },
+        { "surface": "降りそうです", "kana": "ふりそうです" }
+      ],
+      "assemble_tokens": ["雨が","降りそうです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_2_2",
+      "surface": "暗くなってきました。雨が降りそうです。",
+      "kana": "くらくなってきました。あめがふりそうです。",
+      "romaji": "kuraku natte kimashita. ame ga furisou desu.",
+      "meaning_id": "Sudah mulai gelap. Kelihatannya mau turun hujan.",
+      "words": [
+        { "surface": "暗くなって", "kana": "くらくなって" },
+        { "surface": "きました。", "kana": "きました。" },
+        { "surface": "雨が", "kana": "あめが" },
+        { "surface": "降りそうです。", "kana": "ふりそうです。" }
+      ],
+      "assemble_tokens": ["暗くなって","きました。","雨が","降りそうです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_3_1",
+      "surface": "スポーツが得意そうです",
+      "kana": "スポーツがとくいそうです",
+      "romaji": "supōtsu ga tokui sou desu",
+      "meaning_id": "Kelihatannya mahir sport",
+      "words": [
+        { "surface": "スポーツが", "kana": "スポーツが" },
+        { "surface": "得意", "kana": "とくい" },
+        { "surface": "そうです", "kana": "そうです" }
+      ],
+      "assemble_tokens": ["スポーツが","得意","そうです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_3_2",
+      "surface": "高くてスポーツが得意そうです",
+      "kana": "たかくてスポーツがとくいそうです",
+      "romaji": "takakute supōtsu ga tokui sou desu",
+      "meaning_id": "Tinggi dan kelihatannya mahir sport",
+      "words": [
+        { "surface": "高くて", "kana": "たかくて" },
+        { "surface": "スポーツが", "kana": "スポーツが" },
+        { "surface": "得意", "kana": "とくい" },
+        { "surface": "そうです", "kana": "そうです" }
+      ],
+      "assemble_tokens": ["高くて","スポーツが","得意","そうです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_3_3",
+      "surface": "背が高くてスポーツが得意そうです",
+      "kana": "せがたかくてスポーツがとくいそうです",
+      "romaji": "se ga takakute supōtsu ga tokui sou desu",
+      "meaning_id": "Perawakannya tinggi dan kelihatannya mahir sport",
+      "words": [
+        { "surface": "背が", "kana": "せが" },
+        { "surface": "高くて", "kana": "たかくて" },
+        { "surface": "スポーツが", "kana": "スポーツが" },
+        { "surface": "得意", "kana": "とくい" },
+        { "surface": "そうです", "kana": "そうです" }
+      ],
+      "assemble_tokens": ["背が","高くて","スポーツが","得意","そうです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_3_4",
+      "surface": "あの人は背が高くてスポーツが得意そうです。",
+      "kana": "あのひとはせがたかくてスポーツがとくいそうです。",
+      "romaji": "ano hito wa se ga takakute supōtsu ga tokui sou desu.",
+      "meaning_id": "Orang itu perawakannya tinggi dan kelihatannya mahir sport.",
+      "words": [
+        { "surface": "あの人は", "kana": "あのひとは" },
+        { "surface": "背が", "kana": "せが" },
+        { "surface": "高くて", "kana": "たかくて" },
+        { "surface": "スポーツが", "kana": "スポーツが" },
+        { "surface": "得意", "kana": "とくい" },
+        { "surface": "そうです。", "kana": "そうです。" }
+      ],
+      "assemble_tokens": ["あの人は","背が","高くて","スポーツが","得意","そうです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_4_1",
+      "surface": "忙しくて疲れているそうです",
+      "kana": "いそがしくてつかれているそうです",
+      "romaji": "isogashikute tsukarete iru sou desu",
+      "meaning_id": "Sibuk dan kelihatannya sedang/sudah lelah",
+      "words": [
+        { "surface": "忙しくて", "kana": "いそがしくて" },
+        { "surface": "疲れている", "kana": "つかれている" },
+        { "surface": "そうです", "kana": "そうです" }
+      ],
+      "assemble_tokens": ["忙しくて","疲れている","そうです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_4_2",
+      "surface": "毎日忙しくて疲れているそうです",
+      "kana": "まいにちいそがしくてつかれているそうです",
+      "romaji": "mainichi isogashikute tsukarete iru sou desu",
+      "meaning_id": "Setiap hari sibuk dan kelihatannya sedang/sudah lelah",
+      "words": [
+        { "surface": "毎日", "kana": "毎日" },
+        { "surface": "忙しくて", "kana": "忙しくて" },
+        { "surface": "疲れている", "kana": "つかれている" },
+        { "surface": "そうです", "kana": "そうです" }
+      ],
+      "assemble_tokens": ["毎日","忙しくて","疲れている","そうです"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_4_3",
+      "surface": "彼女は毎日忙しくて疲れているそうです。",
+      "kana": "かのじょはまいにちいそがしくてつかれているそうです。",
+      "romaji": "kanojyo wa mainichi isogashikute tsukarete iru sou desu.",
+      "meaning_id": "Dia setiap hari sibuk dan kelihatannya sedang/sudah lelah.",
+      "words": [
+        { "surface": "彼女は", "kana": "かのじょは" },
+        { "surface": "毎日", "kana": "毎日" },
+        { "surface": "忙しくて", "kana": "忙しくて" },
+        { "surface": "疲れている", "kana": "つかれている" },
+        { "surface": "そうです。", "kana": "そうです。" }
+      ],
+      "assemble_tokens": ["彼女は","毎日","忙しくて","疲れている","そうです。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_5_1",
+      "surface": "答えが見つかりそうにない",
+      "kana": "こたえがみつかりそうにない",
+      "romaji": "kotae ga mitsukari sou ni nai",
+      "meaning_id": "Jawabannya kelihatannya tidak ditemukan",
+      "words": [
+        { "surface": "答えが", "kana": "こたえが" },
+        { "surface": "見つかり", "kana": "みつかり" },
+        { "surface": "そうにない", "kana": "そうにない" }
+      ],
+      "assemble_tokens": ["答えが","見つかり","そうにない"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_5_2",
+      "surface": "複雑で答えがみつかりそうにない",
+      "kana": "ふくざつでこたえがみつかりそうにない",
+      "romaji": "fukuzatsu de kotae ga mitsukari sou ni nai",
+      "meaning_id": "Rumit dan jawabannya kelihatannya tidak ditemukan",
+      "words": [
+        { "surface": "複雑で", "kana": "ふくざつで" },
+        { "surface": "答えが", "kana": "こたえが" },
+        { "surface": "みつかり", "kana": "みつかり" },
+        { "surface": "そうにない", "kana": "そうにない" }
+      ],
+      "assemble_tokens": ["複雑で","答えが","みつかり","そうにない"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_8_5_3",
+      "surface": "この問題は複雑で答えがみつかりそうにない。",
+      "kana": "このもんだいはふくざつでこたえがみつかりそうにない。",
+      "romaji": "kono mondai wa fukuzatsu de kotae ga mitsukari sou ni nai.",
+      "meaning_id": "Soal ini rumit dan jawabannya kelihatannya tidak ditemukan.",
+      "words": [
+        { "surface": "この問題は", "kana": "このもんだいは" },
+        { "surface": "複雑で", "kana": "ふくざつで" },
+        { "surface": "答えが", "kana": "こたえが" },
+        { "surface": "みつかり", "kana": "みつかり" },
+        { "surface": "そうにない。", "kana": "そうにない。" }
+      ],
+      "assemble_tokens": ["この問題は","複雑で","答えが","みつかり","そうにない。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_9_1_1",
+      "surface": "雨が降るそうだ",
+      "kana": "あめがふるそうだ",
+      "romaji": "ame ga furu sou da",
+      "meaning_id": "Katanya turun hujan",
+      "words": [
+        { "surface": "雨が", "kana": "あめが" },
+        { "surface": "降る", "kana": "ふる" },
+        { "surface": "そうだ", "kana": "そうだ" }
+      ],
+      "assemble_tokens": ["雨が","降る","そうだ"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_9_1_2",
+      "surface": "明日は雨が降るそうだ。",
+      "kana": "あしたはあめがふるそうだ。",
+      "romaji": "ashita wa ame ga furu sou da.",
+      "meaning_id": "Besok, katanya turun hujan.",
+      "words": [
+        { "surface": "明日は", "kana": "あしたは" },
+        { "surface": "雨が", "kana": "あめが" },
+        { "surface": "降る", "kana": "ふる" },
+        { "surface": "そうだ。", "kana": "そうだ。" }
+      ],
+      "assemble_tokens": ["明日は","雨が","降る","そうだ。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_9_2_1",
+      "surface": "とてもおいしいそうだ",
+      "kana": "とてもおいしいそうだ",
+      "romaji": "totemo oishii sou da",
+      "meaning_id": "Katanya sangat enak",
+      "words": [
+        { "surface": "とても", "kana": "とても" },
+        { "surface": "おいしい", "kana": "おいしい" },
+        { "surface": "そうだ", "kana": "そうだ" }
+      ],
+      "assemble_tokens": ["とても","おいしい","そうだ"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_9_2_2",
+      "surface": "あのレストランはとてもおいしいそうだ。",
+      "kana": "あのレストランはとてもおいしいそうだ。",
+      "romaji": "ano resutoran wa totemo oishii sou da.",
+      "meaning_id": "Restoran itu katanya sangat enak.",
+      "words": [
+        { "surface": "あのレストランは", "kana": "あのレストランは" },
+        { "surface": "とても", "kana": "とても" },
+        { "surface": "おいしい", "kana": "おいしい" },
+        { "surface": "そうだ。", "kana": "そうだ。" }
+      ],
+      "assemble_tokens": ["あのレストランは","とても","おいしい","そうだ。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_9_3_1",
+      "surface": "休んでいるそうだ",
+      "kana": "やすんでいるそうだ",
+      "romaji": "yasunde iru sou da",
+      "meaning_id": "Katanya sedang istirahat",
+      "words": [
+        { "surface": "休んでいる", "kana": "やすんでいる" },
+        { "surface": "そうだ", "kana": "そうだ" }
+      ],
+      "assemble_tokens": ["休んでいる","そうだ"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_9_3_2",
+      "surface": "会社を休んでいるそうだ",
+      "kana": "かいしゃをやすんでいるそうだ",
+      "romaji": "kaisha o yasunde iru sou da",
+      "meaning_id": "Katanya sedang tidak masuk kantor",
+      "words": [
+        { "surface": "会社を", "kana": "かいしゃを" },
+        { "surface": "休んでいる", "kana": "やすんでいる" },
+        { "surface": "そうだ", "kana": "そうだ" }
+      ],
+      "assemble_tokens": ["会社を","休んでいる","そうだ"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_9_3_3",
+      "surface": "病気で会社を休んでいるそうだ",
+      "kana": "びょうきでかいしゃをやすんでいるそうだ",
+      "romaji": "byouki de kaisha o yasunde iru sou da",
+      "meaning_id": "Katanya karena sakit sedang tidak masuk kantor",
+      "words": [
+        { "surface": "病気で", "kana": "びょうきで" },
+        { "surface": "会社を", "kana": "かいしゃを" },
+        { "surface": "休んでいる", "kana": "やすんでいる" },
+        { "surface": "そうだ", "kana": "そうだ" }
+      ],
+      "assemble_tokens": ["病気で","会社を","休んでいる","そうだ"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_9_3_4",
+      "surface": "山田さんは病気で会社を休んでいるそうだ。",
+      "kana": "やまださんはびょうきでかいしゃをやすんでいるそうだ。",
+      "romaji": "yamada san wa byouki de kaisha o yasunde iru sou da.",
+      "meaning_id": "Katanya Yamada san karena sakit sedang tidak masuk kantor.",
+      "words": [
+        { "surface": "山田さんは", "kana": "やまださんは" },
+        { "surface": "病気で", "kana": "びょうきで" },
+        { "surface": "会社を", "kana": "かいしゃを" },
+        { "surface": "休んでいる", "kana": "やすんでいる" },
+        { "surface": "そうだ。", "kana": "そうだ。" }
+      ],
+      "assemble_tokens": ["山田さんは","病気で","会社を","休んでいる","そうだ。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_9_4_1",
+      "surface": "とても感動的だそうだ",
+      "kana": "とてもかんどうてきだそうだ",
+      "romaji": "totemo kandou teki da sou da",
+      "meaning_id": "Katanya sangat mengharukan",
+      "words": [
+        { "surface": "とても", "kana": "とても" },
+        { "surface": "感動的", "kana": "かんどうてき" },
+        { "surface": "だそうだ", "kana": "だそうだ" }
+      ],
+      "assemble_tokens": ["とても","感動的","だそうだ"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_9_4_2",
+      "surface": "あの映画はとても感動的だそうだ。",
+      "kana": "あのえいがはとてもかんどうてきだそうだ。",
+      "romaji": "ano eiga wa totemo kandou teki da sou da.",
+      "meaning_id": "Film itu katanya sangat mengharukan.",
+      "words": [
+        { "surface": "あの映画は", "kana": "あのえいがは" },
+        { "surface": "とても", "kana": "とても" },
+        { "surface": "感動的", "kana": "かんどうてき" },
+        { "surface": "だそうだ。", "kana": "だそうだ。" }
+      ],
+      "assemble_tokens": ["あの映画は","とても","感動的","だそうだ。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_9_5_1",
+      "surface": "この仕事は大変だそうだ。",
+      "kana": "このしごとはたいへんだそうだ。",
+      "romaji": "kono shigoto wa taihen da sou da.",
+      "meaning_id": "Katanya pekerjaan ini berat/sulit.",
+      "words": [
+        { "surface": "この仕事は", "kana": "このしごとは" },
+        { "surface": "大変", "kana": "たいへん" },
+        { "surface": "だそうだ。", "kana": "だそうだ。" }
+      ],
+      "assemble_tokens": ["この仕事は","大変","だそうだ。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_1_1",
+      "surface": "来月結婚するらしい",
+      "kana": "らいげつけっこんするらしい",
+      "romaji": "raigetsu kekkon suru rashii",
+      "meaning_id": "Konon katanya menikah bulan depan",
+      "words": [
+        { "surface": "来月", "kana": "来月" },
+        { "surface": "結婚する", "kana": "結婚する" },
+        { "surface": "らしい", "kana": "らしい" }
+      ],
+      "assemble_tokens": ["来月","結婚する","らしい"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_1_2",
+      "surface": "田中さんは来月結婚するらしい。",
+      "kana": "たなかさんはらいげつけっこんするらしい。",
+      "romaji": "tanaka san wa raigetsu kekkon suru rashii.",
+      "meaning_id": "Tanaka san konon katanya menikah bulan depan.",
+      "words": [
+        { "surface": "田中さんは", "kana": "たなかさんは" },
+        { "surface": "来月", "kana": "来月" },
+        { "surface": "結婚する", "kana": "結婚する" },
+        { "surface": "らしい。", "kana": "らしい。" }
+      ],
+      "assemble_tokens": ["田中さんは","来月","結婚する","らしい。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_2_1",
+      "surface": "試験が始まるらしい",
+      "kana": "しけんがはじまるらしい",
+      "romaji": "shiken ga hajimaru rashii",
+      "meaning_id": "Konon katanya ulangannya mulai",
+      "words": [
+        { "surface": "試験が", "kana": "しけんが" },
+        { "surface": "始まる", "kana": "はじまる" },
+        { "surface": "らしい", "kana": "らしい" }
+      ],
+      "assemble_tokens": ["試験が","始まる","らしい"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_2_2",
+      "surface": "来週から試験が始まるらしい。",
+      "kana": "らいしゅうからしけんがはじまるらしい。",
+      "romaji": "raishuu kara shiken ga hajimaru rashii.",
+      "meaning_id": "Konon katanya ulangannya mulai dari minggu depan.",
+      "words": [
+        { "surface": "来週から", "kana": "らいしゅうから" },
+        { "surface": "試験が", "kana": "しけんが" },
+        { "surface": "始まる", "kana": "はじまる" },
+        { "surface": "らしい。", "kana": "らしい。" }
+      ],
+      "assemble_tokens": ["来週から","試験が","始まる","らしい。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_3_1",
+      "surface": "とてもおいしいらしい",
+      "kana": "とてもおいしいらしい",
+      "romaji": "totemo oishii rashii",
+      "meaning_id": "Konon katanya sangat enak",
+      "words": [
+        { "surface": "とても", "kana": "とても" },
+        { "surface": "おいしい", "kana": "おいしい" },
+        { "surface": "らしい", "kana": "らしい" }
+      ],
+      "assemble_tokens": ["とても","おいしい","らしい"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_3_2",
+      "surface": "あのレストランはとてもおいしいらしい。",
+      "kana": "あのレストランはとてもおいしいらしい。",
+      "romaji": "ano resutoran wa totemo oishii rashii.",
+      "meaning_id": "Restoran itu konon katanya sangat enak.",
+      "words": [
+        { "surface": "あのレストランは", "kana": "あのレストランは" },
+        { "surface": "とても", "kana": "とても" },
+        { "surface": "おいしい", "kana": "おいしい" },
+        { "surface": "らしい。", "kana": "らしい。" }
+      ],
+      "assemble_tokens": ["あのレストランは","とても","おいしい","らしい。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_4_1",
+      "surface": "五百年前に建てられたらしい",
+      "kana": "ごひゃくねんまえにたてられたらしい",
+      "romaji": "gohyaku nen mae ni taterareta rashii",
+      "meaning_id": "Konon katanya sudah didirikan 500 tahun lalu",
+      "words": [
+        { "surface": "五百年前に", "kana": "ごひゃくねんまえに" },
+        { "surface": "建てられたらしい", "kana": "たてられたらしい" }
+      ],
+      "assemble_tokens": ["五百年前に","建てられたらしい"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_4_2",
+      "surface": "このお寺は五百年前に建てられたらしい",
+      "kana": "このおてらはごひゃくねんまえにたてられたらしい",
+      "romaji": "kono otera wa gohyaku nen mae ni taterareta rashii",
+      "meaning_id": "Kuil ini konon katanya sudah didirikan 500 tahun lalu",
+      "words": [
+        { "surface": "このお寺は", "kana": "このおてらは" },
+        { "surface": "五百年前に", "kana": "ごひゃくねんまえに" },
+        { "surface": "建てられたらしい", "kana": "たてられたらしい" }
+      ],
+      "assemble_tokens": ["このお寺は","五百年前に","建てられたらしい"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_5_1",
+      "surface": "住んでいたらしい",
+      "kana": "すんでいたらしい",
+      "romaji": "sunde ita rashii",
+      "meaning_id": "Konon katanya (saat itu) sudah tinggal",
+      "words": [
+        { "surface": "住んでいた", "kana": "すんでいた" },
+        { "surface": "らしい", "kana": "らしい" }
+      ],
+      "assemble_tokens": ["住んでいた","らしい"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_5_2",
+      "surface": "日本に住んでいたらしい",
+      "kana": "にほんにすんでいたらしい",
+      "romaji": "nihon ni sunde ita rashii",
+      "meaning_id": "Konon katanya (saat itu) sudah tinggal di Jepang",
+      "words": [
+        { "surface": "日本に", "kana": "にほんに" },
+        { "surface": "住んでいた", "kana": "すんでいた" },
+        { "surface": "らしい", "kana": "らしい" }
+      ],
+      "assemble_tokens": ["日本に","住んでいた","らしい"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_5_3",
+      "surface": "十年間日本に住んでいたらしい",
+      "kana": "じゅうねんかんにほんにすんでいたらしい",
+      "romaji": "jyuu nen kan nihon ni sunde ita rashii",
+      "meaning_id": "Konon katanya (saat itu) sudah tinggal di Jepang selama 10 tahun",
+      "words": [
+        { "surface": "十年間", "kana": "十年間" },
+        { "surface": "日本に", "kana": "日本に" },
+        { "surface": "住んでいた", "kana": "ほんにすんでいた" },
+        { "surface": "らしい", "kana": "らしい" }
+      ],
+      "assemble_tokens": ["十年間","日本に","住んでいた","らしい"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_10_5_4",
+      "surface": "彼は十年間日本に住んでいたらしい。",
+      "kana": "かれはじゅうねんかんにほんにすんでいたらしい。",
+      "romaji": "kare wa jyuu nen kan nihon ni sunde ita rashii.",
+      "meaning_id": "Dia konon katanya sudah tinggal di Jepang selama 10 tahun.",
+      "words": [
+        { "surface": "彼は", "kana": "かれは" },
+        { "surface": "十年間", "kana": "十年間" },
+        { "surface": "日本に", "kana": "日本に" },
+        { "surface": "住んでいた", "kana": "ほんにすんでいた" },
+        { "surface": "らしい。", "kana": "らしい。" }
+      ],
+      "assemble_tokens": ["彼は","十年間","日本に","住んでいた","らしい。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_11_1_1",
+      "surface": "とても男らしい人です",
+      "kana": "とてもおとこらしいひとです",
+      "romaji": "totemo otoko rashii hito desu",
+      "meaning_id": "Sangat layak sebagai seorang laki-laki",
+      "words": [
+        { "surface": "とても", "kana": "とても" },
+        { "surface": "男", "kana": "おとこ" },
+        { "surface": "らしい", "kana": "らしい" },
+        { "surface": "人です", "kana": "ひとです" }
+      ],
+      "assemble_tokens": ["とても","男","らしい","人です"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_11_1_2",
+      "surface": "彼は責任感が強くて、とても男らしい人です。",
+      "kana": "かれはせきにんかんがつよくて、とてもおとこらしいひとです。",
+      "romaji": "kare wa sekininkan ga tsuyokute, totemo otoko rashii hito desu.",
+      "meaning_id": "Dia rasa tanggung jawabnya kuat, sangat layak sebagai seorang laki-laki.",
+      "words": [
+        { "surface": "彼は", "kana": "かれは" },
+        { "surface": "責任感が強くて、", "kana": "せきにんかんがつよくて、" },
+        { "surface": "とても", "kana": "とても" },
+        { "surface": "男", "kana": "おとこ" },
+        { "surface": "らしい", "kana": "らしい" },
+        { "surface": "人です。", "kana": "ひとです。" }
+      ],
+      "assemble_tokens": ["彼は","責任感が強くて、","とても","男","らしい","人です。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_11_2_1",
+      "surface": "子供たちは子供らしく",
+      "kana": "こどもたちはこどもらしく",
+      "romaji": "kodomo tachi wa kodomo rashiku",
+      "meaning_id": "Anak-anak layaknya anak-anak",
+      "words": [
+        { "surface": "子供たちは", "kana": "こどもたちは" },
+        { "surface": "子供", "kana": "こども" },
+        { "surface": "らしく", "kana": "らしく" }
+      ],
+      "assemble_tokens": ["子供たちは","子供","らしく"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_11_2_2",
+      "surface": "元気に外で遊んでいます",
+      "kana": "げんきにそとであそんでいます",
+      "romaji": "genki ni soto de asonde imasu",
+      "meaning_id": "Sedang bermain di luar dengan ceria",
+      "words": [
+        { "surface": "元気に", "kana": "げんきに" },
+        { "surface": "外で遊んでいます", "kana": "そとであそんでいます" }
+      ],
+      "assemble_tokens": ["元気に","外で遊んでいます"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_11_2_3",
+      "surface": "子供たちは子供らしく、元気に外で遊んでいます。",
+      "kana": "こどもたちはこどもらしく、げんきにそとであそんでいます。",
+      "romaji": "kodomo tachi wa kodomo rashiku, genki ni soto de asonde imasu.",
+      "meaning_id": "Anak-anak layaknya anak-anak, sedang bermain di luar dengan ceria.",
+      "words": [
+        { "surface": "子供たちは", "kana": "こどもたちは" },
+        { "surface": "子供", "kana": "こども" },
+        { "surface": "らしく、", "kana": "らしく、" },
+        { "surface": "元気に", "kana": "げんきに" },
+        { "surface": "外で遊んでいます。", "kana": "そとであそんでいます。" }
+      ],
+      "assemble_tokens": ["子供たちは","子供","らしく、","元気に","外で遊んでいます。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_11_3_1",
+      "surface": "春らしい温かい天気ですね",
+      "kana": "はるらしいあたたかいてんきですね",
+      "romaji": "haru rashii atatakai tenki desu ne",
+      "meaning_id": "Cuacanya hangat layaknya musim semi ya",
+      "words": [
+        { "surface": "春", "kana": "はる" },
+        { "surface": "らしい", "kana": "らしい" },
+        { "surface": "温かい天気", "kana": "あたたかいてんき" },
+        { "surface": "ですね", "kana": "ですね" }
+      ],
+      "assemble_tokens": ["春","らしい","温かい天気","ですね"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_11_3_2",
+      "surface": "今日は春らしい温かい天気ですね",
+      "kana": "きょうははるらしいあたたかいてんきですね",
+      "romaji": "kyou wa haru rashii atatakai tenki desu ne",
+      "meaning_id": "Hari ini, cuacanya hangat layaknya musim semi ya",
+      "words": [
+        { "surface": "今日は", "kana": "きょうは" },
+        { "surface": "春", "kana": "はる" },
+        { "surface": "らしい", "kana": "らしい" },
+        { "surface": "温かい天気", "kana": "あたたかいてんき" },
+        { "surface": "ですね", "kana": "ですね" }
+      ],
+      "assemble_tokens": ["今日は","春","らしい","温かい天気","ですね"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_11_4_1",
+      "surface": "この服は若者らしいデザインですね。",
+      "kana": "このふくはわかものらしいデザインですね。",
+      "romaji": "kono fuku wa wakamono rashii dezain desu ne.",
+      "meaning_id": "Baju ini desainnya layaknya/sangat anak muda ya.",
+      "words": [
+        { "surface": "この服は", "kana": "このふくは" },
+        { "surface": "若者", "kana": "わかもの" },
+        { "surface": "らしい", "kana": "らしい" },
+        { "surface": "デザインですね。", "kana": "デザインですね。" }
+      ],
+      "assemble_tokens": ["この服は","若者","らしい","デザインですね。"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_11_5_1",
+      "surface": "落ち着いた話し方をします",
+      "kana": "おちついたはなしかたをします",
+      "romaji": "ochitsuita hanashi kata o shimasu",
+      "meaning_id": "Berbicara dengan cara yang tenang",
+      "words": [
+        { "surface": "落ち着いた", "kana": "おちついた" },
+        { "surface": "話し方を", "kana": "はなしかたを" },
+        { "surface": "します", "kana": "します" }
+      ],
+      "assemble_tokens": ["落ち着いた","話し方を","します"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_11_5_2",
+      "surface": "医者らしい落ち着いた話し方をします",
+      "kana": "いしゃらしいおちついたはなしかたをします",
+      "romaji": "isha rashii ochitsuita hanashi kata o shimasu",
+      "meaning_id": "Berbicara dengan cara yang tenang layaknya seorang dokter",
+      "words": [
+        { "surface": "医者らしい", "kana": "いしゃらしい" },
+        { "surface": "落ち着いた", "kana": "おちついた" },
+        { "surface": "話し方を", "kana": "はなしかたを" },
+        { "surface": "します", "kana": "します" }
+      ],
+      "assemble_tokens": ["医者らしい","落ち着いた","話し方を","します"],
+      "audio": "",
+      "voice": "female"
+    },
+    {
+      "id": "k3s_11_5_3",
+      "surface": "彼は医者らしい落ち着いた話し方をします。",
+      "kana": "かれはいしゃらしいおちついたはなしかたをします。",
+      "romaji": "kare wa isha rashii ochitsuita hanashi kata o shimasu.",
+      "meaning_id": "Dia berbicara dengan cara yang tenang layaknya seorang dokter.",
+      "words": [
+        { "surface": "彼は", "kana": "かれは" },
+        { "surface": "医者らしい", "kana": "いしゃらしい" },
+        { "surface": "落ち着いた", "kana": "おちついた" },
+        { "surface": "話し方を", "kana": "はなしかたを" },
+        { "surface": "します。", "kana": "します。" }
+      ],
+      "assemble_tokens": ["彼は","医者らしい","落ち着いた","話し方を","します。"],
+      "audio": "",
+      "voice": "female"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "k3_l1",
+      "title": "Keadaan Sedang Berlangsung (～ている)",
+      "exercises": [
+        { "type": "choose", "ref": "k3v_hajimeru" },
+        { "type": "assemble", "ref": "k3s_1_1_1" },
+        { "type": "assemble", "ref": "k3s_1_1_2" },
+        { "type": "choose", "ref": "k3s_1_1_2" },
+        { "type": "choose", "ref": "k3v_furimasu" },
+        { "type": "assemble", "ref": "k3s_1_2_1" },
+        { "type": "assemble", "ref": "k3s_1_2_2" },
+        { "type": "assemble", "ref": "k3s_1_2_3" },
+        { "type": "choose", "ref": "k3s_1_2_3" },
+        { "type": "choose", "ref": "k3v_noru" },
+        { "type": "assemble", "ref": "k3s_1_3_1" },
+        { "type": "assemble", "ref": "k3s_1_3_2" },
+        { "type": "assemble", "ref": "k3s_1_3_3" },
+        { "type": "choose", "ref": "k3s_1_3_3" },
+        { "type": "choose", "ref": "k3v_tai_ou_suru" },
+        { "type": "assemble", "ref": "k3s_1_4_1" },
+        { "type": "assemble", "ref": "k3s_1_4_2" },
+        { "type": "choose", "ref": "k3s_1_4_2" },
+        { "type": "choose", "ref": "k3v_tsuzuku" },
+        { "type": "assemble", "ref": "k3s_1_5_1" },
+        { "type": "assemble", "ref": "k3s_1_5_2" },
+        { "type": "assemble", "ref": "k3s_1_5_3" },
+        { "type": "choose", "ref": "k3s_1_5_3" }
+      ]
+    },
+    {
+      "id": "k3_l2",
+      "title": "Keadaan Sudah Dilakukan (～てある)",
+      "exercises": [
+        { "type": "choose", "ref": "k3v_okimasu" },
+        { "type": "assemble", "ref": "k3s_2_1_1" },
+        { "type": "assemble", "ref": "k3s_2_1_2" },
+        { "type": "choose", "ref": "k3s_2_1_2" },
+        { "type": "choose", "ref": "k3v_kaku" },
+        { "type": "assemble", "ref": "k3s_2_2_1" },
+        { "type": "assemble", "ref": "k3s_2_2_2" },
+        { "type": "assemble", "ref": "k3s_2_2_3" },
+        { "type": "choose", "ref": "k3s_2_2_3" },
+        { "type": "choose", "ref": "k3v_ireru" },
+        { "type": "assemble", "ref": "k3s_2_3_1" },
+        { "type": "assemble", "ref": "k3s_2_3_2" },
+        { "type": "choose", "ref": "k3v_okyaku_sama" },
+        { "type": "assemble", "ref": "k3s_2_3_3" },
+        { "type": "choose", "ref": "k3s_2_3_3" },
+        { "type": "choose", "ref": "k3v_haru" },
+        { "type": "assemble", "ref": "k3s_2_4_1" },
+        { "type": "assemble", "ref": "k3s_2_4_2" },
+        { "type": "choose", "ref": "k3s_2_4_2" },
+        { "type": "choose", "ref": "k3v_naraberu" },
+        { "type": "assemble", "ref": "k3s_2_5_1" },
+        { "type": "assemble", "ref": "k3s_2_5_2" },
+        { "type": "assemble", "ref": "k3s_2_5_3" },
+        { "type": "choose", "ref": "k3s_2_5_3" }
+      ]
+    },
+    {
+      "id": "k3_l3",
+      "title": "Keadaan Segera Dilakukan (～するところ)",
+      "exercises": [
+        { "type": "choose", "ref": "k3v_dekakeru" },
+        { "type": "assemble", "ref": "k3s_3_1_1" },
+        { "type": "choose", "ref": "k3s_3_1_1" },
+        { "type": "choose", "ref": "k3v_hajimeru" },
+        { "type": "assemble", "ref": "k3s_3_2_1" },
+        { "type": "assemble", "ref": "k3s_3_2_2" },
+        { "type": "assemble", "ref": "k3s_3_2_3" },
+        { "type": "choose", "ref": "k3s_3_2_3" },
+        { "type": "choose", "ref": "k3v_shimasu" },
+        { "type": "assemble", "ref": "k3s_3_3_1" },
+        { "type": "assemble", "ref": "k3s_3_3_2" },
+        { "type": "assemble", "ref": "k3s_3_3_3" },
+        { "type": "choose", "ref": "k3s_3_3_3" },
+        { "type": "choose", "ref": "k3v_hairu" },
+        { "type": "assemble", "ref": "k3s_3_4_1" },
+        { "type": "assemble", "ref": "k3s_3_4_2" },
+        { "type": "choose", "ref": "k3s_3_4_2" },
+        { "type": "choose", "ref": "k3v_suru" },
+        { "type": "assemble", "ref": "k3s_3_5_1" },
+        { "type": "assemble", "ref": "k3s_3_5_2" },
+        { "type": "assemble", "ref": "k3s_3_5_3" },
+        { "type": "assemble", "ref": "k3s_3_5_4" },
+        { "type": "choose", "ref": "k3s_3_5_4" }
+      ]
+    },
+    {
+      "id": "k3_l4",
+      "title": "Membiasakan diri/Berusaha (～ようにしている)",
+      "exercises": [
+        { "type": "choose", "ref": "k3v_mamoru" },
+        { "type": "assemble", "ref": "k3s_4_1_1" },
+        { "type": "assemble", "ref": "k3s_4_1_2" },
+        { "type": "choose", "ref": "k3s_4_1_2" },
+        { "type": "choose", "ref": "k3v_taberu" },
+        { "type": "assemble", "ref": "k3s_4_2_1" },
+        { "type": "assemble", "ref": "k3s_4_2_2" },
+        { "type": "choose", "ref": "k3v_kenkou" },
+        { "type": "assemble", "ref": "k3s_4_2_3" },
+        { "type": "choose", "ref": "k3s_4_2_3" },
+        { "type": "choose", "ref": "k3v_miru" },
+        { "type": "assemble", "ref": "k3s_4_3_1" },
+        { "type": "choose", "ref": "k3v_osoi" },
+        { "type": "assemble", "ref": "k3s_4_3_2" },
+        { "type": "assemble", "ref": "k3s_4_3_3" },
+        { "type": "choose", "ref": "k3s_4_3_3" },
+        { "type": "choose", "ref": "k3v_kuzusu" },
+        { "type": "assemble", "ref": "k3s_4_4_1" },
+        { "type": "choose", "ref": "k3v_neru" },
+        { "type": "assemble", "ref": "k3s_4_4_2" },
+        { "type": "assemble", "ref": "k3s_4_4_3" },
+        { "type": "choose", "ref": "k3s_4_4_3" },
+        { "type": "choose", "ref": "k3v_tsukaimasu" },
+        { "type": "assemble", "ref": "k3s_4_5_1" },
+        { "type": "choose", "ref": "k3v_hitsuyou" },
+        { "type": "choose", "ref": "k3v_kau" },
+        { "type": "assemble", "ref": "k3s_4_5_2" },
+        { "type": "assemble", "ref": "k3s_4_5_3" },
+        { "type": "choose", "ref": "k3s_4_5_3" }
+      ]
+    },
+    {
+      "id": "k3_l5",
+      "title": "Keputusan/Ketentuan (～ことになる)",
+      "exercises": [
+        { "type": "choose", "ref": "k3v_iku" },
+        { "type": "assemble", "ref": "k3s_5_1_1" },
+        { "type": "assemble", "ref": "k3s_5_1_2" },
+        { "type": "assemble", "ref": "k3s_5_1_3" },
+        { "type": "choose", "ref": "k3s_5_1_3" },
+        { "type": "choose", "ref": "k3v_hikkoshi_suru" },
+        { "type": "assemble", "ref": "k3s_5_2_1" },
+        { "type": "assemble", "ref": "k3s_5_2_2" },
+        { "type": "choose", "ref": "k3s_5_2_2" },
+        { "type": "choose", "ref": "k3v_chuushi_suru" },
+        { "type": "assemble", "ref": "k3s_5_3_1" },
+        { "type": "assemble", "ref": "k3s_5_3_2" },
+        { "type": "choose", "ref": "k3s_5_3_2" },
+        { "type": "choose", "ref": "k3v_ne_age_suru" },
+        { "type": "assemble", "ref": "k3s_5_4_1" },
+        { "type": "choose", "ref": "k3v_otoshimasu" },
+        { "type": "assemble", "ref": "k3s_5_4_2" },
+        { "type": "assemble", "ref": "k3s_5_4_3" },
+        { "type": "choose", "ref": "k3s_5_4_3" },
+        { "type": "choose", "ref": "k3v_hatsubai_suru" },
+        { "type": "assemble", "ref": "k3s_5_5_1" },
+        { "type": "assemble", "ref": "k3s_5_5_2" },
+        { "type": "choose", "ref": "k3s_5_5_2" }
+      ]
+    },
+    {
+      "id": "k3_l6",
+      "title": "Peraturan/Kebiasaan (～ことになっている)",
+      "exercises": [
+        { "type": "choose", "ref": "k3v_sanji" },
+        { "type": "assemble", "ref": "k3s_6_1_1" },
+        { "type": "assemble", "ref": "k3s_6_1_2" },
+        { "type": "assemble", "ref": "k3s_6_1_3" },
+        { "type": "choose", "ref": "k3s_6_1_3" },
+        { "type": "choose", "ref": "k3v_teishutsu" },
+        { "type": "assemble", "ref": "k3s_6_2_1" },
+        { "type": "assemble", "ref": "k3s_6_2_2" },
+        { "type": "assemble", "ref": "k3s_6_2_3" },
+        { "type": "choose", "ref": "k3s_6_2_3" },
+        { "type": "choose", "ref": "k3v_denwa_o_shimasu" },
+        { "type": "assemble", "ref": "k3s_6_3_1" },
+        { "type": "assemble", "ref": "k3s_6_3_2" },
+        { "type": "assemble", "ref": "k3s_6_3_3" },
+        { "type": "choose", "ref": "k3s_6_3_3" },
+        { "type": "choose", "ref": "k3v_okonau" },
+        { "type": "assemble", "ref": "k3s_6_4_1" },
+        { "type": "assemble", "ref": "k3s_6_4_2" },
+        { "type": "assemble", "ref": "k3s_6_4_3" },
+        { "type": "choose", "ref": "k3s_6_4_3" },
+        { "type": "choose", "ref": "k3v_ippou_tsuukou" },
+        { "type": "assemble", "ref": "k3s_6_5_1" },
+        { "type": "assemble", "ref": "k3s_6_5_2" },
+        { "type": "assemble", "ref": "k3s_6_5_3" },
+        { "type": "choose", "ref": "k3s_6_5_3" }
+      ]
+    },
+    {
+      "id": "k3_l7",
+      "title": "Rupanya/Sepertinya (～よう/～みたい)",
+      "exercises": [
+        { "type": "choose", "ref": "k3v_furu" },
+        { "type": "assemble", "ref": "k3s_7_1_1_a" },
+        { "type": "assemble", "ref": "k3s_7_1_1_b" },
+        { "type": "assemble", "ref": "k3s_7_1_2_a" },
+        { "type": "assemble", "ref": "k3s_7_1_2_b" },
+        { "type": "choose", "ref": "k3s_7_1_2_a" },
+        { "type": "choose", "ref": "k3v_kaigi_chuu" },
+        { "type": "assemble", "ref": "k3s_7_2_1_a" },
+        { "type": "assemble", "ref": "k3s_7_2_1_b" },
+        { "type": "assemble", "ref": "k3s_7_2_2_a" },
+        { "type": "assemble", "ref": "k3s_7_2_2_b" },
+        { "type": "choose", "ref": "k3s_7_2_2_a" },
+        { "type": "choose", "ref": "k3v_kaze" },
+        { "type": "assemble", "ref": "k3s_7_3_1_a" },
+        { "type": "assemble", "ref": "k3s_7_3_1_b" },
+        { "type": "choose", "ref": "k3s_7_3_1_a" },
+        { "type": "choose", "ref": "k3v_karai" },
+        { "type": "assemble", "ref": "k3s_7_4_1_a" },
+        { "type": "assemble", "ref": "k3s_7_4_1_b" },
+        { "type": "assemble", "ref": "k3s_7_4_2" },
+        { "type": "choose", "ref": "k3s_7_4_2" },
+        { "type": "choose", "ref": "k3v_muzukashii" },
+        { "type": "assemble", "ref": "k3s_7_5_1_a" },
+        { "type": "assemble", "ref": "k3s_7_5_1_b" },
+        { "type": "assemble", "ref": "k3s_7_5_2_a" },
+        { "type": "assemble", "ref": "k3s_7_5_2_b" },
+        { "type": "choose", "ref": "k3s_7_5_2_a" }
+      ]
+    },
+    {
+      "id": "k3_l8",
+      "title": "Kelihatannya (～そう)",
+      "exercises": [
+        { "type": "choose", "ref": "k3v_oishii" },
+        { "type": "assemble", "ref": "k3s_8_1_1" },
+        { "type": "assemble", "ref": "k3s_8_1_2" },
+        { "type": "choose", "ref": "k3s_8_1_2" },
+        { "type": "choose", "ref": "k3v_kurai" },
+        { "type": "choose", "ref": "k3v_furimasu" },
+        { "type": "assemble", "ref": "k3s_8_2_1" },
+        { "type": "assemble", "ref": "k3s_8_2_2" },
+        { "type": "choose", "ref": "k3s_8_2_2" },
+        { "type": "choose", "ref": "k3v_tokui" },
+        { "type": "assemble", "ref": "k3s_8_3_1" },
+        { "type": "assemble", "ref": "k3s_8_3_2" },
+        { "type": "assemble", "ref": "k3s_8_3_3" },
+        { "type": "assemble", "ref": "k3s_8_3_4" },
+        { "type": "choose", "ref": "k3s_8_3_4" },
+        { "type": "choose", "ref": "k3v_tsukareru" },
+        { "type": "choose", "ref": "k3v_isogashii" },
+        { "type": "assemble", "ref": "k3s_8_4_1" },
+        { "type": "assemble", "ref": "k3s_8_4_2" },
+        { "type": "assemble", "ref": "k3s_8_4_3" },
+        { "type": "choose", "ref": "k3s_8_4_3" },
+        { "type": "choose", "ref": "k3v_mitsukarimasu" },
+        { "type": "assemble", "ref": "k3s_8_5_1" },
+        { "type": "assemble", "ref": "k3s_8_5_2" },
+        { "type": "assemble", "ref": "k3s_8_5_3" },
+        { "type": "choose", "ref": "k3s_8_5_3" }
+      ]
+    },
+    {
+      "id": "k3_l9",
+      "title": "Katanya (～だそう)",
+      "exercises": [
+        { "type": "choose", "ref": "k3v_furimasu" },
+        { "type": "assemble", "ref": "k3s_9_1_1" },
+        { "type": "assemble", "ref": "k3s_9_1_2" },
+        { "type": "choose", "ref": "k3s_9_1_2" },
+        { "type": "choose", "ref": "k3v_oishii" },
+        { "type": "assemble", "ref": "k3s_9_2_1" },
+        { "type": "assemble", "ref": "k3s_9_2_2" },
+        { "type": "choose", "ref": "k3s_9_2_2" },
+        { "type": "choose", "ref": "k3v_yasumimasu" },
+        { "type": "assemble", "ref": "k3s_9_3_1" },
+        { "type": "assemble", "ref": "k3s_9_3_2" },
+        { "type": "assemble", "ref": "k3s_9_3_3" },
+        { "type": "assemble", "ref": "k3s_9_3_4" },
+        { "type": "choose", "ref": "k3s_9_3_4" },
+        { "type": "choose", "ref": "k3v_kandou_teki" },
+        { "type": "assemble", "ref": "k3s_9_4_1" },
+        { "type": "assemble", "ref": "k3s_9_4_2" },
+        { "type": "choose", "ref": "k3s_9_4_2" },
+        { "type": "choose", "ref": "k3v_taihen" },
+        { "type": "assemble", "ref": "k3s_9_5_1" },
+        { "type": "choose", "ref": "k3s_9_5_1" }
+      ]
+    },
+    {
+      "id": "k3_l10",
+      "title": "Konon katanya (～らしい)",
+      "exercises": [
+        { "type": "choose", "ref": "k3v_kekkon_suru" },
+        { "type": "assemble", "ref": "k3s_10_1_1" },
+        { "type": "assemble", "ref": "k3s_10_1_2" },
+        { "type": "choose", "ref": "k3s_10_1_2" },
+        { "type": "choose", "ref": "k3v_hajimaru" },
+        { "type": "assemble", "ref": "k3s_10_2_1" },
+        { "type": "assemble", "ref": "k3s_10_2_2" },
+        { "type": "choose", "ref": "k3s_10_2_2" },
+        { "type": "choose", "ref": "k3v_oishii" },
+        { "type": "assemble", "ref": "k3s_10_3_1" },
+        { "type": "assemble", "ref": "k3s_10_3_2" },
+        { "type": "choose", "ref": "k3s_10_3_2" },
+        { "type": "choose", "ref": "k3v_tateru" },
+        { "type": "assemble", "ref": "k3s_10_4_1" },
+        { "type": "assemble", "ref": "k3s_10_4_2" },
+        { "type": "choose", "ref": "k3s_10_4_2" },
+        { "type": "choose", "ref": "k3v_sumu" },
+        { "type": "assemble", "ref": "k3s_10_5_1" },
+        { "type": "assemble", "ref": "k3s_10_5_2" },
+        { "type": "assemble", "ref": "k3s_10_5_3" },
+        { "type": "assemble", "ref": "k3s_10_5_4" },
+        { "type": "choose", "ref": "k3s_10_5_4" }
+      ]
+    },
+    {
+      "id": "k3_l11",
+      "title": "Karakteristik (～らしい)",
+      "exercises": [
+        { "type": "choose", "ref": "k3v_otoko" },
+        { "type": "assemble", "ref": "k3s_11_1_1" },
+        { "type": "choose", "ref": "k3v_sekininkan" },
+        { "type": "assemble", "ref": "k3s_11_1_2" },
+        { "type": "choose", "ref": "k3s_11_1_2" },
+        { "type": "choose", "ref": "k3v_kodomo" },
+        { "type": "assemble", "ref": "k3s_11_2_1" },
+        { "type": "choose", "ref": "k3v_asobimasu" },
+        { "type": "assemble", "ref": "k3s_11_2_2" },
+        { "type": "assemble", "ref": "k3s_11_2_3" },
+        { "type": "choose", "ref": "k3s_11_2_3" },
+        { "type": "choose", "ref": "k3v_tenki" },
+        { "type": "choose", "ref": "k3v_haru_2" },
+        { "type": "assemble", "ref": "k3s_11_3_1" },
+        { "type": "assemble", "ref": "k3s_11_3_2" },
+        { "type": "choose", "ref": "k3s_11_3_2" },
+        { "type": "choose", "ref": "k3v_wakamono" },
+        { "type": "assemble", "ref": "k3s_11_4_1" },
+        { "type": "choose", "ref": "k3s_11_4_1" },
+        { "type": "choose", "ref": "k3v_hanashi_kata" },
+        { "type": "assemble", "ref": "k3s_11_5_1" },
+        { "type": "assemble", "ref": "k3s_11_5_2" },
+        { "type": "assemble", "ref": "k3s_11_5_3" },
+        { "type": "choose", "ref": "k3s_11_5_3" }
+      ]
+    }
+  ]
+}
