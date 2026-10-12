@@ -158,7 +158,6 @@ test.describe.serial("Ngobrol dengan AI: balasan sungguhan (memakai jatah harian
     await page.getByTestId("use-opener").click();
     const kalimat = await page.getByTestId("chat-input").inputValue();
     await page.getByTestId("send-button").click();
-    await expect(page.getByTestId("user-message")).toContainText(kalimat);
 
     const balasan = page.getByTestId("ai-message");
     const belumAktif = page.getByRole("alert").filter({ hasText: "belum diaktifkan di server ini" });
@@ -169,9 +168,14 @@ test.describe.serial("Ngobrol dengan AI: balasan sungguhan (memakai jatah harian
       // Pesan yang gagal dikembalikan ke kolom ketik supaya bisa dikirim lagi.
       await expect(page.getByTestId("chat-input")).toHaveValue(kalimat);
       await expect(page.getByTestId("user-message")).toHaveCount(0);
+      // Obrolan terblokir: keterangan suara yang menyuruh "tetap bisa mengetik" tidak boleh ikut tampil (kolom ketik mati).
+      await expect(page.getByText(/Kamu (tetap )?bisa mengetik jawabanmu/)).toHaveCount(0);
       test.skip(true, "Server belum punya kunci AI (QA_AI=auto): uji balasan dilewati. Kasus TC-AI-14 mencatat pesan ini.");
     }
 
+    // Pesan murid tetap ada sesudah balasan datang. Sengaja dicek di sini, bukan segera setelah kirim: pada server tanpa AI
+    // gelembung itu ditarik kembali dalam hitungan milidetik, jadi pemeriksaan lebih awal hanya adu cepat.
+    await expect(page.getByTestId("user-message")).toContainText(kalimat);
     await expect(balasan.first()).not.toHaveText("");
     await expect(balasan.first()).toContainText(/\S/);
     expect(await sisaJatah(page)).toBe(sebelum - 1);

@@ -161,6 +161,7 @@ Temuan lain dari penyusunan kit ini ada di lembar **Temuan Awal** buku Excel.
 | Uji admin gagal di awal (`setup-admin`) | Akun admin uji belum ada atau terkunci. |
 | `TC-AK-15` (penguncian) gagal karena akun sudah terkunci dari putaran sebelumnya | Tunggu 15 menit atau buka kunci (lihat 6). Uji ini sudah menangani akun yang sudah terkunci, tetapi akun harus ada. |
 | Uji AI dilewati semua | Server belum punya kunci AI (`QA_AI=auto`). Bila seharusnya aktif, periksa `OPENAI_API_KEY` di server. |
+| Saat merekam muncul "Fitur suara belum diaktifkan di server ini" | Pengenalan suara belum aktif di server (kunci AI kosong). Ini perilaku yang benar, bukan bug: harus tampil satu kali saja, mikrofon mati, mengetik tetap bisa (`TC-AI-12`). |
 | Uji flashcard `TC-FC-02` dilewati | Murid uji belum punya kartu jatuh tempo; lihat resep di bagian 6. |
 | Uji pelajaran gagal "masih terkunci untuk akun uji" | `QA_LESSON_ID` menunjuk pelajaran yang terkunci. Pakai `l1` pada akun baru. |
 | Tangkapan layar di laporan menunjukkan halaman putih | Aplikasi gagal memuat (periksa `QA_STUDENT_URL`, sertifikat HTTPS, dan Console browser). |

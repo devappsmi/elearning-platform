@@ -37,6 +37,8 @@ const RESETS_AT = "2026-10-04T00:00:00.000Z";
 const quotaOf = (used: number) => ({ limit: 20, used, remaining: 20 - used, resetsAt: RESETS_AT });
 const AUDIO_URL = "http://localhost:3001/media/audio/abc.mp3";
 const TRANSCRIPT = "はじめまして。わたしはアニです。";
+const VOICE_OFF = "Fitur suara belum diaktifkan di server ini. Kamu tetap bisa mengetik jawabanmu.";
+const NO_RECORDING = "Browser ini belum mendukung rekam suara. Kamu bisa mengetik jawabanmu.";
 
 /** Balasan AI berurutan dengan jatah yang ikut berkurang. */
 function replies(texts: string[] = ["おなまえは？", "どこからきましたか？", "そうですか。"], usedBefore = 0) {
@@ -195,7 +197,7 @@ describe("TutorPage: layar pilih", () => {
     installApi();
     renderTutor();
 
-    expect(await screen.findByText("Browser ini belum mendukung rekam suara. Kamu bisa mengetik jawabanmu.")).toBeTruthy();
+    expect(await screen.findByText(NO_RECORDING)).toBeTruthy();
   });
 
   it("alamat bukan HTTPS: catatan menjelaskan penyebabnya", async () => {
@@ -790,16 +792,54 @@ describe("TutorPage: bicara lewat mikrofon", () => {
     expect(input().disabled).toBe(false);
   });
 
-  it("fitur suara belum diaktifkan di server (503): mikrofon dimatikan untuk seterusnya, mengetik tetap jalan", async () => {
+  it("fitur suara belum diaktifkan di server (503): SATU banner (bukan dua), mikrofon dimatikan untuk seterusnya, mengetik tetap jalan", async () => {
     installApi({ transcribe: () => ({ error: { statusCode: 503 }, status: 503 }) });
     await openChat();
 
     await record();
 
-    expect((await screen.findAllByText("Fitur suara belum diaktifkan di server ini. Kamu tetap bisa mengetik jawabanmu.")).length).toBeGreaterThan(0);
+    // Dulu tampil dua banner dengan teks sama: keterangan suara yang menetap (info) dan pesan sementara (peringatan, role="alert").
+    const alert = await screen.findByRole("alert");
+    expect(alert.textContent).toBe(VOICE_OFF);
+    expect(screen.getAllByText(VOICE_OFF)).toHaveLength(1);
+    expect(alert.className).toContain("border-sky-200"); // nada info, bukan peringatan berikon jam
     await waitFor(() => expect(micButton().disabled).toBe(true));
+
     await say("ketik saja");
     await screen.findByText("おなまえは？");
+    // Pesan sementara hilang dan keterangan yang menetap menggantikannya: tetap satu banner, kini tanpa role="alert".
+    expect(screen.queryByRole("alert")).toBeNull();
+    expect(screen.getAllByText(VOICE_OFF)).toHaveLength(1);
+  });
+
+  it("suara belum aktif lalu obrolan terblokir (503 pada balasan): saran 'tetap bisa mengetik' dicabut, tinggal satu pesan", async () => {
+    installApi({
+      transcribe: () => ({ error: { statusCode: 503 }, status: 503 }),
+      reply: () => ({ error: { statusCode: 503, message: "AI tutor belum dikonfigurasi di server ini." }, status: 503 }),
+    });
+    await openChat();
+    await record();
+    await screen.findByText(VOICE_OFF);
+
+    await say("はじめまして。");
+
+    expect((await screen.findByRole("alert")).textContent).toBe("Fitur ngobrol dengan AI belum diaktifkan di server ini. Hubungi admin lembaga.");
+    expect(input().disabled).toBe(true);
+    expect(screen.queryByText(VOICE_OFF)).toBeNull();
+  });
+
+  it("browser tanpa rekam suara lalu jatah habis: keterangan suara hilang karena mengetik pun tidak bisa lagi", async () => {
+    media!.uninstall();
+    media = null;
+    installApi({ reply: () => ({ error: { statusCode: 429, message: "Kuota harian AI tutor habis.", quota: quotaOf(20) }, status: 429 }) });
+    await openChat();
+    expect(screen.getAllByText(NO_RECORDING)).toHaveLength(1);
+
+    await say("はじめまして。");
+
+    expect((await screen.findByRole("alert")).textContent).toBe("Jatah ngobrol hari ini sudah habis. Jatahmu kembali besok.");
+    expect(input().disabled).toBe(true);
+    expect(screen.queryByText(NO_RECORDING)).toBeNull();
   });
 
   it("rekaman terlalu singkat: pesan, dan tidak ada permintaan transkripsi berbayar", async () => {

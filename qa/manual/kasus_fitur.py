@@ -62,7 +62,8 @@ KASUS = [
     K("TC-AI-12", A_AI, "Murid", "P2", "Merekam lalu berhenti: suara dikenali jadi teks yang bisa diperiksa",
       "Mikrofon palsu Chromium (QA_AI_SUARA=1) atau mikrofon sungguhan.",
       ["Tekan tombol mikrofon: status \"Merekam 0:xx dari 0:30\".", "Tekan lagi untuk berhenti."],
-      "Muncul \"Mengenali suaramu...\" lalu kolom ketik terisi teks hasil pengenalan dengan keterangan \"Begini yang terdengar. Perbaiki kalau ada yang salah, lalu kirim.\" (atau pesan \"tidak terdengar jelas\" bila suara tidak dikenali).",
+      "Muncul \"Mengenali suaramu...\" lalu kolom ketik terisi teks hasil pengenalan dengan keterangan \"Begini yang terdengar. Perbaiki kalau ada yang salah, lalu kirim.\" (atau pesan \"tidak terdengar jelas\" bila suara tidak dikenali). "
+      "Bila pengenalan suara belum diaktifkan di server: muncul SATU keterangan \"Fitur suara belum diaktifkan di server ini. Kamu tetap bisa mengetik jawabanmu.\" (tidak ganda), tombol mikrofon mati, dan mengetik tetap berfungsi.",
       "AI-04, AI-05"),
     K("TC-AI-13", A_AI, "Murid", "P1", "Mutu balasan: sesuai situasi dan karakter, bahasa Jepang sederhana",
       "AI sungguhan aktif. Penguji paham bahasa Jepang dasar atau didampingi pengajar.",
@@ -73,7 +74,8 @@ KASUS = [
     K("TC-AI-14", A_AI, "Murid", "P1", "Server belum punya kunci AI: pesan jelas dan pesan murid tidak hilang",
       "Server dengan OPENAI_API_KEY kosong (atau gunakan lingkungan uji tanpa kunci).",
       ["Buka layar chat, ketik kalimat dan kirim."],
-      "Muncul peringatan \"Fitur ngobrol dengan AI belum diaktifkan di server ini. Hubungi admin lembaga.\"; kalimat murid kembali ke kolom ketik; jatah tidak berkurang; tidak ada layar kosong.",
+      "Muncul peringatan \"Fitur ngobrol dengan AI belum diaktifkan di server ini. Hubungi admin lembaga.\"; kalimat murid kembali ke kolom ketik; jatah tidak berkurang; tidak ada layar kosong. "
+      "Hanya satu pesan yang tampil: keterangan suara yang menyuruh \"tetap bisa mengetik\" (bila sempat muncul) hilang karena kolom ketik kini mati.",
       "AI-14", "Otomatis dilewati (QA_AI=auto) bila AI belum aktif; gunakan kasus ini untuk memeriksanya manual."),
     K("TC-AI-15", A_AI, "Murid", "P1", "Jatah harian habis",
       "Server dengan TUTOR_DAILY_QUOTA kecil (mis. 2) lalu restart API, atau murid yang sudah memakai semua jatah.",

@@ -128,7 +128,10 @@ export function TutorPage() {
   // ---- Galat bersama --------------------------------------------------------------------------------------------------
   const showFailure = useCallback((failure: TutorFailure, action: TutorAction): void => {
     const hard = failure.kind === "quota" || failure.kind === "not-configured";
-    setNotice({ tone: hard ? "warning" : "error", text: failureText(failure.kind, action) });
+    // Suara yang belum diaktifkan di server bukan gangguan sementara: nadanya info, sama dengan keterangan suara yang menetap
+    // (voiceNotice). Jadi saat pesan sementara ini hilang, keterangan itu menggantikannya tanpa berubah rupa.
+    const voiceOff = action === "transcribe" && failure.kind === "not-configured";
+    setNotice({ tone: voiceOff ? "info" : hard ? "warning" : "error", text: failureText(failure.kind, action) });
     if (failure.quota) setQuota(failure.quota);
     if (action === "reply" && (failure.kind === "quota" || failure.kind === "not-configured")) setBlocked(failure.kind);
     if (action === "transcribe" && failure.kind === "not-configured") setVoiceBlocked(true);
@@ -400,8 +403,12 @@ export function TutorPage() {
   }
 
   const recorderNotice: NoticeState | null = recorder.error ? { tone: "error", text: recorderProblemText(recorder.error) } : null;
-  const shownNotice = notice ?? recorderNotice;
   const blockedNotice: NoticeState | null = blockedReason ? { tone: "warning", text: failureText(blockedReason, "reply") } : null;
+  // Pesan yang diumumkan ke pembaca layar (role="alert"): obrolan yang terblokir didahulukan dari pesan sementara.
+  const liveNotice = blockedNotice ?? notice ?? recorderNotice;
+  // Satu keadaan, satu banner. Keterangan suara yang menetap disembunyikan bila (a) teksnya sama dengan pesan yang sedang diumumkan
+  // (rekaman baru saja gagal karena suara belum aktif), atau (b) obrolan terblokir, sebab saran "kamu bisa mengetik" tidak berlaku lagi.
+  const standingVoiceNotice = voiceNotice !== null && blockedNotice === null && voiceNotice !== liveNotice?.text ? voiceNotice : null;
   const lowQuota = quota.remaining <= 3;
 
   // Tinggi minimum membuat kotak kirim berada di dasar layar walau percakapan masih pendek (dikurangi bilah atas, ruang tab bawah,
@@ -504,17 +511,11 @@ export function TutorPage() {
       </div>
 
       <div className="sticky bottom-[calc(5.25rem_+_env(safe-area-inset-bottom))] z-20 space-y-2 md:bottom-14">
-        {voiceNotice && <Notice tone="info">{voiceNotice}</Notice>}
-        {blockedNotice ? (
-          <Notice tone={blockedNotice.tone} role="alert">
-            {blockedNotice.text}
+        {standingVoiceNotice && <Notice tone="info">{standingVoiceNotice}</Notice>}
+        {liveNotice && (
+          <Notice tone={liveNotice.tone} role="alert">
+            {liveNotice.text}
           </Notice>
-        ) : (
-          shownNotice && (
-            <Notice tone={shownNotice.tone} role="alert">
-              {shownNotice.text}
-            </Notice>
-          )
         )}
         <Composer
           draft={draft}

@@ -39,5 +39,12 @@ test("[TC-AI-12] merekam lalu berhenti: suara dikenali jadi teks yang bisa diper
   if (await terisi.isVisible()) {
     await expect(page.getByTestId("chat-input")).not.toHaveValue("");
     await expect(page.getByTestId("send-button")).toBeEnabled();
+  } else if (await tidakJelas.filter({ hasText: "Fitur suara belum diaktifkan" }).isVisible()) {
+    // Server tanpa pengenalan suara: keterangannya harus tampil SATU kali (dulu dobel: info yang menetap + peringatan sementara),
+    // mikrofon mati untuk seterusnya, dan mengetik tetap bisa.
+    await expect(page.getByText("Fitur suara belum diaktifkan di server ini. Kamu tetap bisa mengetik jawabanmu.")).toHaveCount(1);
+    await expect(mic).toBeDisabled();
+    await page.getByTestId("chat-input").fill("こんにちは");
+    await expect(page.getByTestId("send-button")).toBeEnabled();
   }
 });
