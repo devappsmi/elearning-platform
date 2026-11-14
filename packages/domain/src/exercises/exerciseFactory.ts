@@ -58,20 +58,19 @@ export class ExerciseFactory {
     const variant = variantOrNull ?? (this.unit.type === 'kana' ? 'kana_to_romaji' : 'ja_to_id');
     switch (variant) {
       case 'kana_to_romaji':
-        return this.buildVocabChoice(v, { prompt: v.kana, option: (o) => ({ text: o.romaji }) });
+        return this.buildVocabChoice(v, { promptOf: (o) => o.kana, option: (o) => ({ text: o.romaji }) });
       case 'romaji_to_kana':
-        return this.buildVocabChoice(v, { prompt: v.romaji, option: (o) => ({ text: o.kana }) });
+        return this.buildVocabChoice(v, { promptOf: (o) => o.romaji, option: (o) => ({ text: o.kana }) });
       case 'ja_to_id':
         return this.buildVocabChoice(v, {
-          prompt: v.surface,
+          promptOf: (o) => o.surface,
           promptSub: v.kana === v.surface ? undefined : v.kana,
           option: (o) => (o.meaning === undefined ? null : { text: o.meaning }),
         });
       case 'id_to_ja': {
-        const meaning = v.meaning;
-        if (meaning === undefined) throw new Error(`id_to_ja butuh meaning_id: ${v.id}`);
+        if (v.meaning === undefined) throw new Error(`id_to_ja butuh meaning_id: ${v.id}`);
         return this.buildVocabChoice(v, {
-          prompt: meaning,
+          promptOf: (o) => o.meaning,
           option: (o) => ({ text: o.surface, sub: o.kana === o.surface ? undefined : o.kana }),
         });
       }
@@ -80,17 +79,22 @@ export class ExerciseFactory {
     }
   }
 
+  /** `promptOf` = soal yang akan dimiliki sebuah kosakata untuk varian ini; soal untuk `v` adalah `promptOf(v)`. */
   private buildVocabChoice(
     v: Vocab,
-    { prompt, promptSub, option }: { prompt: string; promptSub?: string; option: (v: Vocab) => ChoiceOption | null },
+    { promptOf, promptSub, option }: { promptOf: (v: Vocab) => string | undefined; promptSub?: string; option: (v: Vocab) => ChoiceOption | null },
   ): PreparedChoose {
+    const prompt = promptOf(v);
     const correct = option(v);
-    if (!correct) throw new Error(`vocab ${v.id} tidak punya data untuk varian ini`);
+    if (prompt === undefined || !correct) throw new Error(`vocab ${v.id} tidak punya data untuk varian ini`);
     const seen = new Set<string>([correct.text]);
     const preferred: ChoiceOption[] = [];
     const others: ChoiceOption[] = [];
     for (const o of this.unit.vocab) {
       if (o.id === v.id) continue;
+      // Kosakata yang soalnya sama juga jawaban sah, jadi tidak boleh jadi pengecoh: じ dan ぢ sama-sama dibaca "ji",
+      // maka soal "ji" tidak boleh menawarkan keduanya (begitu pula ず/づ, atau dua kata yang artinya sama).
+      if (promptOf(o) === prompt) continue;
       const opt = option(o);
       if (!opt || seen.has(opt.text)) continue;
       seen.add(opt.text);

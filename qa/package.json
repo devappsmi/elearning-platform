@@ -1,0 +1,32 @@
+{
+  "name": "elearning-qa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Paket uji dan QC aplikasi belajar bahasa Jepang: uji browser (Playwright), uji API, ekspor konten, dan buku kasus uji manual.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "install:browser": "playwright install chromium",
+    "test": "playwright test",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:murid": "playwright test --project=murid --project=murid-ponsel",
+    "test:admin": "playwright test --project=admin",
+    "test:ai": "playwright test --grep @ai",
+    "test:a11y": "playwright test --grep @a11y",
+    "test:api": "node api/smoke.mjs",
+    "test:api:lengkap": "node api/smoke.mjs --lengkap",
+    "konten": "node content/export-konten.mjs",
+    "laporan": "playwright show-report reports/html",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "1.56.1",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2"
+  },
+  "overrides": {
+    "playwright-core": "1.56.1"
+  }
+}

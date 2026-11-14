@@ -1,7 +1,9 @@
 import { IsIn, IsOptional, IsString, IsUrl, MinLength } from "class-validator";
+import { Trim } from "../../common/trim.decorator";
 
 export class UpdateMeDto {
   @IsOptional()
+  @Trim()
   @IsString()
   @MinLength(1)
   name?: string;

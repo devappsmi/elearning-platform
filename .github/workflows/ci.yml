@@ -24,9 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Versi pnpm diambil dari `packageManager` di package.json (satu sumber
+      # kebenaran). JANGAN menambah `with: version:` di sini -- pnpm/action-setup
+      # menolak konfigurasi ganda ("Multiple versions of pnpm specified").
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.0
 
       - uses: actions/setup-node@v4
         with:
@@ -34,6 +35,14 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+
+      # Klien Prisma harus di-generate SEBELUM typecheck/test: tidak ada langkah
+      # install yang melakukannya (postinstall @prisma/client tidak menemukan
+      # schema di apps/api/prisma dari root monorepo), dan tanpa itu typecheck
+      # apps/api gagal ("has no exported member 'PrismaClient'"). Tidak butuh
+      # DATABASE_URL -- generate hanya membaca schema.
+      - name: Generate Prisma client
+        run: pnpm --filter api exec prisma generate
 
       - run: pnpm turbo run lint typecheck test
 

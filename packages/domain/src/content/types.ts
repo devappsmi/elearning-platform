@@ -104,10 +104,12 @@ export interface GrammarNote {
   id: string;
   title: string;
   bodyMd: string;
+  /** Pelajaran (id) yang menampilkan catatan ini. Kosong = catatan milik unit secara umum (belum ditampilkan di pelajaran mana pun). */
+  lessonId?: string;
 }
 export const grammarNoteSchema = z
-  .object({ id: z.string(), title: z.string(), body_md: z.string() })
-  .transform((g): GrammarNote => ({ id: g.id, title: g.title, bodyMd: g.body_md }));
+  .object({ id: z.string(), title: z.string(), body_md: z.string(), lesson_id: z.string().nullish() })
+  .transform((g): GrammarNote => ({ id: g.id, title: g.title, bodyMd: g.body_md, ...(g.lesson_id ? { lessonId: g.lesson_id } : {}) }));
 
 export interface Exercise {
   type: ExerciseType;

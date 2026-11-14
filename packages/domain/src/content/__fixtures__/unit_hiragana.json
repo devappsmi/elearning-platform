@@ -8,17 +8,26 @@
     {
       "id": "g_dakuten",
       "title": "Dakuten dan handakuten",
-      "body_md": "Dua titik kecil (゛) mengubah bunyi: か→が, さ→ざ, た→だ, は→ば. Lingkaran kecil (゜) hanya untuk baris は: は→ぱ."
+      "body_md": "Dua titik kecil (゛) mengubah bunyi: か→が, さ→ざ, た→だ, は→ば. Lingkaran kecil (゜) hanya untuk baris は: は→ぱ.",
+      "lesson_id": "l4"
+    },
+    {
+      "id": "g_yotsugana",
+      "title": "ぢ dan づ",
+      "body_md": "ぢ dibaca sama dengan じ (**ji**) dan づ sama dengan ず (**zu**), jadi di soal keduanya ditulis ji dan zu.\n\nKata sehari-hari hampir selalu memakai じ dan ず. ぢ dan づ muncul terutama ketika bunyi ち atau つ berubah karena pengulangan atau gabungan kata.\n\nContoh:\n- つづく (tsuzuku)\n  berlanjut\n- ちぢむ (chijimu)\n  menyusut\n- はなぢ (hanaji)\n  mimisan\n- みかづき (mikazuki)\n  bulan sabit\n\nSaat mengetik dengan keyboard Jepang, ketik **di** untuk ぢ dan **du** untuk づ.",
+      "lesson_id": "l4"
     },
     {
       "id": "g_youon",
       "title": "Youon (ゃ ゅ ょ kecil)",
-      "body_md": "Kana berakhiran i digabung ゃ/ゅ/ょ kecil menjadi satu suku kata: き+ゃ = きゃ (kya)."
+      "body_md": "Kana berakhiran i digabung ゃ/ゅ/ょ kecil menjadi satu suku kata: き+ゃ = きゃ (kya).",
+      "lesson_id": "l6"
     },
     {
       "id": "g_sokuon",
       "title": "Sokuon (っ kecil) dan vokal panjang",
-      "body_md": "っ kecil menggandakan konsonan berikutnya: きって (kitte). Vokal panjang ditulis dengan menambah vokal: おかあさん (okaasan), とうきょう (toukyou)."
+      "body_md": "っ kecil menggandakan konsonan berikutnya: きって (kitte). Vokal panjang ditulis dengan menambah vokal: おかあさん (okaasan), とうきょう (toukyou).",
+      "lesson_id": "l7"
     }
   ],
   "vocab": [
@@ -539,7 +548,7 @@
       "id": "k_dji",
       "surface": "ぢ",
       "kana": "ぢ",
-      "romaji": "dji",
+      "romaji": "ji",
       "meaning_id": null,
       "image": null,
       "audio": "k_dji.mp3"
@@ -548,7 +557,7 @@
       "id": "k_dzu",
       "surface": "づ",
       "kana": "づ",
-      "romaji": "dzu",
+      "romaji": "zu",
       "meaning_id": null,
       "image": null,
       "audio": "k_dzu.mp3"

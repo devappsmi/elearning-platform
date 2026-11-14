@@ -8,6 +8,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { REDIS_CLIENT } from "../redis/redis.module";
 import { hashOpaqueToken } from "../common/opaque-token.util";
 import { addDuration } from "../common/duration.util";
+import { normalizeEmail } from "../common/email.util";
 import type { Env } from "../config/env.validation";
 
 const LOGIN_FAIL_LIMIT = 5;
@@ -27,7 +28,9 @@ export class AdminAuthService {
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
-  async login(email: string, password: string) {
+  async login(rawEmail: string, password: string) {
+    // Email BAKU (huruf kecil) -- juga untuk kunci lockout; lihat AuthService.login.
+    const email = normalizeEmail(rawEmail);
     const lockKey = `admin_login_lock:${email}`;
     if (await this.redis.get(lockKey)) {
       throw new ForbiddenException("Terlalu banyak percobaan gagal. Coba lagi dalam 15 menit.");
@@ -89,6 +92,13 @@ export class AdminAuthService {
       data: { revokedAt: new Date(), replacedByToken: hashOpaqueToken(pair.refreshToken) },
     });
     return pair;
+  }
+
+  async me(adminUserId: string) {
+    return this.prisma.adminUser.findUniqueOrThrow({
+      where: { id: adminUserId },
+      select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true, lastLoginAt: true },
+    });
   }
 
   private async issueTokenPair(adminUserId: string, role: string): Promise<{ accessToken: string; refreshToken: string }> {

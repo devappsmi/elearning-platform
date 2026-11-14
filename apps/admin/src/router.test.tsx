@@ -7,6 +7,6 @@ describe("router", () => {
   it("renders without crashing (redirects unauthenticated user to /login)", async () => {
     render(<RouterProvider router={router} />);
 
-    expect(await screen.findByText("Login")).toBeTruthy();
+    expect(await screen.findByRole("heading", { name: "Masuk" })).toBeTruthy();
   });
 });
